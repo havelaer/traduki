@@ -4,7 +4,7 @@
   "description": "Rollup plugin for messageformat-modules",
   "author": "havelaer",
   "keywords": [
-    "rollup",
+    "rollup-plugin",
     "messageformat",
     "pluralformat",
     "icu",
@@ -23,9 +23,23 @@
   },
   "license": "MIT",
   "scripts": {
+    "test": "jest test",
     "build": "tsc"
   },
+  "jest": {
+    "preset": "ts-jest"
+  },
   "devDependencies": {
+    "@types/hash-sum": "^1.0.0",
+    "@types/jest": "^26.0.4",
+    "@types/js-yaml": "^3.12.5",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "hash-sum": "^2.0.0",
+    "js-yaml": "^3.14.0",
+    "messageformat": "^2.3.0"
   }
 }
