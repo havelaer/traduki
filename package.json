@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "messageformat-modules",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "havelaer",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap --use-workspaces",
+    "build": "lerna run build",
+    "publish": "lerna run tsc && lerna publish"
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1",
+    "typescript": "^3.9.6"
+  }
+}

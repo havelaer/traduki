@@ -1,0 +1,30 @@
+{
+  "name": "messageformat-modules-runtime",
+  "version": "0.0.0",
+  "description": "messageformat-modules runtime",
+  "author": "havelaer",
+  "keywords": [
+    "messageformat",
+    "pluralformat",
+    "icu",
+    "i18n",
+    "translations"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelaer/messageformat-modules.git",
+    "directory": "packages/messageformat-modules-runtime"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules
+coverage
+.nyc_output
+.DS_Store
+*.log
+.vscode
+.idea
+docs
+lerna-debug.log
+npm-debug.log
+packages/*/lib
+packages/*/types

@@ -1,0 +1,31 @@
+{
+  "name": "rollup-plugin-messageformat-modules",
+  "version": "0.0.0",
+  "description": "Rollup plugin for messageformat-modules",
+  "author": "havelaer",
+  "keywords": [
+    "rollup",
+    "messageformat",
+    "pluralformat",
+    "icu",
+    "i18n",
+    "translations"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelaer/messageformat-modules.git",
+    "directory": "packages/rollup-plugin-messageformat-modules"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
+}
