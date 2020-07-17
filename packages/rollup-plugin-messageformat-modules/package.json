@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-messageformat-modules",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Rollup plugin for messageformat-modules",
   "author": "havelaer",
   "keywords": [
@@ -37,7 +37,7 @@
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
     "jest": "^26.1.0",
-    "messageformat-modules-runtime": "^0.0.0",
+    "messageformat-modules-runtime": "^0.0.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
   },
