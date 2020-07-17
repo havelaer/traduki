@@ -20,9 +20,9 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
-    "publish": "lerna run tsc && lerna publish"
+    "test": "lerna run test",
+    "publish": "npm run build && lerna publish"
   },
   "devDependencies": {
     "@types/node": "^14.0.21",

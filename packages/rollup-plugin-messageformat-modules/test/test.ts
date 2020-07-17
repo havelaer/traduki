@@ -28,6 +28,6 @@ describe('plugin', () => {
         expect(translation.hello).toBe('Hallo John!');
         expect(translation.count).toBe('Dit heeft 4 gebruikers.');
         expect(translation.coverage).toBe('We hebben 81% code dekking.');
-        expect(await translation.async).toBe('Voorbeeld');
+        expect(translation.async).toBe('Voorbeeld');
     });
 });
