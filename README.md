@@ -70,7 +70,7 @@ export default {
 ### Install
 
 ```bash
-npm install --save-dev rollup-plugin-messagesformat-modules
+npm install --save-dev rollup-plugin-messageformat-modules
 npm install messagesformat-modules-runtime
 ```
 
@@ -79,7 +79,7 @@ npm install messagesformat-modules-runtime
 Create a rollup.config.js configuration file and import the plugin:
 
 ```js
-import messageformatModules from 'rollup-plugin-messagesformat-modules';
+import messageformatModules from 'rollup-plugin-messageformat-modules';
 
 module.exports = {
   input: 'src/index.js',
