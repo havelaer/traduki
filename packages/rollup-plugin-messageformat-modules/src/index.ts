@@ -37,12 +37,12 @@ function defaultKeyHashFn({ key, path }: KeyHashArgs) {
 
 const IDENTIFIER = 'MESSAGEFORMAT_MODULES_5008cbd5';
 
-export const messageformatModules = (options: PluginOptions = {}): Plugin => {
+const messageformatModules = (options: PluginOptions = {}): Plugin => {
     const {
         runtimeModuleId = 'messageformat-modules-runtime',
         primaryLocale = 'en',
         keyHashFn = defaultKeyHashFn,
-        endsWith = '.yaml',
+        endsWith = '.messages.yaml',
     } = options;
 
     const modules: MessageModule[] = [];
@@ -170,3 +170,5 @@ export const messageformatModules = (options: PluginOptions = {}): Plugin => {
         },
     };
 };
+
+export default messageformatModules;

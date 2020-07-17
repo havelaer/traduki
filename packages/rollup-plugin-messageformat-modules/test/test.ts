@@ -1,5 +1,5 @@
 import { rollup, RollupOptions } from 'rollup';
-import { messageformatModules } from '../src/index';
+import messageformatModules from '../src/index';
 
 const config: RollupOptions = {
     input: './test/fixtures/index.js',

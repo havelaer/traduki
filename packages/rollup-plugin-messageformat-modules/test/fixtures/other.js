@@ -1,3 +1,3 @@
-import c from './c.locales.yaml';
+import c from './c.messages.yaml';
 
 export default c;

@@ -1,3 +1,3 @@
-import d from './d.locales.yaml';
+import d from './d.messages.yaml';
 
 export default d;

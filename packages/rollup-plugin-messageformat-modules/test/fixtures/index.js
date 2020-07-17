@@ -1,6 +1,6 @@
 import i18n from './runtime';
-import a from './a.locales.yaml';
-import b from './b.locales.yaml';
+import a from './a.messages.yaml';
+import b from './b.messages.yaml';
 import c from './other';
 
 export default async lanuage => {
