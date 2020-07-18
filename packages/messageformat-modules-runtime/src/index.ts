@@ -1,10 +1,10 @@
-class Runtime {
-    private maps: Record<string, string>[] = [];
+class LazyLion {
+    private messageMaps: Record<string, string>[] = [];
     private translations: Record<string, (arg: Record<string, string>) => string> = {};
     private language: string = '';
 
     register(map: Record<string, string>) {
-        this.maps.push(map);
+        this.messageMaps.push(map);
     }
 
     setLocale(language: string) {
@@ -16,7 +16,7 @@ class Runtime {
     async load() {
         const language = this.language;
         const results = await Promise.all(
-            this.maps
+            this.messageMaps
                 .map(map => map[language])
                 .filter(Boolean)
                 .map(src => import(src).then(({ default: translations }) => translations),
@@ -29,8 +29,13 @@ class Runtime {
     }
 
     translate(key: string, args: Record<string, string>) {
+        if (!this.translations[key]) {
+            console.warn(`[lazylion] Global message key '${key}' does not exit, or is not loaded yet.`);
+            return key;
+        }
+
         return this.translations[key](args);
     }
 }
 
-export default new Runtime();
+export default new LazyLion();
