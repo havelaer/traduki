@@ -1,6 +1,6 @@
 class LazyLionRuntime {
     private messageMaps: Record<string, string>[] = [];
-    private translations: Record<string, (arg: Record<string, string>) => string> = {};
+    private translations: Record<string, (arg: Record<string, string | number>) => string> = {};
     private language: string = '';
 
     register(map: Record<string, string>) {
@@ -28,7 +28,7 @@ class LazyLionRuntime {
         );
     }
 
-    translate(key: string, args: Record<string, string>) {
+    translate(key: string, args: Record<string, string | number>) {
         if (!this.translations[key]) {
             console.warn(`[lazy-lion] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
