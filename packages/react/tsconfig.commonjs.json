@@ -1,0 +1,9 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+      "typeRoots": ["src/@types"],
+      "module": "commonjs",
+      "outDir": "./lib/commonjs"
+    },
+    "include": ["./src"]
+  }

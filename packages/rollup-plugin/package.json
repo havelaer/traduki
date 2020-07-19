@@ -16,7 +16,6 @@
   ],
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
-  "typings": "lib/types/index.d.ts",
   "publishConfig": {
     "access": "public"
   },

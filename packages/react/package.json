@@ -1,14 +1,16 @@
 {
-  "name": "@lazy-lion/runtime",
+  "name": "@lazy-lion/react",
   "version": "0.0.3",
-  "description": "Lazy Lion runtime",
+  "description": "Lazy Lion React helpers",
   "author": "havelaer",
   "keywords": [
     "messageformat",
     "pluralformat",
     "icu",
     "i18n",
-    "translations"
+    "L10n",
+    "translations",
+    "react"
   ],
   "files": [
     "lib"
@@ -21,7 +23,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/havelaer/lazy-lion.git",
-    "directory": "packages/runtime"
+    "directory": "packages/react"
   },
   "license": "MIT",
   "scripts": {
@@ -29,7 +31,15 @@
     "build:main": "tsc -p tsconfig.commonjs.json",
     "build:module": "tsc -p tsconfig.module.json"
   },
+  "peerDependencies": {
+    "react": ">=15"
+  },
   "devDependencies": {
+    "@types/react": "^16.9.43",
+    "react": "^16.13.1",
     "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "@lazy-lion/runtime": "^0.0.3"
   }
 }
