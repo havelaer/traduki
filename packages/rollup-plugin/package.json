@@ -17,6 +17,9 @@
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "typings": "lib/types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/havelaer/lazy-lion.git",

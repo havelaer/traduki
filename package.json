@@ -4,17 +4,10 @@
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "files": [
-    "dist"
-  ],
   "workspaces": [
     "packages/*"
   ],
   "author": "havelaer",
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
