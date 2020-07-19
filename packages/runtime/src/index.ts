@@ -1,4 +1,4 @@
-class LazyLion {
+class LazyLionRuntime {
     private messageMaps: Record<string, string>[] = [];
     private translations: Record<string, (arg: Record<string, string>) => string> = {};
     private language: string = '';
@@ -38,4 +38,4 @@ class LazyLion {
     }
 }
 
-export default new LazyLion();
+export default new LazyLionRuntime();

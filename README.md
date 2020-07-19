@@ -1,10 +1,12 @@
-# messageformat-modules
+# Lazy Lion
 
-> WORK IN PROGRESS
+## ⚠️ WORK IN PROGRESS ⚠️
 
-MessageFormat modules is inspired by the mechanisms of CSS Modules. Component based translation files which are bundled per locale in there own percompiled js file for production.
+*Lazy Lion is a set of build- and runtime tools for lazy loading L10n messages.*
 
-When importing the messages yaml from a JS Module, it exports an object with all mappings from local message keys to global message keys. As side effect it registers the location of the bundled messages file for each locale.
+It is inspired by the mechanisms of CSS Modules: Modular / locally scoped translation files which are bundled and precompiled per locale for production.
+
+When importing the messages YAML from a JS Module, it exports an object with all mappings from local message keys to global message keys. As side effect it registers the location of the bundled (global) messages file for each locale.
 
 This even works when the application is split in different chunks. For each chunk messages files are bundled per locale.
 
@@ -36,18 +38,20 @@ nl:
 
 ```js
 // index.js
-import runtime from 'messageformat-modules-runtime'
+import Lion from '@lazy-lion/runtime'
 import messagesA from 'a.messages.yaml'
 import messagesB from 'b.messages.yaml'
 
 console.log(messagesA); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 console.log(messagesB); // { hello: 'hello_1f4f2d72', example: 'example_5bb0d8fb' }
 
-await runtime.setLocale('en').load();
-runtime.translate(messagesA.hello, { name: 'John' }); // "Hello John!"
+(async () => {
+  await Lion.setLocale('en').load();
+  Lion.translate(messagesA.hello, { name: 'John' }); // "Hello John!"
+})
 ```
 
-### Production build
+### Example production build
 
 A production build wil result in a compiled `index.js`, a precompiled messages file for english `index.en.js` and a precompiled dutch messages file `index.nl.js`.
 
@@ -70,8 +74,8 @@ export default {
 ### Install
 
 ```bash
-npm install --save-dev rollup-plugin-messageformat-modules
-npm install messagesformat-modules-runtime
+npm install --save-dev @lazy-lion/rollup-plugin
+npm install @lazy-lion/runtime
 ```
 
 ### Usage
@@ -79,7 +83,7 @@ npm install messagesformat-modules-runtime
 Create a rollup.config.js configuration file and import the plugin:
 
 ```js
-import messageformatModules from 'rollup-plugin-messageformat-modules';
+import lazyLionPlugin from '@lazy-lion/rollup-plugin';
 
 module.exports = {
   input: 'src/index.js',
@@ -88,7 +92,7 @@ module.exports = {
     format: 'cjs'
   },
   plugins: [
-    messageformatModules()
+    lazyLionPlugin()
   ]
 };
 ```

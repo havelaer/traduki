@@ -35,11 +35,11 @@ function defaultKeyHashFn({ key, path }: KeyHashArgs) {
     return hash(`${key}_${path}`);
 }
 
-const IDENTIFIER = 'MESSAGEFORMAT_MODULES_5008cbd5';
+const IDENTIFIER = 'LAZY_LION_5008cbd5';
 
-const messageformatModules = (options: PluginOptions = {}): Plugin => {
+const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
     const {
-        runtimeModuleId = 'messageformat-modules-runtime',
+        runtimeModuleId = '@lazy-lion/runtime',
         primaryLocale = 'en',
         keyHashFn = defaultKeyHashFn,
         endsWith = '.messages.yaml',
@@ -52,7 +52,7 @@ const messageformatModules = (options: PluginOptions = {}): Plugin => {
     let format: string = '';
 
     return {
-        name: 'messageformat-modules',
+        name: 'lazy-lion',
         resolveId(source, importer) {
             if (importer && source.endsWith(endsWith)) {
                 return path.resolve(path.dirname(importer), source);
@@ -171,4 +171,4 @@ const messageformatModules = (options: PluginOptions = {}): Plugin => {
     };
 };
 
-export default messageformatModules;
+export default lazyLionPlugin;

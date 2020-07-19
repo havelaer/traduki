@@ -1,7 +1,7 @@
 {
-  "name": "messageformat-modules-runtime",
+  "name": "@lazy-lion/runtime",
   "version": "0.0.1",
-  "description": "messageformat-modules runtime",
+  "description": "Lazy Lion runtime",
   "author": "havelaer",
   "keywords": [
     "messageformat",
@@ -18,8 +18,8 @@
   "typings": "lib/types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/havelaer/messageformat-modules.git",
-    "directory": "packages/messageformat-modules-runtime"
+    "url": "https://github.com/havelaer/lazy-lion.git",
+    "directory": "packages/runtime"
   },
   "license": "MIT",
   "scripts": {

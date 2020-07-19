@@ -1,7 +1,7 @@
 {
-  "name": "rollup-plugin-messageformat-modules",
+  "name": "@lazy-lion/rollup-plugin",
   "version": "0.0.1",
-  "description": "Rollup plugin for messageformat-modules",
+  "description": "Rollup plugin for lazy-lion",
   "author": "havelaer",
   "keywords": [
     "rollup-plugin",
@@ -19,8 +19,8 @@
   "typings": "lib/types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/havelaer/messageformat-modules.git",
-    "directory": "packages/rollup-plugin-messageformat-modules"
+    "url": "https://github.com/havelaer/lazy-lion.git",
+    "directory": "packages/rollup-plugin"
   },
   "license": "MIT",
   "scripts": {
@@ -33,11 +33,11 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
+    "@lazy-lion/runtime": "^0.0.1",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
     "jest": "^26.1.0",
-    "messageformat-modules-runtime": "^0.0.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
   },

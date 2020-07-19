@@ -1,9 +1,8 @@
 import { rollup, RollupOptions } from 'rollup';
-import messageformatModules from '../src/index';
+import lazyLion from '../src/index';
 
 const config: RollupOptions = {
     input: './test/fixtures/index.js',
-    // preserveEntrySignatures: 'allow-extension',
     output: {
         dir: './test/output',
         format: 'cjs',
@@ -11,7 +10,7 @@ const config: RollupOptions = {
         chunkFileNames: `[name]-chunk.[hash].js`,
         assetFileNames: `assets/[name]-asset.[hash].js`,
     },
-    plugins: [messageformatModules({
+    plugins: [lazyLion({
         runtimeModuleId: './runtime'
     })],
 };
