@@ -30,7 +30,7 @@ class LazyLionRuntime {
 
     translate(key: string, args: Record<string, string>) {
         if (!this.translations[key]) {
-            console.warn(`[lazylion] Global message key '${key}' does not exit, or is not loaded yet.`);
+            console.warn(`[lazy-lion] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
         }
 

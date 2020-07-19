@@ -78,7 +78,7 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
             const references = languages
                 .map(language => {
                     if (!dictionaries.hasOwnProperty(language)) {
-                        console.warn(`[i18n] Missing language ${language} for ${id}`);
+                        console.warn(`[lazy-lion] Missing language ${language} for ${id}`);
                         return;
                     }
 
