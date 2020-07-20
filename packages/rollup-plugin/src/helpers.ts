@@ -1,26 +1,46 @@
+import fs from 'fs';
+import * as Yaml from 'js-yaml';
+import hash from 'hash-sum';
+
 export function toMessagesMap(
     messages: Record<string, string>,
-    keyHashFn: (key: string) => string
+    keyHashFn: (key: string) => string,
 ) {
     return Object.keys(messages).reduce(
         (prev, key) => ({
             ...prev,
             [key]: `${key}_${keyHashFn(key)}`,
         }),
-        {}
+        {},
     );
+}
+
+export function defaultKeyHashFn({ key, path }: { key: string; path: string }) {
+    return hash(`${key}_${path}`);
+}
+
+export function loadYaml(path: string): Promise<Record<string, Record<string, string>>> {
+    return new Promise((resolve, reject) => {
+        fs.readFile(path, { encoding: 'utf8' }, (err, data) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(Yaml.load(data));
+        });
+    });
 }
 
 export function mapMessageKeys(
     messages: Record<string, string>,
-    messagesMap: Record<string, string>
+    messagesMap: Record<string, string>,
 ) {
     return Object.keys(messages).reduce(
         (prev, key) => ({
             ...prev,
             [messagesMap[key]]: messages[key],
         }),
-        {}
+        {},
     );
 }
 
@@ -33,35 +53,35 @@ export function notEmpty<TValue>(value: TValue | null | undefined): value is TVa
 const getResolveUrl = (path: string, URL = 'URL') => `new ${URL}(${path}).href`;
 
 const getRelativeUrlFromDocument = (relativePath: string) =>
-getResolveUrl(
-    `'${relativePath}', document.currentScript && document.currentScript.src || document.baseURI`
-	);
+    getResolveUrl(
+        `'${relativePath}', document.currentScript && document.currentScript.src || document.baseURI`,
+    );
 
 export const relativeUrlMechanisms: Record<string, (relativePath: string) => string> = {
-	amd: relativePath => {
-		if (relativePath[0] !== '.') relativePath = './' + relativePath;
-		return getResolveUrl(`require.toUrl('${relativePath}'), document.baseURI`);
-	},
-	cjs: relativePath =>
-		`(typeof document === 'undefined' ? ${getResolveUrl(
-			`'file:' + __dirname + '/${relativePath}'`,
-			`(require('u' + 'rl').URL)`
-		)} : ${getRelativeUrlFromDocument(relativePath)})`,
-	es: relativePath => getResolveUrl(`'${relativePath}', import.meta.url`),
-	iife: relativePath => getRelativeUrlFromDocument(relativePath),
-	system: relativePath => getResolveUrl(`'${relativePath}', module.meta.url`),
-	umd: relativePath =>
-		`(typeof document === 'undefined' ? ${getResolveUrl(
-			`'file:' + __dirname + '/${relativePath}'`,
-			`(require('u' + 'rl').URL)`
-		)} : ${getRelativeUrlFromDocument(relativePath)})`
+    amd: relativePath => {
+        if (relativePath[0] !== '.') relativePath = './' + relativePath;
+        return getResolveUrl(`require.toUrl('${relativePath}'), document.baseURI`);
+    },
+    cjs: relativePath =>
+        `(typeof document === 'undefined' ? ${getResolveUrl(
+            `'file:' + __dirname + '/${relativePath}'`,
+            `(require('u' + 'rl').URL)`,
+        )} : ${getRelativeUrlFromDocument(relativePath)})`,
+    es: relativePath => getResolveUrl(`'${relativePath}', import.meta.url`),
+    iife: relativePath => getRelativeUrlFromDocument(relativePath),
+    system: relativePath => getResolveUrl(`'${relativePath}', module.meta.url`),
+    umd: relativePath =>
+        `(typeof document === 'undefined' ? ${getResolveUrl(
+            `'file:' + __dirname + '/${relativePath}'`,
+            `(require('u' + 'rl').URL)`,
+        )} : ${getRelativeUrlFromDocument(relativePath)})`,
 };
 
 export const messagesFormatExport: Record<string, string | undefined> = {
     amd: 'module.exports',
-	cjs: 'module.exports',
-	es: 'export default',
-	iife: '', // TODO
-	system: '', // TODO
-	umd: undefined,
-}
+    cjs: 'module.exports',
+    es: 'export default',
+    iife: '', // TODO
+    system: '', // TODO
+    umd: undefined,
+};

@@ -1,6 +1,4 @@
-import * as fs from 'fs';
 import hash from 'hash-sum';
-import * as Yaml from 'js-yaml';
 import MessageFormat from 'messageformat';
 import * as path from 'path';
 import { Plugin } from 'rollup';
@@ -10,6 +8,7 @@ import {
     notEmpty,
     relativeUrlMechanisms,
     toMessagesMap,
+    loadYaml,
 } from './helpers';
 
 type KeyHashArgs = {
@@ -58,11 +57,10 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
                 return path.resolve(path.dirname(importer), source);
             }
         },
-        load(id) {
+        async load(id) {
             if (!id.endsWith(endsWith)) return;
 
-            const content = fs.readFileSync(id, { encoding: 'utf8' });
-            const dictionaries = Yaml.load(content);
+            const dictionaries = await loadYaml(id);
             const languages = Object.keys(dictionaries);
             const messages = dictionaries[primaryLocale];
             const messagesMap = toMessagesMap(messages, key =>
@@ -84,7 +82,7 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
 
                     const referenceId = this.emitFile({
                         type: 'asset',
-                        name: `${path.basename(id, endsWith)}.${language}.${IDENTIFIER}.js`,
+                        name: `${path.basename(id)}.${language}.${IDENTIFIER}.js`,
                         source: `${id}.${language}`,
                     });
 
