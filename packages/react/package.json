@@ -1,6 +1,6 @@
 {
   "name": "@lazy-lion/react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lazy Lion React helpers",
   "author": "havelaer",
   "keywords": [
@@ -40,6 +40,6 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@lazy-lion/runtime": "^0.1.0"
+    "@lazy-lion/runtime": "^0.2.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@lazy-lion/rollup-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rollup plugin for Lazy Lion",
   "author": "havelaer",
   "keywords": [
@@ -35,7 +35,7 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
-    "@lazy-lion/runtime": "^0.1.0",
+    "@lazy-lion/runtime": "^0.2.0",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
