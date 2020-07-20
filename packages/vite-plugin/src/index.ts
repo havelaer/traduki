@@ -1,5 +1,5 @@
 import lazyLionRollupPlugin from '@lazy-lion/rollup-plugin';
-import { toMessagesMap, defaultKeyHashFn } from '@lazy-lion/rollup-plugin/lib/module/helpers';
+import { toMessagesMap, defaultKeyHashFn } from '@lazy-lion/rollup-plugin/lib/commonjs/helpers';
 import { Plugin, ServerPlugin } from 'vite';
 import { cachedRead } from 'vite/dist/node/utils/fsUtils';
 import path from 'path';
