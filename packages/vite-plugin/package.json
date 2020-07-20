@@ -1,6 +1,6 @@
 {
   "name": "@lazy-lion/vite-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Vite plugin for Lazy Lion",
   "author": "havelaer",
   "keywords": [

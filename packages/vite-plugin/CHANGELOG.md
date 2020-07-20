@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/havelaer/lazy-lion/compare/v0.2.0...v0.2.1) (2020-07-20)
+
+
+### Bug Fixes
+
+* import path rollup plugin helpers ([1d16879](https://github.com/havelaer/lazy-lion/commit/1d168793f283a54d28152531d911e9227fcc6853))
+
+
+
+
+
 # [0.2.0](https://github.com/havelaer/lazy-lion/compare/v0.1.0...v0.2.0) (2020-07-20)
 
 
