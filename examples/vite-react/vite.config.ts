@@ -4,7 +4,7 @@ import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
     jsx: 'react',
-    plugins: [reactPlugin, lazyLionPlugin({})],
+    plugins: [reactPlugin, lazyLionPlugin()],
 };
 
 export default config;

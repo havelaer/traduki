@@ -14,10 +14,10 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>{t(messages.hello)}</p>
         <p>
-          <button onClick={() => setCount(count => count + 1)}>count is: {count}</button>
+          <button onClick={() => setCount(count => count + 1)}>{t(messages.count, { count })}</button>
         </p>
         <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
+          {t(messages.edit)}
         </p>
         <a
           className="App-link"
@@ -25,7 +25,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          {t(messages.learn)}
         </a>
       </header>
     </div>
