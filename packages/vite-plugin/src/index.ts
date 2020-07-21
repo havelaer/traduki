@@ -17,7 +17,7 @@ type PluginOptions = {
     endsWith?: string;
 };
 
-function createVitePlugin(options: PluginOptions): Plugin {
+function createVitePlugin(options: PluginOptions = {}): Plugin {
     const {
         runtimeModuleId = '@lazy-lion/runtime',
         primaryLocale = 'en',
