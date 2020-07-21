@@ -3,7 +3,7 @@
     "compilerOptions": {
       "typeRoots": ["src/@types"],
       "module": "commonjs",
-      "outDir": "./lib/commonjs"
+      "outDir": "./lib/cjs"
     },
     "include": ["./src"]
   }

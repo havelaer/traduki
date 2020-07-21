@@ -15,8 +15,9 @@
   "files": [
     "lib"
   ],
-  "main": "lib/commonjs/index.js",
-  "module": "lib/module/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "browser": "lib/browser/index.min.js",
   "publishConfig": {
     "access": "public"
   },
@@ -27,19 +28,26 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:main && npm run build:module",
-    "build:main": "tsc -p tsconfig.commonjs.json",
-    "build:module": "tsc -p tsconfig.module.json"
+    "clean": "rm -rf lib",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:browser",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:browser": "rollup -c"
   },
   "peerDependencies": {
     "react": ">=15"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@rollup/plugin-typescript": "^5.0.2",
     "@types/react": "^16.9.43",
     "react": "^16.13.1",
+    "rollup": "^2.22.1",
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@lazy-lion/runtime": "^0.2.0"
+    "@lazy-lion/runtime": "^0.2.0",
+    "remarkable": "^2.0.1"
   }
 }

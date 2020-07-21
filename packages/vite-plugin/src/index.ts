@@ -1,5 +1,5 @@
 import lazyLionRollupPlugin from '@lazy-lion/rollup-plugin';
-import { toMessagesMap, defaultKeyHashFn } from '@lazy-lion/rollup-plugin/lib/commonjs/helpers';
+import { toMessagesMap, defaultKeyHashFn } from '@lazy-lion/rollup-plugin/lib/cjs/helpers';
 import { Plugin, ServerPlugin } from 'vite';
 import { cachedRead } from 'vite/dist/node/utils/fsUtils';
 import path from 'path';
@@ -35,6 +35,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
             if (ctx.path.endsWith(endsWith)) {
                 const contents = await cachedRead(ctx, path.join(root, ctx.path));
                 const dictionaries = Yaml.load(contents.toString());
+                const languages = Object.keys(dictionaries);
                 const messages = dictionaries[primaryLocale];
                 const messagesMap = toMessagesMap(messages, key =>
                     keyHashFn({
@@ -43,8 +44,25 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                     }),
                 );
 
+                const references = languages.map(language => {
+                    const url = `'${ctx.path}.${language}.js'`;
+
+                    return { language, url };
+                });
+
+                const jsonExport = JSON.stringify(messagesMap);
+                const registerMap = references
+                    .map(ref => `${ref.language}: ${ref.url}`)
+                    .join(',');
+
                 ctx.type = 'js';
-                ctx.body = `export default ${JSON.stringify(messagesMap)};`
+                ctx.body = `
+                    import runtime from '${runtimeModuleId}';
+
+                    runtime.register({${registerMap}});
+
+                    export default ${jsonExport};
+                `;
             }
 
             await next();
@@ -56,7 +74,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
             plugins: [lazyLionRollupPlugin(options)],
         },
         configureServer: serverPlugin,
-    }
-};
+    };
+}
 
 export default createVitePlugin;

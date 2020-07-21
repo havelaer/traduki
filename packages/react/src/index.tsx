@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import runtime from '@lazy-lion/runtime';
 import { Remarkable } from 'remarkable';
 
@@ -48,7 +48,7 @@ export function useTranslations(): TranslateHelper {
         return md.render(translator(key, args));
     };
 
-    return useMemo(() => {
+    return React.useMemo(() => {
         (translator as any).md = translatorMarkdown;
 
         return translator as TranslateHelper;
