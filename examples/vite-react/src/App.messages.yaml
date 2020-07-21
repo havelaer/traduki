@@ -1,0 +1,5 @@
+en:
+  welcome: Hello Vite + React!
+  edit: Edit <code>App.tsx</code> and save to test HMR updates.
+  learn: Learn React
+  count: "count is: {count}"
