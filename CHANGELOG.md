@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2](https://github.com/havelaer/lazy-lion/compare/v0.2.1...v0.2.2) (2020-07-22)
+
+
+### Bug Fixes
+
+* **runtime:** (re)load if locale is already known ([0bdc27e](https://github.com/havelaer/lazy-lion/commit/0bdc27e2768d7fa89cdc471afb8bf1449a18811d))
+* **vite-plugin:** default empty options object ([f3983a9](https://github.com/havelaer/lazy-lion/commit/f3983a9586a699b96dfd5d27cd16ad1450c19251))
+* **vite-plugin:** dev mode and react to changes ([31ee610](https://github.com/havelaer/lazy-lion/commit/31ee61001647c3721d433e7ec4e9b1079e608db0))
+* translate all text and add *.messages.yaml type ([10d6557](https://github.com/havelaer/lazy-lion/commit/10d65571da97043e29d7638ec7e14e1abcf97146))
+
+
+### Features
+
+* added locale toggle to example ([1f737a6](https://github.com/havelaer/lazy-lion/commit/1f737a69b7bca799583b47a6797cb46abbb0cd5f))
+* vite-react example ([833a775](https://github.com/havelaer/lazy-lion/commit/833a77587243bde2fdd9cdb39c659c191dcfb4fa))
+
+
+
+
+
 ## [0.2.1](https://github.com/havelaer/lazy-lion/compare/v0.2.0...v0.2.1) (2020-07-20)
 
 
