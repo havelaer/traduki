@@ -12,7 +12,7 @@ Lazy Lion is a set of build- and runtime tools for lazy loading L10n messages.
 
 * It uses [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting.
 
-* The tooling is build for web applications using [Rollup](https://rollupjs.org/guide/en/) (see: [@lazy-lion/rollup-plugin](#@lazy-lion/rollup-plugin)) or [Vite](https://github.com/vitejs/vite) (see: [@lazy-lion/vite-plugin](#@lazy-lion/vite-plugin)).
+* The tooling is build for web applications using [Rollup](https://rollupjs.org/guide/en/) (see: [@lazy-lion/rollup-plugin](#lazy-lionrollup-plugin)) or [Vite](https://github.com/vitejs/vite) (see: [@lazy-lion/vite-plugin](#lazy-lionvite-plugin)).
 
 * React hooks are also available (see: [@lazy-lion/react](#@lazy-lion/react))
 
