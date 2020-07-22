@@ -10,7 +10,7 @@ export type Translator = (
 ) => string;
 
 export type TranslateHelper = Translator & {
-    md: Translator;
+    markdown: Translator;
 };
 
 interface LazyLionContextProps {
@@ -49,7 +49,7 @@ export function useTranslations(): TranslateHelper {
     };
 
     return React.useMemo(() => {
-        (translator as any).md = translatorMarkdown;
+        (translator as any).markdown = translatorMarkdown;
 
         return translator as TranslateHelper;
     }, []);
