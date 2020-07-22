@@ -1,20 +1,22 @@
 # Lazy Lion
 
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/lazy-lion/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.2.2-blue)](https://www.npmjs.com/package/@lazy-lion/runtime)
+
 **⚠️ WORK IN PROGRESS ⚠**
 
-*Lazy Lion is a set of build- and runtime tools for lazy loading L10n messages.*
+Lazy Lion is a set of build- and runtime tools for lazy loading L10n messages.
 
-It is inspired by the mechanisms of CSS Modules: Modular / locally scoped translation files which are bundled and precompiled per locale for production.
+* *Modular* messages files which are bundled and precompiled *per locale* and *per chunk* for production.
 
-When importing the messages YAML from a JS Module, it exports an object with all mappings from local message keys to global message keys. As side effect it registers the location of the bundled (global) messages file for each locale.
+* When importing the messages YAML from a JS Module, it exports an object with all mappings from local message keys to global message keys. And as side effect it registers the location of the bundled (global) messages file for each locale.
 
-This even works when the application is split in different chunks. For each chunk messages files are bundled per locale.
+* It uses [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting.
 
-You can use toe power of [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting in the messages files.
+* The tooling is build for web applications using [Rollup](https://rollupjs.org/guide/en/) (see: [@lazy-lion/rollup-plugin](#@lazy-lion/rollup-plugin)) or [Vite](https://github.com/vitejs/vite) (see: [@lazy-lion/vite-plugin](#@lazy-lion/vite-plugin)).
 
-The tooling is build for web application using [Rollup](https://rollupjs.org/guide/en/) or [Vite](https://github.com/vitejs/vite).
+* React hooks are also available (see: [@lazy-lion/react](#@lazy-lion/react))
 
-### Example setup
+## Example
 
 ```yaml
 # a.messages.yaml
@@ -26,47 +28,18 @@ nl:
     intro: Hoe is het met jou?
 ```
 
-```yaml
-# b.messages.yaml
-en:
-    hello: Hey!
-    example: We have {p, number, percent} code coverage.
-nl:
-    hello: Hoi!
-    example: We hebben {p, number, percent} code dekking.
-```
-
 ```js
 // index.js
-import runtime from '@lazy-lion/runtime'
-import messagesA from 'a.messages.yaml'
-import messagesB from 'b.messages.yaml'
+import llr from '@lazy-lion/runtime'
+import messages from 'a.messages.yaml'
 
-console.log(messagesA); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
-console.log(messagesB); // { hello: 'hello_1f4f2d72', example: 'example_5bb0d8fb' }
+console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 
 (async () => {
-  await runtime.setLocale('en').load();
-  runtime.translate(messagesA.hello, { name: 'John' }); // "Hello John!"
-})
-```
+    await llr.setLocale('en').load();
 
-### Example production build
-
-A production build wil result in a compiled `index.js`, a precompiled messages file for english `index.en.js` and a precompiled dutch messages file `index.nl.js`.
-
-During runtime the correct locale can be loaded.
-
-```js
-// index.en.js
-// precompiled bundled messageformat messages javascript file for english
-// (also support for commonjs)
-export default {
-  hello_30ebe736: function(d) { return "Hello " + d.name + "!"; },
-  intro_01b95038: function(d) { return "How are you?"; },
-  hello_1f4f2d72: function(d) { return "Hey!"; },
-  example_5bb0d8fb: function(d) { return "We have " + fmt.number(d.p, "en", (" percent").trim()) + " code coverage."; }
-}
+    llr.translate(messages.hello, { name: 'John' }); // "Hello John!"
+})();
 ```
 
 ## @lazy-lion/vite-plugin
@@ -95,7 +68,7 @@ export default: UserConfig = {
 
 ### Options
 
-`TODO`
+TODO
 
 ## @lazy-lion/rollup-plugin
 
@@ -126,14 +99,19 @@ export default {
 
 ### Options
 
-`TODO`
+TODO
 
 ## @lazy-lion/react
 
 ### Install
 
 ```bash
-# No need to install @lazy-lion/runtime
+# For Rollup:
+npm install --save-dev @lazy-lion/rollup-plugin
+npm install @lazy-lion/react
+
+# Or for vite:
+npm install --save-dev @lazy-lion/vite-plugin
 npm install @lazy-lion/react
 ```
 
@@ -178,4 +156,30 @@ function Component() {
 }
 
 export default App;
+```
+
+Lazy Lion is build with code splitting in mind. The react package provides a `lazy` function.
+
+`lazy` is a wrapper around `React.lazy`: besides handling dynamic imports of components, it also takes care of the loading of the precompiled messages files associated with the chunk.
+
+```js
+import React, { Suspense } from 'react';
+import { lazy } from '@lazy-lion/react';
+import messages from './Component.messages.yaml';
+
+const AsyncComponent = lazy(() => import('./AsyncComponent'));
+
+function Component() {
+    const t = useTranslations();
+
+    return (
+        <div>
+            <Suspense fallback={<div>{t(messages.loading)}</div>}>
+                <AsyncComponent />
+            </Suspense>
+        </div>
+    );
+}
+
+export default Component;
 ```
