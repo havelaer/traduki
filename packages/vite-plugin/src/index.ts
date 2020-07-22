@@ -1,9 +1,14 @@
 import lazyLionRollupPlugin from '@lazy-lion/rollup-plugin';
-import { toMessagesMap, defaultKeyHashFn } from '@lazy-lion/rollup-plugin/lib/cjs/helpers';
+import {
+    defaultKeyHashFn,
+    mapMessageKeys,
+    toMessagesMap,
+} from '@lazy-lion/rollup-plugin/lib/cjs/helpers';
+import Yaml from 'js-yaml';
+import MessageFormat from 'messageformat';
+import path from 'path';
 import { Plugin, ServerPlugin } from 'vite';
 import { cachedRead } from 'vite/dist/node/utils/fsUtils';
-import path from 'path';
-import Yaml from 'js-yaml';
 
 type KeyHashArgs = {
     key: string;
@@ -25,6 +30,8 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
         endsWith = '.messages.yaml',
     } = options;
 
+    const assets = new Map();
+
     const serverPlugin: ServerPlugin = ({
         root, // project root directory, absolute path
         app, // Koa app instance
@@ -32,6 +39,8 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
         watcher, // chokidar file watcher instance
     }) => {
         app.use(async (ctx, next) => {
+            // Parse message.yaml and export messages map.
+            // As side effect register for each locale the path to the compiled messages module
             if (ctx.path.endsWith(endsWith)) {
                 const contents = await cachedRead(ctx, path.join(root, ctx.path));
                 const dictionaries = Yaml.load(contents.toString());
@@ -45,24 +54,33 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 );
 
                 const references = languages.map(language => {
-                    const url = `'${ctx.path}.${language}.js'`;
+                    const url = `${ctx.path}.${language}.js`;
+                    const messages = mapMessageKeys(dictionaries[language], messagesMap);
+                    const messageformat = new MessageFormat(language);
+                    const compiled = messageformat.compile(messages).toString('export default');
+
+                    assets.set(url, compiled);
 
                     return { language, url };
                 });
 
                 const jsonExport = JSON.stringify(messagesMap);
-                const registerMap = references
-                    .map(ref => `${ref.language}: ${ref.url}`)
-                    .join(',');
+                const registerMap = references.map(ref => `${ref.language}: '${ref.url}?t=${Date.now()}'`).join(',');
 
                 ctx.type = 'js';
-                ctx.body = `
-                    import runtime from '${runtimeModuleId}';
+                ctx.body = [
+                    `import runtime from '${runtimeModuleId}';`,
+                    `runtime.register({${registerMap}});`,
+                    `export default ${jsonExport};`,
+                ].join('\n');
+            }
 
-                    runtime.register({${registerMap}});
+            // Return the compiled messages module for the requested locale
+            if (assets.has(ctx.path)) {
+                const compiled = assets.get(ctx.path);
 
-                    export default ${jsonExport};
-                `;
+                ctx.type = 'js';
+                ctx.body = compiled;
             }
 
             await next();
