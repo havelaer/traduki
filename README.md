@@ -1,6 +1,6 @@
 # Lazy Lion
 
-## ⚠️ WORK IN PROGRESS ⚠️
+**⚠️ WORK IN PROGRESS ⚠**
 
 *Lazy Lion is a set of build- and runtime tools for lazy loading L10n messages.*
 
@@ -12,7 +12,7 @@ This even works when the application is split in different chunks. For each chun
 
 You can use toe power of [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting in the messages files.
 
-The tooling is build for [Rollup](https://rollupjs.org/guide/en/).
+The tooling is build for web application using [Rollup](https://rollupjs.org/guide/en/) or [Vite](https://github.com/vitejs/vite).
 
 ### Example setup
 
@@ -38,7 +38,7 @@ nl:
 
 ```js
 // index.js
-import Lion from '@lazy-lion/runtime'
+import runtime from '@lazy-lion/runtime'
 import messagesA from 'a.messages.yaml'
 import messagesB from 'b.messages.yaml'
 
@@ -46,8 +46,8 @@ console.log(messagesA); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 console.log(messagesB); // { hello: 'hello_1f4f2d72', example: 'example_5bb0d8fb' }
 
 (async () => {
-  await Lion.setLocale('en').load();
-  Lion.translate(messagesA.hello, { name: 'John' }); // "Hello John!"
+  await runtime.setLocale('en').load();
+  runtime.translate(messagesA.hello, { name: 'John' }); // "Hello John!"
 })
 ```
 
@@ -69,7 +69,35 @@ export default {
 }
 ```
 
-## Getting started
+## @lazy-lion/vite-plugin
+
+### Install
+
+```bash
+npm install --save-dev @lazy-lion/vite-plugin
+npm install @lazy-lion/runtime
+```
+
+### Usage
+
+Create a vite.config.ts configuration file and import the plugin:
+
+```ts
+// vite.config.ts
+import type { UserConfig } from 'vite';
+import lazyLionPlugin from '@lazy-lion/vite-plugin';
+
+export default: UserConfig = {
+    jsx: 'react',
+    plugins: [lazyLionPlugin()],
+};
+```
+
+### Options
+
+`TODO`
+
+## @lazy-lion/rollup-plugin
 
 ### Install
 
@@ -83,20 +111,71 @@ npm install @lazy-lion/runtime
 Create a rollup.config.js configuration file and import the plugin:
 
 ```js
+// rollup.config.js
 import lazyLionPlugin from '@lazy-lion/rollup-plugin';
 
-module.exports = {
-  input: 'src/index.js',
-  output: {
-    dir: 'output',
-    format: 'cjs'
-  },
-  plugins: [
-    lazyLionPlugin()
-  ]
+export default {
+    input: 'src/index.js',
+    output: {
+        dir: 'output',
+        format: 'cjs',
+    },
+    plugins: [lazyLionPlugin()],
 };
 ```
 
 ### Options
 
-TODO
+`TODO`
+
+## @lazy-lion/react
+
+### Install
+
+```bash
+# No need to install @lazy-lion/runtime
+npm install @lazy-lion/react
+```
+
+### Usage
+
+Make sure to wrap you application in the `LazyLionProvider`:
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { LazyLionProvider } from '@lazy-lion/react';
+import App from './App';
+
+ReactDOM.render(
+    <LazyLionProvider initialLocale="en">
+        <App />
+    </LazyLionProvider>
+    document.getElementById('root'),
+);
+```
+
+Then you can use the `useTranslations` and `useLocale` hooks like in the example code below:
+
+```js
+import React from 'react';
+import { useTranslations, useLocale } from '@lazy-lion/react';
+import messages from './App.messages.yaml';
+
+function Component() {
+    const t = useTranslations();
+    const [, setLocale] = useLocale();
+
+    return (
+        <div>
+            <p>{t(messages.welcome)}</p>
+            <p>
+                <button onClick={() => setLocale('en')}>en</button>
+                <button onClick={() => setLocale('nl')}>nl</button>
+            </p>
+        </div>
+    );
+}
+
+export default App;
+```
