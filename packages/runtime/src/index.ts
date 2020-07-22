@@ -5,6 +5,8 @@ class LazyLionRuntime {
 
     register(map: Record<string, string>) {
         this.messageMaps.push(map);
+
+        if (this.language) this.load();
     }
 
     setLocale(language: string) {
