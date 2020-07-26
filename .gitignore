@@ -11,3 +11,5 @@ npm-debug.log
 packages/*/lib
 packages/*/types
 output
+dist
+.cache
