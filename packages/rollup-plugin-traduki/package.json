@@ -1,6 +1,6 @@
 {
   "name": "@traduki/rollup-plugin-traduki",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Rollup plugin for Traduki",
   "author": "havelaer",
   "keywords": [
@@ -35,7 +35,7 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
-    "@traduki/runtime": "^0.2.3",
+    "@traduki/runtime": "^0.2.5",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
