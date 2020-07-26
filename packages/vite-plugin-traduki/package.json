@@ -1,5 +1,5 @@
 {
-  "name": "@traduki/vite-plugin-traduki-traduki",
+  "name": "@traduki/vite-plugin-traduki",
   "version": "0.2.3",
   "description": "Vite plugin for Traduki",
   "author": "havelaer",
