@@ -4,7 +4,7 @@
   "description": "Vite plugin for Traduki",
   "author": "havelaer",
   "keywords": [
-    "rollup-plugin",
+    "vite-plugin",
     "messageformat",
     "pluralformat",
     "icu",
