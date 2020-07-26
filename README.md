@@ -164,7 +164,7 @@ Traduki is build with code splitting in mind. The react package provides a `lazy
 
 ```js
 import React, { Suspense } from 'react';
-import { lazy } from '@traduki/react';
+import { lazy, useTranslator } from '@traduki/react';
 import messages from './Component.messages.yaml';
 
 const AsyncComponent = lazy(() => import('./AsyncComponent'));
