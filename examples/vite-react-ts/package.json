@@ -6,13 +6,14 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
+    "@traduki/react": "^0.2.5",
     "@pika/react": "^16.13.1",
     "@pika/react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "@traduki/vite-plugin-traduki": "^0.2.4",
+    "@traduki/vite-plugin-traduki": "^0.2.5",
     "typescript": "^3.9.3",
     "vite": "^1.0.0-rc.1",
     "vite-plugin-react": "^3.0.0"

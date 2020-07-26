@@ -895,18 +895,18 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@traduki/react@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@traduki/react/-/react-0.2.3.tgz#a351c53d797179c2afe26dbbbcfcd704e7647885"
-  integrity sha512-fr46NkcxR/RfBNw6IrCO9TesragC/F7SgtLUMmebaKkwXhABY6G4df1WIidjHJKltnv1EjSgnKuseurhG42CDA==
+"@traduki/react@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@traduki/react/-/react-0.2.5.tgz#0a88d9c8760d24c5e56f312843b827d62985696d"
+  integrity sha512-bOjw10sjZEVfclqQOqokMUHhOCKeVePwfHi4niCh9ZpMsjNrRKfvF9X0ZFyFqK+Lrdc2yiLf95g5l6sHxhEOMw==
   dependencies:
-    "@traduki/runtime" "^0.2.3"
+    "@traduki/runtime" "^0.2.5"
     remarkable "^2.0.1"
 
-"@traduki/runtime@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@traduki/runtime/-/runtime-0.2.3.tgz#099e84959c76c99e273f76af083c158077bf9d14"
-  integrity sha512-lgchtsZF9TgO0rGVxXXeXdiGj1FIqdY/J86kehmTs+mMzKxDqzAmOpeTdKHxJsk3XKtx0ppAWRMHIL5XV6M0Aw==
+"@traduki/runtime@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@traduki/runtime/-/runtime-0.2.5.tgz#e5104cf749196a5d63b2e59d919e5d007766079a"
+  integrity sha512-4w0xLwEsgE7vbKnFbTxhVLnzSow3LsUo4QqYgpmsnlab/+qJKBTNPoSlDHhUukb2txn4/dBVjA+myQ0KVA023Q==
 
 "@types/prop-types@*":
   version "15.7.3"
