@@ -1,0 +1,10 @@
+en:
+  welcome: Hello Vite + React!
+  edit: Edit `App.tsx` and save to test HMR updates.
+  learn: Learn React
+  count: "count is: {count}"
+nl:
+  welcome: Hallo Vite + React!
+  edit: Wijzig `App.tsx` om HMR updates te testen.
+  learn: Leer React
+  count: "teller is: {count}"
