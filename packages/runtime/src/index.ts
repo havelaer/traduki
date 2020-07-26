@@ -3,14 +3,8 @@ class TradukiRuntime {
     private messages: Record<string, (arg: Record<string, string | number>) => string> = {};
     private locale: string = '';
 
-    constructor() {
-        console.log('asdf')
-    }
-
     register(map: Record<string, string>) {
         this.messageMaps.push(map);
-
-        console.log('register', this.messageMaps)
 
         if (this.locale) this.load();
     }
@@ -18,15 +12,11 @@ class TradukiRuntime {
     setLocale(locale: string) {
         this.locale = locale;
 
-        console.log('setLocale', this.locale)
-
         return this;
     }
 
     async load() {
         const locale = this.locale;
-
-        console.log('load', this.locale, this.messageMaps)
 
         const results = await Promise.all(
             this.messageMaps
