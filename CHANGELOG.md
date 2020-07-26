@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/havelaer/traduki/compare/v0.2.6...v0.2.7) (2020-07-26)
+
+
+### Bug Fixes
+
+* remove console.logs ([380d0f2](https://github.com/havelaer/traduki/commit/380d0f20c648b587067325a55f65a10bb390692f))
+
+
+
+
+
 ## [0.2.6](https://github.com/havelaer/traduki/compare/v0.2.5...v0.2.6) (2020-07-26)
 
 

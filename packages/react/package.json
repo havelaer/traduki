@@ -1,6 +1,6 @@
 {
   "name": "@traduki/react",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Traduki React helpers",
   "author": "havelaer",
   "keywords": [
@@ -45,7 +45,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@traduki/runtime": "^0.2.6",
+    "@traduki/runtime": "^0.2.7",
     "remarkable": "^2.0.1"
   }
 }
