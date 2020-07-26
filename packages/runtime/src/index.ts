@@ -1,42 +1,54 @@
 class TradukiRuntime {
     private messageMaps: Record<string, string>[] = [];
-    private translations: Record<string, (arg: Record<string, string | number>) => string> = {};
-    private language: string = '';
+    private messages: Record<string, (arg: Record<string, string | number>) => string> = {};
+    private locale: string = '';
+
+    constructor() {
+        console.log('asdf')
+    }
 
     register(map: Record<string, string>) {
         this.messageMaps.push(map);
 
-        if (this.language) this.load();
+        console.log('register', this.messageMaps)
+
+        if (this.locale) this.load();
     }
 
-    setLocale(language: string) {
-        this.language = language;
+    setLocale(locale: string) {
+        this.locale = locale;
+
+        console.log('setLocale', this.locale)
 
         return this;
     }
 
     async load() {
-        const language = this.language;
+        const locale = this.locale;
+
+        console.log('load', this.locale, this.messageMaps)
+
         const results = await Promise.all(
             this.messageMaps
-                .map(map => map[language])
+                .map(map => map[locale])
                 .filter(Boolean)
-                .map(src => import(src).then(({ default: translations }) => translations),
+                .map(src => import(src).then(({ default: messages }) => messages),
             ),
         );
-        this.translations = results.reduce(
-            (prev, translations) => ({ ...prev, ...translations }),
+
+        this.messages = results.reduce(
+            (prev, messages) => ({ ...prev, ...messages }),
             {},
         );
     }
 
     translate(key: string, args: Record<string, string | number>) {
-        if (!this.translations[key]) {
+        if (!this.messages[key]) {
             console.warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
         }
 
-        return this.translations[key](args);
+        return this.messages[key](args);
     }
 }
 

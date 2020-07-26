@@ -4,7 +4,12 @@ import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
     jsx: 'react',
-    plugins: [reactPlugin, tradukiPlugin()],
+    plugins: [
+        reactPlugin,
+        tradukiPlugin({
+            runtimeModuleId: '@traduki/react',
+        }),
+    ],
 };
 
 export default config;

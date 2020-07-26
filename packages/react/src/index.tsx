@@ -1,5 +1,5 @@
 import * as React from 'react';
-import runtime from '@traduki/runtime';
+import traduki from '@traduki/runtime';
 import { Remarkable } from 'remarkable';
 
 const md = new Remarkable();
@@ -41,7 +41,7 @@ export function useTranslator(): TranslateHelper {
     }
 
     const translator: Translator = (key, args = {}) => {
-        return runtime.translate(key, args);
+        return traduki.translate(key, args);
     };
 
     const translatorMarkdown: Translator = (key, args = {}) => {
@@ -70,8 +70,8 @@ export const TradukiProvider: React.FC<TradukiProviderProps> = ({
     const [locale, setLocale] = React.useState<string | null>(null);
 
     const updateLocale = (locale: string) => {
-        runtime.setLocale(locale);
-        runtime.load().then(() => setLocale(locale));
+        traduki.setLocale(locale);
+        traduki.load().then(() => setLocale(locale));
     }
 
     React.useMemo(() => updateLocale(initialLocale), []);
@@ -103,5 +103,11 @@ export const TradukiProvider: React.FC<TradukiProviderProps> = ({
  * It loads the locale based messages files before resolving the import factory promise
  */
 export const lazy: typeof React.lazy = factory => {
-    return React.lazy(() => factory().then(result => runtime.load().then(() => result)));
+    return React.lazy(() => factory().then(result => traduki.load().then(() => result)));
 }
+
+/*
+ * The default export is the traduki runtime
+ * Use this as runtimeModuleId `@traduki/react` in the rollup/vite/parcel plugin
+ */
+export default traduki;
