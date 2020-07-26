@@ -5,10 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.2](https://github.com/havelaer/traduki/compare/v0.2.1...v0.2.2) (2020-07-22)
 
-
-### Bug Fixes
-
-* **runtime:** (re)load if locale is already known ([0bdc27e](https://github.com/havelaer/traduki/commit/0bdc27e2768d7fa89cdc471afb8bf1449a18811d))
+**Note:** Version bump only for package @traduki/rollup-plugin-traduki
 
 
 
@@ -16,18 +13,16 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.2.0](https://github.com/havelaer/traduki/compare/v0.1.0...v0.2.0) (2020-07-20)
 
-**Note:** Version bump only for package @traduki/runtime
+
+### Features
+
+* initial vite plugin ([13e22a1](https://github.com/havelaer/traduki/commit/13e22a15a9483e15dff79c29156ca5a2c7e67cb6))
 
 
 
 
 
 # [0.1.0](https://github.com/havelaer/traduki/compare/v0.0.3...v0.1.0) (2020-07-19)
-
-
-### Bug Fixes
-
-* **runtime:** translation arg type ([2861b5a](https://github.com/havelaer/traduki/commit/2861b5a69ed95b4d231913385bc234ab7e5fa2ca))
 
 
 ### Features
@@ -51,4 +46,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.0.2](https://github.com/havelaer/traduki/compare/v0.0.1...v0.0.2) (2020-07-19)
 
-**Note:** Version bump only for package @traduki/runtime
+**Note:** Version bump only for package @traduki/rollup-plugin-traduki

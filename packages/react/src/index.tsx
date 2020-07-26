@@ -1,5 +1,5 @@
 import * as React from 'react';
-import runtime from '@lazy-lion/runtime';
+import runtime from '@traduki/runtime';
 import { Remarkable } from 'remarkable';
 
 const md = new Remarkable();
@@ -13,30 +13,30 @@ export type TranslateHelper = Translator & {
     markdown: Translator;
 };
 
-interface LazyLionContextProps {
+interface TradukiContextProps {
     locale: string | null;
     setLocale(locale: string): void;
 }
 
-export const LazyLionContext = React.createContext<LazyLionContextProps | null>(
+export const TradukiContext = React.createContext<TradukiContextProps | null>(
     null,
 );
 
 export function useLocale(): [string | null, (locale: string) => void] {
-    const context = React.useContext(LazyLionContext);
+    const context = React.useContext(TradukiContext);
     if (!context) {
-        throw new Error(`useLocale must be used within a LazyLionProvider`);
+        throw new Error(`useLocale must be used within a TradukiProvider`);
     }
 
     return [context.locale, context.setLocale];
 }
 
-export function useTranslations(): TranslateHelper {
-    const context = React.useContext(LazyLionContext);
+export function useTranslator(): TranslateHelper {
+    const context = React.useContext(TradukiContext);
 
     if (!context) {
         throw new Error(
-            `useTranslations must be used within a LazyLionProvider`,
+            `useTranslator must be used within a TradukiProvider`,
         );
     }
 
@@ -55,7 +55,7 @@ export function useTranslations(): TranslateHelper {
     }, []);
 }
 
-interface LazyLionProviderProps {
+interface TradukiProviderProps {
     initialLocale: string;
 }
 
@@ -63,7 +63,7 @@ interface LazyLionProviderProps {
  * Application provider needed for the provided react hooks
  * During initialization it loads the locale based messages files.
  */
-export const LazyLionProvider: React.FC<LazyLionProviderProps> = ({
+export const TradukiProvider: React.FC<TradukiProviderProps> = ({
     initialLocale,
     children,
 }) => {
@@ -76,7 +76,7 @@ export const LazyLionProvider: React.FC<LazyLionProviderProps> = ({
 
     React.useMemo(() => updateLocale(initialLocale), []);
 
-    const context: LazyLionContextProps = React.useMemo(() => {
+    const context: TradukiContextProps = React.useMemo(() => {
         return {
             locale,
             setLocale(locale: string) {
@@ -92,9 +92,9 @@ export const LazyLionProvider: React.FC<LazyLionProviderProps> = ({
     if (!context.locale) return null;
 
     return (
-        <LazyLionContext.Provider value={context}>
+        <TradukiContext.Provider value={context}>
             {children}
-        </LazyLionContext.Provider>
+        </TradukiContext.Provider>
     );
 };
 

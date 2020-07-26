@@ -7,6 +7,6 @@ export default {
     output: {
         file: pkg.browser,
         format: 'umd',
-        name: 'LazyLion'
+        name: 'Traduki'
     },
 };

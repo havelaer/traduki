@@ -1,7 +1,7 @@
 {
-  "name": "@lazy-lion/react",
+  "name": "@traduki/react",
   "version": "0.2.2",
-  "description": "Lazy Lion React helpers",
+  "description": "Traduki React helpers",
   "author": "havelaer",
   "keywords": [
     "messageformat",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/havelaer/lazy-lion.git",
+    "url": "https://github.com/havelaer/traduki.git",
     "directory": "packages/react"
   },
   "license": "MIT",
@@ -47,7 +47,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@lazy-lion/runtime": "^0.2.2",
+    "@traduki/runtime": "^0.2.2",
     "remarkable": "^2.0.1"
   }
 }

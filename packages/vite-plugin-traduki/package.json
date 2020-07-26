@@ -1,7 +1,7 @@
 {
-  "name": "@lazy-lion/rollup-plugin",
+  "name": "@traduki/vite-plugin-traduki-traduki",
   "version": "0.2.2",
-  "description": "Rollup plugin for Lazy Lion",
+  "description": "Vite plugin for Traduki",
   "author": "havelaer",
   "keywords": [
     "rollup-plugin",
@@ -21,8 +21,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/havelaer/lazy-lion.git",
-    "directory": "packages/rollup-plugin"
+    "url": "https://github.com/havelaer/traduki.git",
+    "directory": "packages/vite-plugin"
   },
   "license": "MIT",
   "scripts": {
@@ -35,17 +35,17 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
-    "@lazy-lion/runtime": "^0.2.2",
+    "@traduki/runtime": "^0.2.2",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
     "jest": "^26.1.0",
-    "rollup": "^2.20.0",
     "ts-jest": "^26.1.1",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.6",
+    "vite": "^1.0.0-rc.1"
   },
   "dependencies": {
-    "hash-sum": "^2.0.0",
+    "@traduki/rollup-plugin-traduki": "^0.2.2",
     "js-yaml": "^3.14.0",
     "messageformat": "^2.3.0"
   }

@@ -12,7 +12,7 @@ export default {
     output: {
         file: pkg.browser,
         format: 'umd',
-        name: 'LazyLionReact',
+        name: 'TradukiReact',
         globals: {
             react: 'React',
         }

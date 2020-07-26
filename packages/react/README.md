@@ -1,3 +1,3 @@
-# @lazy-lion/react
+# @traduki/react
 
-See main github repository [readme.md](https://github.com/havelaer/lazy-lion)
+See main github repository [readme.md](https://github.com/havelaer/traduki)

@@ -34,11 +34,11 @@ function defaultKeyHashFn({ key, path }: KeyHashArgs) {
     return hash(`${key}_${path}`);
 }
 
-const IDENTIFIER = 'LAZY_LION_5008cbd5';
+const IDENTIFIER = 'TRADUKI_5008cbd5';
 
-const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
+const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
     const {
-        runtimeModuleId = '@lazy-lion/runtime',
+        runtimeModuleId = '@traduki/runtime',
         primaryLocale = 'en',
         keyHashFn = defaultKeyHashFn,
         endsWith = '.messages.yaml',
@@ -51,7 +51,7 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
     let format: string = '';
 
     return {
-        name: 'lazy-lion',
+        name: 'traduki',
         resolveId(source, importer) {
             if (importer && source.endsWith(endsWith)) {
                 return path.resolve(path.dirname(importer), source);
@@ -76,7 +76,7 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
             const references = languages
                 .map(language => {
                     if (!dictionaries.hasOwnProperty(language)) {
-                        console.warn(`[lazy-lion] Missing language ${language} for ${id}`);
+                        console.warn(`[traduki] Missing language ${language} for ${id}`);
                         return;
                     }
 
@@ -169,4 +169,4 @@ const lazyLionPlugin = (options: PluginOptions = {}): Plugin => {
     };
 };
 
-export default lazyLionPlugin;
+export default tradukiPlugin;

@@ -1,4 +1,4 @@
-class LazyLionRuntime {
+class TradukiRuntime {
     private messageMaps: Record<string, string>[] = [];
     private translations: Record<string, (arg: Record<string, string | number>) => string> = {};
     private language: string = '';
@@ -32,7 +32,7 @@ class LazyLionRuntime {
 
     translate(key: string, args: Record<string, string | number>) {
         if (!this.translations[key]) {
-            console.warn(`[lazy-lion] Global message key '${key}' does not exit, or is not loaded yet.`);
+            console.warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
         }
 
@@ -40,4 +40,4 @@ class LazyLionRuntime {
     }
 }
 
-export default new LazyLionRuntime();
+export default new TradukiRuntime();

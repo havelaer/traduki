@@ -1,9 +1,9 @@
-import lazyLionRollupPlugin from '@lazy-lion/rollup-plugin';
+import tradukiRollupPlugin from '@traduki/rollup-plugin-traduki';
 import {
     defaultKeyHashFn,
     mapMessageKeys,
     toMessagesMap,
-} from '@lazy-lion/rollup-plugin/lib/cjs/helpers';
+} from '@traduki/rollup-plugin-traduki/lib/cjs/helpers';
 import Yaml from 'js-yaml';
 import MessageFormat from 'messageformat';
 import path from 'path';
@@ -24,7 +24,7 @@ type PluginOptions = {
 
 function createVitePlugin(options: PluginOptions = {}): Plugin {
     const {
-        runtimeModuleId = '@lazy-lion/runtime',
+        runtimeModuleId = '@traduki/runtime',
         primaryLocale = 'en',
         keyHashFn = defaultKeyHashFn,
         endsWith = '.messages.yaml',
@@ -89,7 +89,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
 
     return {
         rollupInputOptions: {
-            plugins: [lazyLionRollupPlugin(options)],
+            plugins: [tradukiRollupPlugin(options)],
         },
         configureServer: serverPlugin,
     };

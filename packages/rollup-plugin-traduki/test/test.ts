@@ -1,5 +1,5 @@
 import { rollup, RollupOptions } from 'rollup';
-import lazyLion from '../src/index';
+import traduki from '../src/index';
 
 const config: RollupOptions = {
     input: './test/fixtures/index.js',
@@ -10,7 +10,7 @@ const config: RollupOptions = {
         chunkFileNames: `[name]-chunk.[hash].js`,
         assetFileNames: `assets/[name]-asset.[hash].js`,
     },
-    plugins: [lazyLion({
+    plugins: [traduki({
         runtimeModuleId: './runtime'
     })],
 };
