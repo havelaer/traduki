@@ -249,34 +249,34 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@traduki/react@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@traduki/react/-/react-0.2.5.tgz#0a88d9c8760d24c5e56f312843b827d62985696d"
-  integrity sha512-bOjw10sjZEVfclqQOqokMUHhOCKeVePwfHi4niCh9ZpMsjNrRKfvF9X0ZFyFqK+Lrdc2yiLf95g5l6sHxhEOMw==
+"@traduki/react@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@traduki/react/-/react-0.2.6.tgz#6658aa51fc7aefc80d04ea0236826eae906f9126"
+  integrity sha512-j7oWbG5nZ7uJE8WUCuivscTDcIdZZdhIljk6gHSb8CloZ2hqdBH/gKRSWZhssZBmtcLWqVCDdX4WAOv1bTBGoQ==
   dependencies:
-    "@traduki/runtime" "^0.2.5"
+    "@traduki/runtime" "^0.2.6"
     remarkable "^2.0.1"
 
-"@traduki/rollup-plugin-traduki@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@traduki/rollup-plugin-traduki/-/rollup-plugin-traduki-0.2.5.tgz#e7811014c1c61951e1d05e4f921a8ae0e37ac89c"
-  integrity sha512-mn14wzb/ZpQXuXgAj3bLTxa4akuHcQczsOwPcUIS9d683zGL33kcUnfVfoEnfLhxDs+IOxNxO2e0jwTajk2OVw==
+"@traduki/rollup-plugin-traduki@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@traduki/rollup-plugin-traduki/-/rollup-plugin-traduki-0.2.6.tgz#a93a8a437c9a5a62c0f491e0736c3e1b5ea46ac8"
+  integrity sha512-eEmU4bEYaDJzF0wXEq6NPsot1XCQ3/TTzg+kS81T6RdwkVIJQg2Y/101PN/9YB99Ldpbl/5eW+PvvfaXDk6Z8w==
   dependencies:
     hash-sum "^2.0.0"
     js-yaml "^3.14.0"
     messageformat "^2.3.0"
 
-"@traduki/runtime@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@traduki/runtime/-/runtime-0.2.5.tgz#e5104cf749196a5d63b2e59d919e5d007766079a"
-  integrity sha512-4w0xLwEsgE7vbKnFbTxhVLnzSow3LsUo4QqYgpmsnlab/+qJKBTNPoSlDHhUukb2txn4/dBVjA+myQ0KVA023Q==
+"@traduki/runtime@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@traduki/runtime/-/runtime-0.2.6.tgz#e91b0680d19e8cc959b24e4cd3d254000afffec4"
+  integrity sha512-Db8Yccf3kM+X6hZ1wFuKYI0nSayzeRoz2hEdRD5JNBz27HpF4+WjJCmhDHWGKyz3cC+PneRNdIDVoRPPxmZCVg==
 
-"@traduki/vite-plugin-traduki@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@traduki/vite-plugin-traduki/-/vite-plugin-traduki-0.2.5.tgz#e5182463f4c573aa5af305e5054803597b100315"
-  integrity sha512-O3yXsPF93fVzuLebpeNOcvcOBGqut4oHsZBHWJxu/6kxKCosG5ONHICoRc1SZI8UBsH/9RZInnep2rQ1SBtPxQ==
+"@traduki/vite-plugin-traduki@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@traduki/vite-plugin-traduki/-/vite-plugin-traduki-0.2.6.tgz#a41b6dd2dcaf27e3f42306b028647be62d84926c"
+  integrity sha512-z/kLeIPAx0tV+OQ6S47IQFS2mzufNwufCvZVi4kNbxE0THi9hNmCgIln5UNMfqym6wiM9V5pHEO3lqOYLUtBIw==
   dependencies:
-    "@traduki/rollup-plugin-traduki" "^0.2.5"
+    "@traduki/rollup-plugin-traduki" "^0.2.6"
     js-yaml "^3.14.0"
     messageformat "^2.3.0"
 

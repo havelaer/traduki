@@ -12,7 +12,7 @@
       "build": "parcel build index.html"
     },
     "dependencies": {
-      "@traduki/react": "^0.2.5",
+      "@traduki/react": "^0.2.6",
       "react": "^16.13.1",
       "react-dom": "^16.13.1"
     },

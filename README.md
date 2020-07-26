@@ -1,6 +1,6 @@
 # Traduki
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.2.5-blue)](https://www.npmjs.com/package/@traduki/runtime)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.2.6-blue)](https://www.npmjs.com/package/@traduki/runtime)
 
 **⚠️ WORK IN PROGRESS ⚠**
 
@@ -117,6 +117,17 @@ npm install --save-dev @traduki/vite-plugin-traduki
 npm install @traduki/react
 ```
 
+When configuring Rollup or Vite make sure you use the runtime from the react package:
+
+```js
+
+// ...
+tradukiPlugin({
+    runtimeModuleId: '@traduki/react',
+}),
+// ...
+
+```
 ### Usage
 
 Make sure to wrap you application in the `TradukiProvider`:
