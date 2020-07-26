@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.6](https://github.com/havelaer/traduki/compare/v0.2.5...v0.2.6) (2020-07-26)
+
+
+### Bug Fixes
+
+* vite duplicate runtime ([8808079](https://github.com/havelaer/traduki/commit/880807970a9cb14177af02447820ea6fc76614f6))
+
+
+
+
+
 ## [0.2.5](https://github.com/havelaer/traduki/compare/v0.2.4...v0.2.5) (2020-07-26)
 
 **Note:** Version bump only for package @traduki/react
