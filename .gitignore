@@ -13,3 +13,4 @@ packages/*/types
 output
 dist
 .cache
+.parcel-cache
