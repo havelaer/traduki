@@ -1,0 +1,53 @@
+{
+  "name": "@traduki/parcel-transformer-traduki",
+  "version": "0.2.7",
+  "description": "Parcel transformer for Traduki",
+  "author": "havelaer",
+  "keywords": [
+    "parcel-transformer",
+    "messageformat",
+    "pluralformat",
+    "icu",
+    "i18n",
+    "translations"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/cjs/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelaer/traduki.git",
+    "directory": "packages/parcel-transformer-traduki"
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "test": "jest test",
+    "build": "npm run clean && npm run build:cjs",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@traduki/runtime": "^0.2.7",
+    "@types/hash-sum": "^1.0.0",
+    "@types/jest": "^26.0.4",
+    "@types/js-yaml": "^3.12.5",
+    "jest": "^26.1.0",
+    "parcel": "^2.0.0-beta.1",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "@parcel/plugin": "^2.0.0-alpha.3",
+    "hash-sum": "^2.0.0",
+    "js-yaml": "^3.14.0",
+    "messageformat": "^2.3.0"
+  }
+}
