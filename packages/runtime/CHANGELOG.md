@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.8](https://github.com/havelaer/traduki/compare/v0.2.7...v0.2.8) (2020-07-27)
+
+
+### Bug Fixes
+
+* broken pkg.browser ([751142c](https://github.com/havelaer/traduki/commit/751142c5bc6b46d0a86765dbe9c3ce15fdb60363))
+
+
+
+
+
 ## [0.2.7](https://github.com/havelaer/traduki/compare/v0.2.6...v0.2.7) (2020-07-26)
 
 
