@@ -1,0 +1,42 @@
+{
+  "name": "@traduki/build-utils",
+  "version": "0.2.8",
+  "description": "Build utils for the various traduki plugins",
+  "author": "havelaer",
+  "files": [
+    "lib"
+  ],
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelaer/traduki.git",
+    "directory": "packages/rollup-plugin-traduki"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "jest test",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "devDependencies": {
+    "@types/hash-sum": "^1.0.0",
+    "@types/jest": "^26.0.4",
+    "@types/js-yaml": "^3.12.5",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "hash-sum": "^2.0.0",
+    "js-yaml": "^3.14.0",
+    "messageformat": "^2.3.0"
+  }
+}
