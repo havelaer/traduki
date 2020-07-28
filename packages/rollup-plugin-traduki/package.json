@@ -35,6 +35,7 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
+    "@traduki/build-utils": "^0.2.8",
     "@traduki/runtime": "^0.2.8",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
