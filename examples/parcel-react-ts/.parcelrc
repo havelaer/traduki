@@ -4,6 +4,10 @@
     ],
     "transformers": {
         "*.messages.yaml": ["@traduki/parcel-transformer-traduki"],
-        "*.traduki": ["@traduki/parcel-transformer-traduki"]
+        "*.messages.yaml-*": ["@traduki/parcel-transformer-traduki"]
+    },
+    "packagers": {
+        "*.yaml-en": "@traduki/parcel-packager-traduki",
+        "*.yaml-nl": "@traduki/parcel-packager-traduki"
     }
 }

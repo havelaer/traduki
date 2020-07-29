@@ -8,10 +8,7 @@ import {
 
 export default new Transformer({
     async transform({ asset }: any) {
-        if (asset.meta.locale) {
-            asset.type = 'js';
-            return [asset];
-        }
+        console.log(asset);
 
         const dictionaries = await readYaml(asset.filePath);
         const locales = Object.keys(dictionaries);
@@ -20,9 +17,13 @@ export default new Transformer({
         const parts = [asset];
         const registerMap = locales.reduce((map, locale) => {
             parts.push({
+                type: `${asset.type}-${locale}`,
+                filePath: asset.filePath,
                 uniqueKey: `${asset.filePath}.${locale}`,
-                type: 'ts',
-                content: generatePrecompiledMessages(locale, dictionaries[locale], 'esm'),
+                // type: 'messages',
+                // content: generatePrecompiledMessages(locale, dictionaries[locale], 'esm'),
+                content: JSON.stringify(dictionaries[locale]),
+                meta: { locale, hasDependencies: false },
             });
 
             return {
