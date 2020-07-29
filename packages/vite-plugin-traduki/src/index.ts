@@ -1,11 +1,12 @@
-import tradukiRollupPlugin from '@traduki/rollup-plugin-traduki';
 import {
     defaultKeyHashFn,
-    mapMessageKeys,
+    generateMapping,
+    generatePrecompiledMessages,
+    parseYaml,
     toMessagesMap,
-} from '@traduki/rollup-plugin-traduki/lib/cjs/helpers';
-import Yaml from 'js-yaml';
-import MessageFormat from 'messageformat';
+    transformMessageKeys,
+} from '@traduki/build-utils';
+import tradukiRollupPlugin from '@traduki/rollup-plugin-traduki';
 import path from 'path';
 import { Plugin, ServerPlugin } from 'vite';
 import { cachedRead } from 'vite/dist/node/utils/fsUtils';
@@ -16,7 +17,7 @@ type KeyHashArgs = {
 };
 
 type PluginOptions = {
-    runtimeModuleId?: string | null | false; // TODO: support null and false
+    runtimeModuleId?: string;
     primaryLocale?: string;
     keyHashFn?: (args: KeyHashArgs) => string;
     endsWith?: string;
@@ -35,52 +36,45 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
     const serverPlugin: ServerPlugin = ({
         root, // project root directory, absolute path
         app, // Koa app instance
-        server, // raw http server instance
-        watcher, // chokidar file watcher instance
     }) => {
         app.use(async (ctx, next) => {
             // Parse message.yaml and export messages map.
             // As side effect register for each locale the path to the compiled messages module
             if (ctx.path.endsWith(endsWith)) {
                 const contents = await cachedRead(ctx, path.join(root, ctx.path));
-                const dictionaries = Yaml.load(contents.toString());
-                const languages = Object.keys(dictionaries);
+                const dictionaries = await parseYaml(contents.toString());
+                const locales = Object.keys(dictionaries);
                 const messages = dictionaries[primaryLocale];
-                const messagesMap = toMessagesMap(messages, key =>
-                    keyHashFn({
-                        key,
-                        path: ctx.path,
-                    }),
-                );
+                const messagesMap = toMessagesMap(messages, ctx.path, keyHashFn);
 
-                const references = languages.map(language => {
-                    const url = `${ctx.path}.${language}.js`;
-                    const messages = mapMessageKeys(dictionaries[language], messagesMap);
-                    const messageformat = new MessageFormat(language);
-                    const compiled = messageformat.compile(messages).toString('export default');
+                const references = locales.map(locale => {
+                    const url = `${ctx.path}.${locale}.js`;
+                    const messages = transformMessageKeys(dictionaries[locale], messagesMap);
+                    const source = generatePrecompiledMessages(locale, messages, 'esm');
 
-                    assets.set(url, compiled);
+                    assets.set(url, source);
 
-                    return { language, url };
+                    return { locale, url };
                 });
 
-                const jsonExport = JSON.stringify(messagesMap);
-                const registerMap = references.map(ref => `${ref.language}: '${ref.url}?t=${Date.now()}'`).join(',');
+                // A map of locales pointing to a Rollup placeholder `import.meta.ROLLUP_FILE_URL_`
+                // The placeholder will be replaced later by `resolveFileUrl`
+                const registerMap = references.reduce(
+                    (map, reference) => ({
+                        ...map,
+                        [reference.locale]: `'${reference.url}?t=${Date.now()}'`,
+                    }),
+                    {},
+                );
 
                 ctx.type = 'js';
-                ctx.body = [
-                    `import runtime from '${runtimeModuleId}';`,
-                    `runtime.register({${registerMap}});`,
-                    `export default ${jsonExport};`,
-                ].join('\n');
+                ctx.body = generateMapping(runtimeModuleId, registerMap, messagesMap);
             }
 
             // Return the compiled messages module for the requested locale
             if (assets.has(ctx.path)) {
-                const compiled = assets.get(ctx.path);
-
                 ctx.type = 'js';
-                ctx.body = compiled;
+                ctx.body = assets.get(ctx.path);
             }
 
             await next();

@@ -27,26 +27,23 @@
   "license": "MIT",
   "scripts": {
     "test": "jest test",
-    "build": "npm run build:cjs && npm run build:esm",
+    "build": "yarn run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json"
   },
   "jest": {
     "preset": "ts-jest"
   },
+  "dependencies": {
+    "@traduki/build-utils": "^0.2.8",
+    "@traduki/rollup-plugin-traduki": "^0.2.8"
+  },
   "devDependencies": {
     "@traduki/runtime": "^0.2.8",
-    "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
-    "@types/js-yaml": "^3.12.5",
     "jest": "^26.1.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6",
     "vite": "^1.0.0-rc.1"
-  },
-  "dependencies": {
-    "@traduki/rollup-plugin-traduki": "^0.2.8",
-    "js-yaml": "^3.14.0",
-    "messageformat": "^2.3.0"
   }
 }
