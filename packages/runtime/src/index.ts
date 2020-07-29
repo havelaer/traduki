@@ -1,3 +1,7 @@
+declare global {
+    interface Window { dynamicImport: any; }
+}
+
 class TradukiRuntime {
     private messageMaps: Record<string, string>[] = [];
     private messages: Record<string, (arg: Record<string, string | number>) => string> = {};
@@ -22,7 +26,7 @@ class TradukiRuntime {
             this.messageMaps
                 .map(map => map[locale])
                 .filter(Boolean)
-                .map(src => import(src).then(({ default: messages }) => messages),
+                .map(src => window.dynamicImport(src).then(({ default: messages }: any) => messages),
             ),
         );
 
