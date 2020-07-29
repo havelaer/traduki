@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslator, useLocale } from '@traduki/react';
 import messages from './App.messages.yaml';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
+                {/* <img src={logo} className="App-logo" alt="logo" /> */}
                 <p>{t(messages.welcome)}</p>
                 <p>
                     <button onClick={() => setCount(count => count + 1)}>

@@ -5,7 +5,8 @@
   "description": "",
   "keywords": [],
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "author": "havelaer",
   "license": "MIT",
@@ -15,7 +16,7 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "publish": "npm run build && lerna publish"
+    "publish": "yarn run build && lerna publish"
   },
   "devDependencies": {
     "@types/node": "^14.0.21",

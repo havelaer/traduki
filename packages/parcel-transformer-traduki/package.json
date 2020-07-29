@@ -18,6 +18,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=10.x",
+    "parcel": ">=2.0.0-beta.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/havelaer/traduki.git",
@@ -27,7 +31,8 @@
   "scripts": {
     "clean": "rm -rf lib",
     "test": "jest test",
-    "build": "npm run clean && npm run build:cjs",
+    "dev": "tsc -w -p tsconfig.cjs.json",
+    "build": "yarn run clean && npm run build:cjs",
     "build:cjs": "tsc -p tsconfig.cjs.json"
   },
   "jest": {
@@ -44,6 +49,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
+    "@traduki/build-utils": "^0.2.8",
     "@parcel/plugin": "^2.0.0-alpha.3",
     "hash-sum": "^2.0.0",
     "js-yaml": "^3.14.0",

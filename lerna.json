@@ -2,10 +2,7 @@
     "npmClient": "yarn",
     "useWorkspaces": true,
     "packages": [
-        "packages/react",
-        "packages/rollup-plugin-traduki",
-        "packages/runtime",
-        "packages/vite-plugin-traduki"
+        "packages/*"
     ],
     "version": "0.2.8",
     "command": {
