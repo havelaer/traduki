@@ -22,7 +22,7 @@ describe('plugin', () => {
 
         const output = require('./output/index.js');
 
-        const translation = await output('nl');
+        const translation = await output.index('nl');
 
         expect(translation.hello).toBe('Hallo John!');
         expect(translation.count).toBe('Dit heeft 4 gebruikers.');

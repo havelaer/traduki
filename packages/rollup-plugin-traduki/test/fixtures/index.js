@@ -3,7 +3,7 @@ import a from './a.messages.yaml';
 import b from './b.messages.yaml';
 import c from './other';
 
-export default async lanuage => {
+export const index = async lanuage => {
     const { default: d } = await import('./async');
 
     await i18n.setLocale(lanuage).load();

@@ -1,19 +1,15 @@
-import * as path from 'path';
-import { Plugin } from 'rollup';
 import {
-    transformMessageKeys,
-    notEmpty,
-    generateUrlMechanism,
     generateMapping,
     generatePrecompiledMessages,
-    toMessagesMap,
+    generateUrlMechanism,
+    KeyHashFnArgs,
+    notEmpty,
     readYaml,
+    toMessagesMap,
+    transformMessageKeys,
 } from '@traduki/build-utils';
-
-type KeyHashArgs = {
-    key: string;
-    path: string;
-};
+import * as path from 'path';
+import { Plugin } from 'rollup';
 
 type MessageModule = {
     id: string;
@@ -25,7 +21,7 @@ type MessageModule = {
 type PluginOptions = {
     runtimeModuleId?: string; // TODO: support null and false
     primaryLocale?: string;
-    keyHashFn?: (args: KeyHashArgs) => string;
+    keyHashFn?: (data: KeyHashFnArgs) => string;
     endsWith?: string;
 };
 
@@ -58,18 +54,13 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
             const messages = dictionaries[primaryLocale];
-            const messagesMap = toMessagesMap(messages, id);
+            const messagesMap = toMessagesMap(messages, id, keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
             // Return runtime code with references to those assets
             // In the resolveFileUrl the dummy asset will be replaced with the bundled asset file.
             const references = locales
                 .map(locale => {
-                    if (!dictionaries.hasOwnProperty(locale)) {
-                        console.warn(`[traduki] Missing locale ${locale} for ${id}`);
-                        return;
-                    }
-
                     const referenceId = this.emitFile({
                         type: 'asset',
                         name: `${path.basename(id)}.${locale}.${IDENTIFIER}.js`,
@@ -87,10 +78,15 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 })
                 .filter(notEmpty);
 
-            const registerMap = references.reduce((map, reference) => ({
-                ...map,
-                [reference.locale]: `import.meta.ROLLUP_FILE_URL_${reference.referenceId}`,
-            }));
+            // A map of locales pointing to a Rollup placeholder `import.meta.ROLLUP_FILE_URL_`
+            // The placeholder will be replaced later by `resolveFileUrl`
+            const registerMap = references.reduce(
+                (map, reference) => ({
+                    ...map,
+                    [reference.locale]: `import.meta.ROLLUP_FILE_URL_${reference.referenceId}`,
+                }),
+                {},
+            );
 
             return generateMapping(runtimeModuleId, registerMap, messagesMap);
         },
@@ -100,6 +96,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             return options;
         },
         augmentChunkHash(chunk) {
+            // Create mapping from chunk to child modules
             const moduleIds = Object.keys(chunk.modules);
             moduleIds.forEach(moduleId => moduleToChunk.set(moduleId, chunk.name));
             chunkModules.set(chunk.name, moduleIds);
@@ -107,11 +104,13 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
         resolveFileUrl({ moduleId, format, fileName, relativePath }) {
             if (!relativePath.includes(IDENTIFIER)) return null;
 
-            const locale = modules.find(m => this.getFileName(m.referenceId) === fileName)
-                ?.locale;
+            const module = modules.find(m => this.getFileName(m.referenceId) === fileName);
 
-            if (!locale) return null;
+            if (!module) {
+                throw new Error(`No info found for ${fileName}`);
+            }
 
+            const { locale } = module;
             const chunkName = moduleToChunk.get(moduleId) as string;
             const bundleName = `${chunkName}.${locale}.js`;
 
@@ -129,8 +128,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                         {},
                     );
 
-                const source = generatePrecompiledMessages(locale, messages);
-
+                const source = generatePrecompiledMessages(locale, messages, format);
                 const referenceId = this.emitFile({
                     type: 'asset',
                     name: bundleName,
@@ -141,9 +139,10 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             }
 
             const referenceId = assets.get(bundleName);
-            return generateUrlMechanism(format, this.getFileName(referenceId as string));
+            return generateUrlMechanism(this.getFileName(referenceId as string), format);
         },
         async generateBundle(_options, bundle) {
+            // Remove dummy asset files
             Object.keys(bundle).forEach(fileName => {
                 if (fileName.includes(IDENTIFIER)) {
                     delete bundle[fileName];

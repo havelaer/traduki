@@ -17,6 +17,7 @@ const messagesFormatExport: Record<string, string | undefined> = {
     amd: 'module.exports',
     cjs: 'module.exports',
     es: 'export default',
+    esm: 'export default',
     iife: '', // TODO
     system: '', // TODO
     umd: undefined,
@@ -87,9 +88,10 @@ export function transformMessageKeys(messages: Messages, messagesMap: MessagesMa
 /**
  * Generate source code that when runs: registers the location of the precompiled messages bundles
  * for each locale and exports the messages map object to be used in the application.
+ * Setting `false` for runtimeModuleId will assume `__traduki` is set globally.
  */
 export function generateMapping(
-    runtimeModuleId: string,
+    runtimeModuleId: string | false,
     registerMap: Record<Locale, string>,
     messagesMap: MessagesMap,
     format: 'cjs' | 'esm' = 'esm',
@@ -100,15 +102,15 @@ export function generateMapping(
     const messagesMapString = JSON.stringify(messagesMap);
     if (format === 'cjs') {
         return [
-            `const runtime = require('${runtimeModuleId}');`,
-            `runtime.register({${registerMapString}});`,
+            runtimeModuleId ? `const __traduki = require('${runtimeModuleId}');` : '',
+            `__traduki.register({${registerMapString}});`,
             `modules.export = ${messagesMapString};`,
         ].join('\n');
     }
 
     return [
-        `import runtime from '${runtimeModuleId}';`,
-        `runtime.register({${registerMapString}});`,
+        runtimeModuleId ? `import __traduki from '${runtimeModuleId}';` : '',
+        `__traduki.register({${registerMapString}});`,
         `export default ${messagesMapString};`,
     ].join('\n');
 }
@@ -158,6 +160,7 @@ export function generateUrlMechanism(relativePath: string, format: string = 'esm
             return `(typeof document === 'undefined' ? ${nodeUrl} : ${browserUrl})`;
         }
         case 'es':
+        case 'esm':
             return getResolveUrl(`'${relativePath}', import.meta.url`);
 
         case 'iife':
