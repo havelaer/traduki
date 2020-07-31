@@ -15,6 +15,7 @@ Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 * The tooling is build for web applications using:
     - [Rollup](https://rollupjs.org/guide/en/) (see: [@traduki/rollup-plugin-traduki](#tradukirollup-plugin)), or
     - [Vite](https://github.com/vitejs/vite) (see: [@traduki/vite-plugin-traduki](#tradukivite-plugin)).
+    - [Parcel (v2)](https://v2.parceljs.org/) (busy with POC).
 
 * React hooks are also available (see: [@traduki/react](#tradukireact))
 
