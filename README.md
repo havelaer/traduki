@@ -33,15 +33,15 @@ nl:
 
 ```js
 // index.js
-import llr from '@traduki/runtime'
+import traduki from '@traduki/runtime'
 import messages from 'a.messages.yaml'
 
 console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 
 (async () => {
-    await llr.setLocale('en').load();
+    await traduki.setLocale('en').load();
 
-    llr.translate(messages.hello, { name: 'John' }); // "Hello John!"
+    traduki.translate(messages.hello, { name: 'John' }); // "Hello John!"
 })();
 ```
 
