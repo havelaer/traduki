@@ -1,6 +1,6 @@
 # Traduki
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.2.6-blue)](https://www.npmjs.com/package/@traduki/runtime)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.3.0-blue)](https://www.npmjs.com/package/@traduki/runtime)
 
 **⚠️ WORK IN PROGRESS ⚠**
 
