@@ -169,7 +169,7 @@ function Component() {
     );
 }
 
-export default App;
+export default Component;
 ```
 
 Traduki is build with code splitting in mind. The react package provides a `lazy` function.
