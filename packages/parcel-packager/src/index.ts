@@ -18,8 +18,6 @@ export default new Packager({
 
         const locale = assets[0].meta.locale;
 
-        // const locale = assets[0].meta
-
         const messages = localMessages.reduce((prev: Messages, messages: Messages) => ({
             ...prev,
             ...messages,

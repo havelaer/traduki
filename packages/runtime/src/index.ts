@@ -2,9 +2,39 @@ declare global {
     interface Window { dynamicImport: any; }
 }
 
+type PrecompiledMessages = Record<string, (arg: Record<string, string | number>) => string>;
+
+type MessagesSource = string | (() => Promise<any>) | (() => any);
+
+function getDefaultExport(mod: any) {
+    return mod['default'] ? mod['default'] : mod;
+}
+
+/**
+ * Resolve messages source
+ * Source is either a url (string), a function returning a `require()` or a function returning an `import()`
+ */
+function resolveMessagesSource(source: MessagesSource) {
+    switch (typeof source) {
+        case 'function': {
+            const result = source();
+
+            if (result.then) {
+                return result.then(getDefaultExport);
+            }
+
+            return Promise.resolve(getDefaultExport(result));
+        }
+
+        // TODO: should propably be deprecated and removed if possible
+        case 'string':
+            return window.dynamicImport(source).then(getDefaultExport);
+    }
+}
+
 class TradukiRuntime {
-    private messageMaps: Record<string, string>[] = [];
-    private messages: Record<string, (arg: Record<string, string | number>) => string> = {};
+    private messageMaps: Record<string, MessagesSource>[] = [];
+    private messages: PrecompiledMessages = {};
     private locale: string = '';
 
     register(map: Record<string, string>) {
@@ -26,8 +56,7 @@ class TradukiRuntime {
             this.messageMaps
                 .map(map => map[locale])
                 .filter(Boolean)
-                .map(src => window.dynamicImport(src).then(({ default: messages }: any) => messages),
-            ),
+                .map(resolveMessagesSource)
         );
 
         this.messages = results.reduce(

@@ -4,37 +4,41 @@ import {
     readYaml,
     toMessagesMap,
     generatePrecompiledMessages,
+    transformMessageKeys,
 } from '@traduki/build-utils';
+import { basename } from 'path';
 
 export default new Transformer({
     async transform({ asset }: any) {
-        console.log(asset);
-
         const dictionaries = await readYaml(asset.filePath);
         const locales = Object.keys(dictionaries);
         const messages = dictionaries[locales[0]];
         const messagesMap = toMessagesMap(messages, asset.filePath);
-        const parts = [asset];
+
+        if (asset.pipeline) {
+            const [, locale] = asset.pipeline.split('-');
+            const globalMessages = transformMessageKeys(dictionaries[locale], messagesMap)
+            return [
+                {
+                    type: `js`,
+                    uniqueKey: `${asset.id}-${locale}`,
+                    content: generatePrecompiledMessages(locale, globalMessages, 'esm'),
+                },
+            ];
+        }
+
         const registerMap = locales.reduce((map, locale) => {
-            parts.push({
-                type: `${asset.type}-${locale}`,
-                filePath: asset.filePath,
-                uniqueKey: `${asset.filePath}.${locale}`,
-                // type: 'messages',
-                // content: generatePrecompiledMessages(locale, dictionaries[locale], 'esm'),
-                content: JSON.stringify(dictionaries[locale]),
-                meta: { locale, hasDependencies: false },
-            });
+            const messagesFile = `${asset.filePath}`;
 
             return {
                 ...map,
-                [locale]: `'asdf'`, // TODO
+                [locale]: `() => require('messages-${locale}:./${basename(messagesFile)}')`,
             };
         }, {});
 
         asset.type = 'js';
         asset.setCode(generateMapping('@traduki/runtime', registerMap, messagesMap, 'esm'));
 
-        return parts;
+        return [asset];
     },
 });

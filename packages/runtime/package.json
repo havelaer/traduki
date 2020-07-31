@@ -26,6 +26,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf lib",
+    "dev": "tsc -w -p tsconfig.cjs.json",
     "build": "yarn run clean && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json && replace 'window.dynamicImport' 'import' lib/cjs/index.js",
     "build:esm": "tsc -p tsconfig.esm.json && replace 'window.dynamicImport' 'import' lib/esm/index.js"
@@ -33,7 +34,6 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "^5.0.2",
     "replace": "^1.2.0",
-    "rollup": "^2.22.1",
     "typescript": "^3.9.6"
   }
 }
