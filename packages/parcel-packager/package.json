@@ -1,6 +1,6 @@
 {
   "name": "@traduki/parcel-packager-traduki",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "description": "Parcel transformer for Traduki",
   "author": "havelaer",
   "keywords": [
@@ -39,7 +39,7 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
-    "@traduki/runtime": "^0.2.8",
+    "@traduki/runtime": "^0.3.0",
     "@types/hash-sum": "^1.0.0",
     "@types/jest": "^26.0.4",
     "@types/js-yaml": "^3.12.5",
@@ -49,8 +49,8 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@traduki/build-utils": "^0.2.8",
     "@parcel/plugin": "^2.0.0-alpha.3",
+    "@traduki/build-utils": "^0.3.0",
     "hash-sum": "^2.0.0",
     "js-yaml": "^3.14.0",
     "messageformat": "^2.3.0"

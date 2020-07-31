@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/havelaer/traduki/compare/v0.2.8...v0.3.0) (2020-07-31)
+
+
+### Bug Fixes
+
+* hacky solution for not transpiling import() in ts commonjs ([8c469c3](https://github.com/havelaer/traduki/commit/8c469c39295ae1f9d000c15bd33bb60f954531c6))
+
+
+### Features
+
+* poc parcel (without code splitting) ([f08a88c](https://github.com/havelaer/traduki/commit/f08a88cffe45a884f7fe3e1962f2395ab5743fb9))
+
+
+
+
+
 ## [0.2.8](https://github.com/havelaer/traduki/compare/v0.2.7...v0.2.8) (2020-07-27)
 
 

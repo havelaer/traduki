@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@traduki/vite-react-example",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "author": "havelaer",
   "license": "MIT",
   "scripts": {
@@ -10,12 +10,12 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@traduki/react": "^0.2.6",
     "@pika/react": "^16.13.1",
-    "@pika/react-dom": "^16.13.1"
+    "@pika/react-dom": "^16.13.1",
+    "@traduki/react": "^0.3.0"
   },
   "devDependencies": {
-    "@traduki/vite-plugin-traduki": "^0.2.8",
+    "@traduki/vite-plugin-traduki": "^0.3.0",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "typescript": "^3.9.3",
