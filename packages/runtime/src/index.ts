@@ -2,7 +2,7 @@ declare global {
     interface Window { dynamicImport: any; }
 }
 
-type PrecompiledMessages = Record<string, (arg: Record<string, string | number>) => string>;
+type PrecompiledMessages = Record<string, (arg?: Record<string, string | number>) => string>;
 
 type MessagesSource = string | (() => Promise<any>) | (() => any);
 
@@ -65,7 +65,7 @@ class TradukiRuntime {
         );
     }
 
-    translate(key: string, args: Record<string, string | number>) {
+    translate(key: string, args?: Record<string, string | number>) {
         if (!this.messages[key]) {
             console.warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;

@@ -68,7 +68,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 );
 
                 ctx.type = 'js';
-                ctx.body = generateMapping(runtimeModuleId, registerMap, messagesMap);
+                ctx.body = generateMapping(messagesMap, registerMap, runtimeModuleId);
             }
 
             // Return the compiled messages module for the requested locale

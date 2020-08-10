@@ -88,7 +88,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 {},
             );
 
-            return generateMapping(runtimeModuleId, registerMap, messagesMap);
+            return generateMapping(messagesMap, registerMap, runtimeModuleId);
         },
         outputOptions(options) {
             format = options.format || 'es';

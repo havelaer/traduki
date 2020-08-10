@@ -9,6 +9,8 @@ export type Messages = Record<string, string>;
 
 export type MessagesMap = Record<string, string>;
 
+export type RegisterMap = Record<Locale, string>;
+
 export type Dictionaries = Record<Locale, Messages>;
 
 export type KeyHashFnArgs = { key: string; path: string; text: string };
@@ -88,29 +90,30 @@ export function transformMessageKeys(messages: Messages, messagesMap: MessagesMa
 /**
  * Generate source code that when runs: registers the location of the precompiled messages bundles
  * for each locale and exports the messages map object to be used in the application.
- * Setting `false` for runtimeModuleId will assume `__traduki` is set globally.
  */
 export function generateMapping(
-    runtimeModuleId: string | false,
-    registerMap: Record<Locale, string>,
     messagesMap: MessagesMap,
+    registerMap?: Record<Locale, string>,
+    runtimeModuleId?: string,
     format: 'cjs' | 'esm' = 'esm',
 ): string {
-    const registerMapString = Object.keys(registerMap)
-        .map(locale => `${locale}: ${registerMap[locale]}`)
-        .join(',');
+    const registerMapString = registerMap
+        ? Object.keys(registerMap)
+              .map(locale => `${locale}: ${registerMap[locale]}`)
+              .join(',')
+        : '';
     const messagesMapString = JSON.stringify(messagesMap);
     if (format === 'cjs') {
         return [
             runtimeModuleId ? `const __traduki = require('${runtimeModuleId}');` : '',
-            `__traduki.register({${registerMapString}});`,
+            registerMapString ? `__traduki.register({${registerMapString}});` : '',
             `modules.export = ${messagesMapString};`,
         ].join('\n');
     }
 
     return [
         runtimeModuleId ? `import __traduki from '${runtimeModuleId}';` : '',
-        `__traduki.register({${registerMapString}});`,
+        registerMapString ? `__traduki.register({${registerMapString}});` : '',
         `export default ${messagesMapString};`,
     ].join('\n');
 }
