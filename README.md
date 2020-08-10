@@ -1,6 +1,6 @@
 # Traduki
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![version](https://img.shields.io/badge/version-0.3.0-blue)](https://www.npmjs.com/package/@traduki/runtime)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE) [![npm](https://img.shields.io/npm/v/@traduki/runtime.svg?maxAge=2592000)](https://www.npmjs.com/package/@traduki/runtime)
 
 **⚠️ WORK IN PROGRESS ⚠**
 
@@ -15,7 +15,7 @@ Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 * The tooling is build for web applications using:
     - [Rollup](https://rollupjs.org/guide/en/) (see: [@traduki/rollup-plugin-traduki](#tradukirollup-plugin)), or
     - [Vite](https://github.com/vitejs/vite) (see: [@traduki/vite-plugin-traduki](#tradukivite-plugin)).
-    - [Parcel (v2)](https://v2.parceljs.org/) (busy with POC).
+    - [Webpack (v5-beta)](https://webpack.js.org/) (see: [@traduki/webpack-plugin-traduki](#tradukiwebpack-plugin)). **(not published yet)**
 
 * React hooks are also available (see: [@traduki/react](#tradukireact))
 
@@ -51,7 +51,7 @@ console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 
 ```bash
 npm install --save-dev @traduki/vite-plugin-traduki
-npm install @traduki/runtime
+npm install @traduki/runtime # or @traduki/react if you're using React
 ```
 
 ### Usage
@@ -79,7 +79,7 @@ TODO
 
 ```bash
 npm install --save-dev @traduki/rollup-plugin-traduki
-npm install @traduki/runtime
+npm install @traduki/runtime # or @traduki/react if you're using React
 ```
 
 ### Usage
@@ -98,6 +98,50 @@ export default {
     },
     plugins: [tradukiPlugin()],
 };
+```
+
+### Options
+
+TODO
+
+## @traduki/webpack-plugin-traduki
+
+### Install
+
+```bash
+npm install --save-dev @traduki/webpack-plugin-traduki
+npm install @traduki/runtime # or @traduki/react if you're using React
+```
+
+### Usage
+
+Create a webpack.config.js configuration file and configure the plugin and loader:
+
+```js
+// webpack.config.js
+const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
+
+module.exports = {
+    // ...
+    plugins: [
+        new TradukiWebpackPlugin({
+            chunkFilename: '[name].[locale].js',
+            runtimeModuleId: '@traduki/runtime', // or @traduki/react if you're using React
+        }),
+    ],
+    module: {
+        rules: [
+            // ...
+            {
+                test: /\.messages\.yaml$/,
+                use: TradukiWebpackPlugin.loader,
+            },
+            // ...
+        ],
+    },
+    // ...
+};
+
 ```
 
 ### Options
