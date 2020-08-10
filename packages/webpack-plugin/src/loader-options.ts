@@ -1,0 +1,16 @@
+export default {
+    type: 'object',
+    additionalProperties: true,
+    properties: {
+        publicPath: {
+            anyOf: [
+                {
+                    type: 'string',
+                },
+                {
+                    instanceof: 'Function',
+                },
+            ],
+        },
+    },
+};

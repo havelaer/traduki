@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "@traduki/webpack-simple-example",
+  "version": "0.3.0",
+  "author": "havelaer",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "dev": "webpack --mode development",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@traduki/runtime": "^0.3.0"
+  },
+  "devDependencies": {
+    "@traduki/webpack-plugin-traduki": "^0.3.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^5.0.0-beta.23",
+    "webpack-cli": "^4.0.0-beta.8"
+  }
+}

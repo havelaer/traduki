@@ -1,0 +1,6 @@
+en:
+  welcome: Hello Webpack!
+  count: "count is: {count}"
+nl:
+  welcome: Hallo Webpack!
+  count: "teller is: {count}"

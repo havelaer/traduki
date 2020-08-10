@@ -1,0 +1,54 @@
+{
+  "name": "@traduki/webpack-plugin-traduki",
+  "version": "0.3.0",
+  "description": "Webpack plugin for Traduki",
+  "author": "havelaer",
+  "keywords": [
+    "webpack",
+    "loader",
+    "plugin",
+    "messageformat",
+    "pluralformat",
+    "icu",
+    "i18n",
+    "translations"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "index.cjs.js",
+  "module": "lib/esm/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelaer/traduki.git",
+    "directory": "packages/webpack-plugin"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "jest test",
+    "dev": "tsc -w -p tsconfig.cjs.json",
+    "build": "yarn run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "dependencies": {
+    "@traduki/build-utils": "^0.3.0",
+    "loader-utils": "^2.0.0",
+    "webpack-sources": "^1.4.3"
+  },
+  "devDependencies": {
+    "@traduki/runtime": "^0.3.0",
+    "@types/jest": "^26.0.4",
+    "@types/loader-utils": "^2.0.1",
+    "jest": "^26.1.0",
+    "rollup": "^2.20.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
+  }
+}
