@@ -1,17 +1,12 @@
-import webpack from 'webpack';
-import loaderUtils from 'loader-utils';
-import validateOptions from 'schema-utils';
 import {
-    RegisterMap,
     generateMapping,
-    generatePrecompiledMessages,
-    generateUrlMechanism,
-    KeyHashFnArgs,
-    notEmpty,
     parseYaml,
+    RegisterMap,
     toMessagesMap,
     transformMessageKeys,
 } from '@traduki/build-utils';
+import loaderUtils from 'loader-utils';
+import validateOptions from 'schema-utils';
 import { pluginName } from './constants';
 
 const schema = require('./loader-options').default;
@@ -49,8 +44,10 @@ function loader(this: any, contents: string) {
 
         return {
             ...map,
-            // [locale]: `() => import('QWERQWER')`
-            [locale]: `() => import(/* webpackIgnore: true */ '$$${pluginName}_${locale}$$' /* ${'-'.padStart(32, '-')} */)`,
+            [locale]: `() => import(/* webpackIgnore: true */ '$$${pluginName}_${locale}$$' /* ${'-'.padStart(
+                32,
+                '-',
+            )} */)`,
         };
     }, {} as RegisterMap);
 
