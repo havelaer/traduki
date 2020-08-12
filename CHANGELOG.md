@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/havelaer/traduki/compare/v0.3.0...v0.4.0) (2020-08-12)
+
+
+### Bug Fixes
+
+* temp disable lib checking because of outdated webpack types ([3efc81d](https://github.com/havelaer/traduki/commit/3efc81d001b3bcde3e03a346067e00084718c2a4))
+* yarn locks ([1e83926](https://github.com/havelaer/traduki/commit/1e83926c2dcae493d9f08da4413447f2180dcf51))
+
+
+### Features
+
+* added webpack plugin poc ([b795d04](https://github.com/havelaer/traduki/commit/b795d0409ba82825c3b9ce11e01c34c0cbfaccf2))
+
+
+
+
+
 # [0.3.0](https://github.com/havelaer/traduki/compare/v0.2.8...v0.3.0) (2020-07-31)
 
 

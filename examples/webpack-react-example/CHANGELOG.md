@@ -11,9 +11,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * yarn locks ([1e83926](https://github.com/havelaer/traduki/commit/1e83926c2dcae493d9f08da4413447f2180dcf51))
 
 
+### Features
 
-
-
-# [0.3.0](https://github.com/havelaer/traduki/compare/v0.2.8...v0.3.0) (2020-07-31)
-
-**Note:** Version bump only for package @traduki/vite-react-example
+* added webpack plugin poc ([b795d04](https://github.com/havelaer/traduki/commit/b795d0409ba82825c3b9ce11e01c34c0cbfaccf2))

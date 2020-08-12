@@ -5,12 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.4.0](https://github.com/havelaer/traduki/compare/v0.3.0...v0.4.0) (2020-08-12)
 
-**Note:** Version bump only for package @traduki/build-utils
 
+### Features
 
-
-
-
-# [0.3.0](https://github.com/havelaer/traduki/compare/v0.2.8...v0.3.0) (2020-07-31)
-
-**Note:** Version bump only for package @traduki/build-utils
+* added webpack plugin poc ([b795d04](https://github.com/havelaer/traduki/commit/b795d0409ba82825c3b9ce11e01c34c0cbfaccf2))
