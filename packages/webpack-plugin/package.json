@@ -1,6 +1,6 @@
 {
   "name": "@traduki/webpack-plugin-traduki",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Webpack plugin for Traduki",
   "author": "havelaer",
   "keywords": [
@@ -38,13 +38,13 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@traduki/build-utils": "^0.4.0",
+    "@traduki/build-utils": "^0.5.0",
     "loader-utils": "^2.0.0",
     "schema-utils": "^2.7.0",
     "webpack-sources": "^1.4.3"
   },
   "devDependencies": {
-    "@traduki/runtime": "^0.4.0",
+    "@traduki/runtime": "^0.5.0",
     "@types/jest": "^26.0.4",
     "@types/loader-utils": "^2.0.1",
     "jest": "^26.1.0",
