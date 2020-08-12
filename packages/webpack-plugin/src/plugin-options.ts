@@ -5,7 +5,7 @@ export default {
         runtimeModuleId: {
             type: 'string',
         },
-        chunkFilename: {
+        filename: {
             type: 'string',
         },
     },

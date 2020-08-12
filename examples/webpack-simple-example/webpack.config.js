@@ -2,12 +2,12 @@ const path = require('path');
 const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
 
 module.exports = {
-    entry: './src/main.ts',
-    mode: 'development',
+    entry: './main.ts',
+    context: path.join(__dirname, 'src'),
     devtool: false,
     plugins: [
         new TradukiWebpackPlugin({
-            chunkFilename: '[name].[locale].js',
+            filename: '[name].[locale].js',
         }),
     ],
     module: {

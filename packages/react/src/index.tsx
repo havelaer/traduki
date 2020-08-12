@@ -108,6 +108,6 @@ export const lazy: typeof React.lazy = factory => {
 
 /*
  * The default export is the traduki runtime
- * Use this as runtimeModuleId `@traduki/react` in the rollup/vite/parcel plugin
+ * Use this as runtimeModuleId `@traduki/react` in the rollup/vite/webpack plugin
  */
 export default traduki;

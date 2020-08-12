@@ -1,10 +1,10 @@
 en:
-  welcome: Hello Parcel + React!
+  welcome: Hello Webpack + React!
   edit: Edit `App.tsx` and save to test HMR updates.
   learn: Learn React
   count: "count is: {count}"
 nl:
-  welcome: Hallo Parcel + React!
+  welcome: Hallo Webpack + React!
   edit: Wijzig `App.tsx` om HMR updates te testen.
   learn: Leer React
   count: "teller is: {count}"

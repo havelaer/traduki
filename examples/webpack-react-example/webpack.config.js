@@ -4,7 +4,6 @@ const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
 
 module.exports = {
     entry: './src/main.tsx',
-    mode: 'development',
     plugins: [
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
@@ -13,7 +12,7 @@ module.exports = {
             chunkFilename: '[id].css',
         }),
         new TradukiWebpackPlugin({
-            chunkFilename: '[id].[locale].js',
+            filename: '[name].[locale].js',
             runtimeModuleId: '@traduki/react',
         }),
     ],
@@ -42,5 +41,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
+        publicPath: '/dist/',
+        chunkFilename: '[id].js',
+        filename: '[name].js'
     },
 };

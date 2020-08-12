@@ -99,10 +99,10 @@ export function generateMapping(
 ): string {
     const registerMapString = registerMap
         ? Object.keys(registerMap)
-              .map(locale => `${locale}: ${registerMap[locale]}`)
-              .join(',')
+              .map(locale => `\t${locale}: ${registerMap[locale]}`)
+              .join(',\n')
         : '';
-    const messagesMapString = JSON.stringify(messagesMap);
+    const messagesMapString = JSON.stringify(messagesMap, null, 4);
     if (format === 'cjs') {
         return [
             runtimeModuleId ? `const __traduki = require('${runtimeModuleId}');` : '',
@@ -113,7 +113,7 @@ export function generateMapping(
 
     return [
         runtimeModuleId ? `import __traduki from '${runtimeModuleId}';` : '',
-        registerMapString ? `__traduki.register({${registerMapString}});` : '',
+        registerMapString ? `__traduki.register({\n${registerMapString}\n});` : '',
         `export default ${messagesMapString};`,
     ].join('\n');
 }
