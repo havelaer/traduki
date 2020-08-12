@@ -125,7 +125,7 @@ module.exports = {
     // ...
     plugins: [
         new TradukiWebpackPlugin({
-            chunkFilename: '[name].[locale].js',
+            filename: '[name].[locale].js',
             runtimeModuleId: '@traduki/runtime', // or @traduki/react if you're using React
         }),
     ],
