@@ -25,7 +25,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib/*",
     "dev": "tsc -w -p tsconfig.cjs.json",
     "build": "yarn run clean && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json && replace 'window.dynamicImport' 'import' lib/cjs/index.js",

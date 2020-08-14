@@ -15,21 +15,16 @@ function getDefaultExport(mod: any) {
  * Source is either a url (string), a function returning a `require()` or a function returning an `import()`
  */
 function resolveMessagesSource(source: MessagesSource) {
-    switch (typeof source) {
-        case 'function': {
-            const result = source();
-
-            if (result.then) {
-                return result.then(getDefaultExport);
-            }
-
-            return Promise.resolve(getDefaultExport(result));
-        }
-
-        // TODO: should propably be deprecated and removed if possible
-        case 'string':
-            return window.dynamicImport(source).then(getDefaultExport);
+    if (typeof source !== 'function') {
+        throw new Error(`[traduki] Expected a function, instead received ${typeof source}`);
     }
+    const result = source();
+
+    if (result.then) {
+        return result.then(getDefaultExport);
+    }
+
+    return Promise.resolve(getDefaultExport(result));
 }
 
 class TradukiRuntime {

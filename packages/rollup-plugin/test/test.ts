@@ -11,7 +11,8 @@ const config: RollupOptions = {
         assetFileNames: `assets/[name]-asset.[hash].js`,
     },
     plugins: [traduki({
-        runtimeModuleId: './runtime'
+        runtimeModuleId: './runtime',
+        publicPath: './'
     })],
 };
 

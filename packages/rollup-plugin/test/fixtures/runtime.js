@@ -15,8 +15,7 @@ export default {
             this.maps
                 .map(map => map[language])
                 .filter(Boolean)
-                .map(src => src.replace('http://localhost', '.'))
-                .map(src => import(src).then(({ default: translations }) => translations),
+                .map(src => src().then(({ default: translations }) => translations),
             ),
         );
         this.translations = results.reduce(

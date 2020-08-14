@@ -17,6 +17,7 @@ type KeyHashArgs = {
 };
 
 type PluginOptions = {
+    publicPath?: string;
     runtimeModuleId?: string;
     primaryLocale?: string;
     keyHashFn?: (args: KeyHashArgs) => string;

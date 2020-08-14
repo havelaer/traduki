@@ -20,6 +20,7 @@ type MessageModule = {
 
 type PluginOptions = {
     runtimeModuleId?: string; // TODO: support null and false
+    publicPath?: string;
     primaryLocale?: string;
     keyHashFn?: (data: KeyHashFnArgs) => string;
     endsWith?: string;
@@ -32,6 +33,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
         runtimeModuleId = '@traduki/runtime',
         primaryLocale = 'en',
         keyHashFn,
+        publicPath = '/',
         endsWith = '.messages.yaml',
     } = options;
 
@@ -83,7 +85,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             const registerMap = references.reduce(
                 (map, reference) => ({
                     ...map,
-                    [reference.locale]: `import.meta.ROLLUP_FILE_URL_${reference.referenceId}`,
+                    [reference.locale]: `() => import(import.meta.ROLLUP_FILE_URL_${reference.referenceId})`,
                 }),
                 {},
             );
@@ -139,7 +141,8 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             }
 
             const referenceId = assets.get(bundleName);
-            return generateUrlMechanism(this.getFileName(referenceId as string), format);
+            const optionalSlash = publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
+            return `'${publicPath}${optionalSlash}${this.getFileName(referenceId as string)}'`;
         },
         async generateBundle(_options, bundle) {
             // Remove dummy asset files

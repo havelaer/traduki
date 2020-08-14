@@ -4,9 +4,11 @@ import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
     jsx: 'react',
+    assetsDir: '_assets',
     plugins: [
         reactPlugin,
         tradukiPlugin({
+            publicPath: '/_assets',
             runtimeModuleId: '@traduki/react',
         }),
     ],
