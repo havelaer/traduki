@@ -42,12 +42,11 @@ function loader(this: any, contents: string) {
             messages: transformMessageKeys(dictionaries[locale], messagesMap),
         });
 
+        const placeholder = plugin.createPlaceHolder(locale);
+
         return {
             ...map,
-            [locale]: `() => import(/* webpackIgnore: true */ '$$${pluginName}_${locale}$$' /* ${'-'.padStart(
-                32,
-                '-',
-            )} */)`,
+            [locale]: `() => import(/* webpackIgnore: true */ '${placeholder}')`,
         };
     }, {} as RegisterMap);
 
