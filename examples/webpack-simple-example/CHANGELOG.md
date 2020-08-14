@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.1](https://github.com/havelaer/traduki/compare/v0.5.0...v0.5.1) (2020-08-14)
+
+
+### Bug Fixes
+
+* webpack plugin in production mode ([df329e3](https://github.com/havelaer/traduki/commit/df329e34c74cf7453dc6d9e04fff8dcff74eb03e))
+
+
+
+
+
 # [0.5.0](https://github.com/havelaer/traduki/compare/v0.4.0...v0.5.0) (2020-08-12)
 
 
