@@ -13,9 +13,9 @@ Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 * It uses [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting.
 
 * The tooling is build for web applications using:
-    - [Rollup](https://rollupjs.org/guide/en/) (see: [@traduki/rollup-plugin-traduki](#tradukirollup-plugin)), or
-    - [Vite](https://github.com/vitejs/vite) (see: [@traduki/vite-plugin-traduki](#tradukivite-plugin)).
-    - [Webpack] v4 & v5 (https://webpack.js.org/) (see: [@traduki/webpack-plugin-traduki](#tradukiwebpack-plugin)). **(currently only development mode)**
+    - [Rollup](https://rollupjs.org/guide/en/) (see: [@traduki/rollup-plugin-traduki](#tradukirollup-plugin-traduki)), or
+    - [Vite](https://github.com/vitejs/vite) (see: [@traduki/vite-plugin-traduki](#tradukivite-plugin-traduki)).
+    - [Webpack](https://webpack.js.org/) (see: [@traduki/webpack-plugin-traduki](#tradukiwebpack-plugin-traduki)).
 
 * React hooks are also available (see: [@traduki/react](#tradukireact))
 
