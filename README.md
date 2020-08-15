@@ -34,7 +34,7 @@ nl:
 ```js
 // index.js
 import traduki from '@traduki/runtime'
-import messages from 'a.messages.yaml'
+import messages from './a.messages.yaml'
 
 console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 
