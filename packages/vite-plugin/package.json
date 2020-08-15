@@ -9,6 +9,8 @@
     "pluralformat",
     "icu",
     "i18n",
+    "L10n",
+    "code-splitting",
     "translations"
   ],
   "files": [

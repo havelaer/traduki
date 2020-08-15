@@ -75,7 +75,7 @@ export function readYaml(path: string): Promise<Dictionaries> {
 
 /**
  * Transform the keys of the message object to the key names found in the messages map
- * { hello: "Hello world!" } -> { hello_5nf85: "Hello world!" }
+ * { hello: "Hello world!" } x { hello: "hello_5nf85" } -> { hello_5nf85: "Hello world!" }
  */
 export function transformMessageKeys(messages: Messages, messagesMap: MessagesMap) {
     return Object.keys(messages).reduce(
@@ -106,15 +106,15 @@ export function generateMapping(
     if (format === 'cjs') {
         return [
             runtimeModuleId ? `const __traduki = require('${runtimeModuleId}');` : '',
-            registerMapString ? `__traduki.register({${registerMapString}});` : '',
-            `modules.export = ${messagesMapString};`,
+            registerMapString ? `__traduki.register({\n${registerMapString}\n});` : '',
+            `modules.export = ${messagesMapString};\n`,
         ].join('\n');
     }
 
     return [
         runtimeModuleId ? `import __traduki from '${runtimeModuleId}';` : '',
         registerMapString ? `__traduki.register({\n${registerMapString}\n});` : '',
-        `export default ${messagesMapString};`,
+        `export default ${messagesMapString};\n`,
     ].join('\n');
 }
 
@@ -136,51 +136,4 @@ export function generatePrecompiledMessages(
  */
 export function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== null && value !== undefined;
-}
-
-const getResolveUrl = (path: string, URL = 'URL') => `new ${URL}(${path}).href`;
-
-const getRelativeUrlFromDocument = (relativePath: string) =>
-    getResolveUrl(
-        `'${relativePath}', document.currentScript && document.currentScript.src || document.baseURI`,
-    );
-
-/**
- * Generate source code for relative url mechanism (copy/pasted from Rollup & refactored)
- */
-export function generateUrlMechanism(relativePath: string, format: string = 'esm') {
-    switch (format) {
-        case 'amd':
-            if (relativePath[0] !== '.') relativePath = './' + relativePath;
-            return getResolveUrl(`require.toUrl('${relativePath}'), document.baseURI`);
-
-        case 'cjs': {
-            const browserUrl = getRelativeUrlFromDocument(relativePath);
-            const nodeUrl = getResolveUrl(
-                `'file:' + __dirname + '/${relativePath}'`,
-                `(require('u' + 'rl').URL)`,
-            );
-            return `(typeof document === 'undefined' ? ${nodeUrl} : ${browserUrl})`;
-        }
-        case 'es':
-        case 'esm':
-            return getResolveUrl(`'${relativePath}', import.meta.url`);
-
-        case 'iife':
-            return getRelativeUrlFromDocument(relativePath);
-
-        case 'system':
-            return getResolveUrl(`'${relativePath}', module.meta.url`);
-
-        case 'umd': {
-            const browserUrl = getRelativeUrlFromDocument(relativePath);
-            const nodeUrl = getResolveUrl(
-                `'file:' + __dirname + '/${relativePath}'`,
-                `(require('u' + 'rl').URL)`,
-            );
-            return `(typeof document === 'undefined' ? ${nodeUrl} : ${browserUrl})`;
-        }
-        default:
-            throw new Error(`invalid format ${format}`);
-    }
 }

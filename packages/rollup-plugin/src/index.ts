@@ -1,7 +1,6 @@
 import {
     generateMapping,
     generatePrecompiledMessages,
-    generateUrlMechanism,
     KeyHashFnArgs,
     notEmpty,
     readYaml,

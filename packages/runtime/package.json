@@ -8,6 +8,8 @@
     "pluralformat",
     "icu",
     "i18n",
+    "L10n",
+    "code-splitting",
     "translations"
   ],
   "files": [
@@ -28,12 +30,10 @@
     "clean": "rm -rf lib/*",
     "dev": "tsc -w -p tsconfig.cjs.json",
     "build": "yarn run clean && npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc -p tsconfig.cjs.json && replace 'window.dynamicImport' 'import' lib/cjs/index.js",
-    "build:esm": "tsc -p tsconfig.esm.json && replace 'window.dynamicImport' 'import' lib/esm/index.js"
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^5.0.2",
-    "replace": "^1.2.0",
     "typescript": "^3.9.6"
   }
 }
