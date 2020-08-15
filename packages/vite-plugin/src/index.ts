@@ -63,7 +63,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 const registerMap = references.reduce(
                     (map, reference) => ({
                         ...map,
-                        [reference.locale]: `'${reference.url}?t=${Date.now()}'`,
+                        [reference.locale]: `() => import('${reference.url}?t=${Date.now()}')`,
                     }),
                     {},
                 );
