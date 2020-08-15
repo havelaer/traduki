@@ -1,6 +1,6 @@
 # Traduki
 
-[![npm](https://img.shields.io/npm/v/@traduki/runtime.svg?maxAge=2592000)](https://www.npmjs.com/package/@traduki/runtime) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/@traduki/runtime.svg)](https://www.npmjs.com/package/@traduki/runtime) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE)
 
 **⚠️ WORK IN PROGRESS ⚠**
 

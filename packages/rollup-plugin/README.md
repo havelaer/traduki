@@ -1,6 +1,6 @@
 # @traduki/rollup-plugin-traduki
 
-[![npm](https://img.shields.io/npm/v/@traduki/rollup-plugin-traduki.svg?maxAge=2592000)](https://www.npmjs.com/package/@traduki/rollup-plugin-traduki)
+[![npm](https://img.shields.io/npm/v/@traduki/rollup-plugin-traduki.svg)](https://www.npmjs.com/package/@traduki/rollup-plugin-traduki)
 
 See main github repository [readme.md](https://github.com/havelaer/traduki)
 

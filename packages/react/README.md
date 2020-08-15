@@ -1,6 +1,6 @@
 # @traduki/react
 
-[![npm](https://img.shields.io/npm/v/@traduki/react.svg?maxAge=2592000)](https://www.npmjs.com/package/@traduki/react)
+[![npm](https://img.shields.io/npm/v/@traduki/react.svg)](https://www.npmjs.com/package/@traduki/react)
 
 See main github repository [readme.md](https://github.com/havelaer/traduki)
 
