@@ -16,7 +16,7 @@ See main github repository [readme.md](https://github.com/havelaer/traduki)
 
 ## Usage
 
-### <TradukiProvider />
+### \<TradukiProvider />
 
 Make sure to wrap you application in the `TradukiProvider`:
 
