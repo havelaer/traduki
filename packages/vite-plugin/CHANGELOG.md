@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/havelaer/traduki/compare/v0.5.1...v0.5.2) (2020-08-15)
+
+
+### Bug Fixes
+
+* vite dev mode unsupported register of messages bundles ([5c3c29c](https://github.com/havelaer/traduki/commit/5c3c29c859ce7d69e55766ee055b9c1d6587c357))
+
+
+
+
+
 ## [0.5.1](https://github.com/havelaer/traduki/compare/v0.5.0...v0.5.1) (2020-08-14)
 
 
