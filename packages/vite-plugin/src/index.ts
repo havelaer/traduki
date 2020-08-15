@@ -14,6 +14,7 @@ import { cachedRead } from 'vite/dist/node/utils/fsUtils';
 type KeyHashArgs = {
     key: string;
     path: string;
+    text: string;
 };
 
 type PluginOptions = {

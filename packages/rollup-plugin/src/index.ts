@@ -20,7 +20,6 @@ type MessageModule = {
 type PluginOptions = {
     runtimeModuleId?: string; // TODO: support null and false
     publicPath?: string;
-    primaryLocale?: string;
     keyHashFn?: (data: KeyHashFnArgs) => string;
     endsWith?: string;
 };
@@ -30,7 +29,6 @@ const IDENTIFIER = 'TRADUKI_5008cbd5';
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
     const {
         runtimeModuleId = '@traduki/runtime',
-        primaryLocale = 'en',
         keyHashFn,
         publicPath = '/',
         endsWith = '.messages.yaml',
@@ -54,7 +52,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
-            const messages = dictionaries[primaryLocale];
+            const messages = dictionaries[locales[0]];
             const messagesMap = toMessagesMap(messages, id, keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
