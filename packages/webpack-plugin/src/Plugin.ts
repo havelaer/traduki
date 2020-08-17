@@ -65,7 +65,7 @@ export default class TradukiWebpackPlugin {
 
     private options: any;
     private messagesSource: MessagesSource[] = [];
-    private chunkMessagesDictionaries = new Map<any, Dictionaries>();
+    private chunkMessagesDictionaries: Map<any, Dictionaries> | null = null;
 
     constructor(options = {}) {
         validateOptions(schema, options, { name: pluginName });
@@ -100,6 +100,8 @@ export default class TradukiWebpackPlugin {
              *   chunk -> { <locale1>: {...}, <locale2>: {...}, etc. }
              */
             compilation.hooks.afterOptimizeTree.tap(pluginName, chunks => {
+                this.chunkMessagesDictionaries = new Map();
+
                 for (const chunk of chunks) {
                     const chunkNormalModuleFiles = getChunkModules(compilation, chunk)
                         .map((m: any) => m.resource)
@@ -129,7 +131,7 @@ export default class TradukiWebpackPlugin {
              * Having a filename we can find and replace the url placeHolders.
              */
             compilation.hooks.optimizeChunkAssets.tap(pluginName, () => {
-                this.chunkMessagesDictionaries.forEach((dictionaries, chunk) => {
+                this.chunkMessagesDictionaries!.forEach((dictionaries, chunk) => {
                     const locales = Object.keys(dictionaries);
 
                     locales.forEach(locale => {
@@ -172,6 +174,7 @@ export default class TradukiWebpackPlugin {
     }
 
     addMessages(source: MessagesSource) {
+        this.messagesSource = this.messagesSource.filter(s => s.resourcePath !== source.resourcePath);
         this.messagesSource.push(source);
     }
 
