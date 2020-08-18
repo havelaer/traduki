@@ -1,4 +1,0 @@
-en:
-  count: This has {count, plural, one{one user} other{# users}}.
-nl:
-  count: Dit heeft {count, plural, one{een gebruiker} other{# gebruikers}}.

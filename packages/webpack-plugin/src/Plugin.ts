@@ -1,4 +1,4 @@
-import { generatePrecompiledMessages, Messages, Dictionaries } from '@traduki/build-utils';
+import { Dictionaries, generatePrecompiledMessages, Messages } from '@traduki/build-utils';
 import { interpolateName } from 'loader-utils';
 import validateOptions from 'schema-utils';
 import webpack from 'webpack';
@@ -120,7 +120,7 @@ export default class TradukiWebpackPlugin {
                         };
                     }, {} as Dictionaries);
 
-                    this.chunkMessagesDictionaries.set(chunk, dictionaries);
+                    this.chunkMessagesDictionaries!.set(chunk, dictionaries);
                 }
             });
 
@@ -174,7 +174,9 @@ export default class TradukiWebpackPlugin {
     }
 
     addMessages(source: MessagesSource) {
-        this.messagesSource = this.messagesSource.filter(s => s.resourcePath !== source.resourcePath);
+        this.messagesSource = this.messagesSource.filter(
+            s => !(s.resourcePath === source.resourcePath && s.locale === source.locale),
+        );
         this.messagesSource.push(source);
     }
 

@@ -50,6 +50,7 @@
     "@types/jest": "^26.0.4",
     "@types/loader-utils": "^2.0.1",
     "jest": "^26.1.0",
+    "memfs": "^3.2.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6",
     "webpack": "^4.44.1"
