@@ -3,7 +3,7 @@ import webpack from 'webpack';
 import TradukiWebpackPlugin from '../../src';
 import { createFsFromVolume, Volume } from 'memfs';
 
-module.exports = (fixture: string) => {
+export default (fixture: string) => {
     const compiler = webpack({
         entry: path.resolve(__dirname, '..', fixture),
         plugins: [

@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-const compiler = require('./helpers/compiler');
+import compiler from './helpers/compiler';
 
 describe('simple case', () => {
     let stats: any;
