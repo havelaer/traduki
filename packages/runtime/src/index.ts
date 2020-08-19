@@ -1,72 +1,153 @@
-declare global {
-    interface Window { dynamicImport: any; }
-}
+type Locale = string;
 
 type PrecompiledMessages = Record<string, (arg?: Record<string, string | number>) => string>;
 
-type MessagesSource = string | (() => Promise<any>) | (() => any);
+type ImportedModule = { default: PrecompiledMessages } | PrecompiledMessages;
 
-function getDefaultExport(mod: any) {
+type Importer = (() => Promise<ImportedModule>) | (() => ImportedModule);
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+    return value !== null && value !== undefined;
+}
+
+function isPromise<T>(maybePromise: any): maybePromise is Promise<T> {
+    return typeof maybePromise.then === 'function';
+}
+
+function getDefaultExport(mod: ImportedModule): PrecompiledMessages {
+    // @ts-ignore
     return mod['default'] ? mod['default'] : mod;
 }
 
+function warn(message: string, err?: Error) {
+    console.warn(message);
+    if (err) console.error(err);
+}
+
+const EMPTY_OBJECT = {};
+
 /**
- * Resolve messages source
+ * Resolve messages importer
  * Source is either a url (string), a function returning a `require()` or a function returning an `import()`
  */
-function resolveMessagesSource(source: MessagesSource) {
-    if (typeof source !== 'function') {
-        throw new Error(`[traduki] Expected a function, instead received ${typeof source}`);
-    }
-    const result = source();
-
-    if (result.then) {
-        return result.then(getDefaultExport);
+function resolveImporter(importer: Importer): Promise<PrecompiledMessages | null> {
+    if (typeof importer !== 'function') {
+        warn(`[traduki] Expected a function, instead received ${typeof importer}`);
+        return Promise.resolve(null);
     }
 
-    return Promise.resolve(getDefaultExport(result));
+    try {
+        const result = importer();
+
+        if (isPromise<ImportedModule>(result)) {
+            return result.then(getDefaultExport).catch((error: Error) => {
+                warn(`[traduki] Error calling locale importer`, error);
+                return null;
+            });
+        }
+
+        return Promise.resolve(getDefaultExport(result));
+    } catch (error) {
+        warn(`[traduki] Error calling locale importer`, error);
+        return Promise.resolve(null);
+    }
 }
 
 class TradukiRuntime {
-    private messageMaps: Record<string, MessagesSource>[] = [];
-    private messages: PrecompiledMessages = {};
+    private queue: Record<Locale, Importer[]> = {};
+    private loadingOrDone: Importer[] = [];
+    private currentMessages: PrecompiledMessages | null = null;
     private locale: string = '';
 
-    register(map: Record<string, string>) {
-        this.messageMaps.push(map);
+    private isLoadingOrDone(importer: Importer) {
+        return this.loadingOrDone.indexOf(importer) > -1;
+    }
 
-        if (this.locale) this.load();
+    private resetLoadingOrDone() {
+        this.queue[this.locale] = [...this.queue[this.locale], ...this.loadingOrDone];
+        this.loadingOrDone = [];
+    }
+
+    register(map: Record<string, Importer>) {
+        Object.keys(map).forEach(locale => {
+            const importer = map[locale];
+
+            if (!(typeof importer === 'function')) {
+                warn(`[traduki] Expected a function, instead received '${typeof importer}'`);
+            }
+
+            if (!this.queue[locale]) this.queue[locale] = [];
+
+            if (this.isLoadingOrDone(importer)) return;
+
+            this.queue[locale].push(map[locale]);
+        });
     }
 
     setLocale(locale: string) {
+        if (locale !== this.locale && this.queue[this.locale]) {
+            this.resetLoadingOrDone();
+        }
+
         this.locale = locale;
 
         return this;
     }
 
+    getLocale() {
+        return this.locale;
+    }
+
+    status() {
+        return {
+            queued: this.queue[this.locale].length,
+            loadingOrDone: this.loadingOrDone.length,
+        }
+    }
+
     async load() {
         const locale = this.locale;
 
-        const results = await Promise.all(
-            this.messageMaps
-                .map(map => map[locale])
-                .filter(Boolean)
-                .map(resolveMessagesSource)
-        );
+        if (!locale) {
+            warn(`[traduki] Called load(), but no locale was set.`);
+            return;
+        }
 
-        this.messages = results.reduce(
-            (prev, messages) => ({ ...prev, ...messages }),
-            {},
-        );
+        const queued: Importer[] = [];
+        let importer: Importer | undefined;
+
+        while ((importer = this.queue[locale].pop())) {
+            queued.push(importer);
+            this.loadingOrDone.push(importer);
+        }
+
+        const results = await Promise.all(queued.map(resolveImporter));
+        const newmessages = results
+            .filter(notEmpty)
+            .reduce((prev, messages) => ({ ...prev, ...messages }), {} as PrecompiledMessages);
+
+        this.currentMessages = {
+            ...this.currentMessages,
+            ...newmessages,
+        };
+    }
+
+    hasKey(key: string) {
+        return !!(this.currentMessages && this.currentMessages[key]);
     }
 
     translate(key: string, args?: Record<string, string | number>) {
-        if (!this.messages[key]) {
-            console.warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
+        if (!this.currentMessages) {
+            warn(`[traduki] No messages loaded yet`);
             return key;
         }
 
-        return this.messages[key](args);
+        if (!this.hasKey(key)) {
+            warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
+            return key;
+        }
+
+        return this.currentMessages[key](args || EMPTY_OBJECT);
     }
 }
 
