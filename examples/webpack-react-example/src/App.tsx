@@ -5,9 +5,7 @@ import otherMessages from './Other.messages.yaml';
 // import logo from './logo.svg';
 import './App.css';
 
-// const messages: any = {};
-
-// const AsyncComponent = lazy(() => import('./Component'));
+const AsyncComponent = lazy(() => import('./Component'));
 
 function App() {
     const [count, setCount] = useState(0);
@@ -26,7 +24,7 @@ function App() {
                     </button>
                 </p>
                 <Suspense fallback={<div>loading...</div>}>
-                    {/* <AsyncComponent /> */}
+                    <AsyncComponent />
                 </Suspense>
                 <p dangerouslySetInnerHTML={{ __html: t.markdown(messages.edit) }} />
                 <a
