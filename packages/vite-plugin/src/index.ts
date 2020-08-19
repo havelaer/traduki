@@ -64,7 +64,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 const registerMap = references.reduce(
                     (map, reference) => ({
                         ...map,
-                        [reference.locale]: `() => import('${reference.url}?t=${Date.now()}')`,
+                        [reference.locale]: `() => import('${reference.url}?z=${Date.now()}')`,
                     }),
                     {},
                 );
@@ -73,6 +73,9 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 ctx.body = [
                     generateImporters(registerMap, runtimeModuleId),
                     generateExportMapping(messagesMap),
+                    'if (__traduki.getLocale()) {',
+                    '\t__traduki.load();',
+                    '}',
                 ].join('\n');
             }
 
