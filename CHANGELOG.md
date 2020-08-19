@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3](https://github.com/havelaer/traduki/compare/v0.5.2...v0.5.3) (2020-08-19)
+
+
+### Bug Fixes
+
+* multiple compilation cycles (watch mode) ([13acaf3](https://github.com/havelaer/traduki/commit/13acaf336c2aeb99c544c869060ebee86eb5dd8d))
+
+
+
+
+
 ## [0.5.2](https://github.com/havelaer/traduki/compare/v0.5.1...v0.5.2) (2020-08-15)
 
 
