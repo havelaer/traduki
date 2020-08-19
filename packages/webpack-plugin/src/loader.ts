@@ -1,5 +1,6 @@
 import {
-    generateMapping,
+    generateImporters,
+    generateExportMapping,
     parseYaml,
     RegisterMap,
     toMessagesMap,
@@ -21,7 +22,7 @@ function loader(this: any, contents: string) {
     const dictionaries = parseYaml(contents);
     const locales = Object.keys(dictionaries);
     const messages = dictionaries[locales[0]];
-    const messagesMap = toMessagesMap(messages, this.resourcePath);
+    const messagesMap = toMessagesMap(messages);
 
     const compiler = this._compiler;
     const isChildCompiler = compiler.isChild();
@@ -50,7 +51,10 @@ function loader(this: any, contents: string) {
         };
     }, {} as RegisterMap);
 
-    return generateMapping(messagesMap, registerMap, plugin.options.runtimeModuleId);
+    return [
+        generateImporters(registerMap, plugin.options.runtimeModuleId),
+        generateExportMapping(messagesMap),
+    ].join('\n');
 }
 
 export default loader;

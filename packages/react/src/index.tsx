@@ -2,6 +2,8 @@ import * as React from 'react';
 import traduki from '@traduki/runtime';
 import { Remarkable } from 'remarkable';
 
+const register = traduki.register
+
 const md = new Remarkable();
 
 export type Translator = (
@@ -67,14 +69,19 @@ export const TradukiProvider: React.FC<TradukiProviderProps> = ({
     initialLocale,
     children,
 }) => {
-    const [locale, setLocale] = React.useState<string | null>(null);
+    const [locale, setLocale] = React.useState<string | null>(() => {
+        return null;
+    });
 
     const updateLocale = (locale: string) => {
         traduki.setLocale(locale);
-        traduki.load().then(() => setLocale(locale));
+        traduki.load().then(() => {
+            setLocale(locale);
+        });
     }
-
-    React.useMemo(() => updateLocale(initialLocale), []);
+    React.useMemo(() => {
+        updateLocale(initialLocale);
+    }, []);
 
     const context: TradukiContextProps = React.useMemo(() => {
         return {

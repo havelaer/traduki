@@ -1,6 +1,7 @@
 import {
     defaultKeyHashFn,
-    generateMapping,
+    generateImporters,
+    generateExportMapping,
     generatePrecompiledMessages,
     parseYaml,
     toMessagesMap,
@@ -13,7 +14,6 @@ import { cachedRead } from 'vite/dist/node/utils/fsUtils';
 
 type KeyHashArgs = {
     key: string;
-    path: string;
     text: string;
 };
 
@@ -47,7 +47,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 const dictionaries = await parseYaml(contents.toString());
                 const locales = Object.keys(dictionaries);
                 const messages = dictionaries[primaryLocale];
-                const messagesMap = toMessagesMap(messages, ctx.path, keyHashFn);
+                const messagesMap = toMessagesMap(messages, keyHashFn);
 
                 const references = locales.map(locale => {
                     const url = `${ctx.path}.${locale}.js`;
@@ -70,7 +70,10 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 );
 
                 ctx.type = 'js';
-                ctx.body = generateMapping(messagesMap, registerMap, runtimeModuleId);
+                ctx.body = [
+                    generateImporters(registerMap, runtimeModuleId),
+                    generateExportMapping(messagesMap),
+                ].join('\n');
             }
 
             // Return the compiled messages module for the requested locale

@@ -13,7 +13,7 @@ export type RegisterMap = Record<Locale, string>;
 
 export type Dictionaries = Record<Locale, Messages>;
 
-export type KeyHashFnArgs = { key: string; path: string; text: string };
+export type KeyHashFnArgs = { key: string; text: string };
 
 const messagesFormatExport: Record<string, string | undefined> = {
     amd: 'module.exports',
@@ -25,8 +25,8 @@ const messagesFormatExport: Record<string, string | undefined> = {
     umd: undefined,
 };
 
-export function defaultKeyHashFn({ key, path, text }: KeyHashFnArgs) {
-    return hash(`${key}_${path}_${text}`);
+export function defaultKeyHashFn({ key, text }: KeyHashFnArgs) {
+    return hash(`${key}_${text}`);
 }
 
 /**
@@ -35,7 +35,6 @@ export function defaultKeyHashFn({ key, path, text }: KeyHashFnArgs) {
  */
 export function toMessagesMap(
     messages: Messages,
-    path: string,
     keyHashFn: (data: KeyHashFnArgs) => string = defaultKeyHashFn,
 ): MessagesMap {
     return Object.keys(messages).reduce(
@@ -43,7 +42,6 @@ export function toMessagesMap(
             ...prev,
             [key]: `${key}_${keyHashFn({
                 key,
-                path,
                 text: messages[key],
             })}`,
         }),
@@ -88,34 +86,40 @@ export function transformMessageKeys(messages: Messages, messagesMap: MessagesMa
 }
 
 /**
- * Generate source code that when runs: registers the location of the precompiled messages bundles
- * for each locale and exports the messages map object to be used in the application.
+ * Generate source code that when runs registers the location of the precompiled messages bundles for each locale
  */
-export function generateMapping(
-    messagesMap: MessagesMap,
-    registerMap?: Record<Locale, string>,
-    runtimeModuleId?: string,
+export function generateImporters(
+    registerMap: Record<Locale, string>,
+    runtimeModuleId: string,
     format: 'cjs' | 'esm' = 'esm',
 ): string {
-    const registerMapString = registerMap
-        ? Object.keys(registerMap)
-              .map(locale => `\t${locale}: ${registerMap[locale]}`)
-              .join(',\n')
-        : '';
-    const messagesMapString = JSON.stringify(messagesMap, null, 4);
+    const registerMapString = Object.keys(registerMap)
+        .map(locale => `\t${locale}: ${registerMap[locale]}`)
+        .join(',\n');
+
     if (format === 'cjs') {
         return [
-            runtimeModuleId ? `const __traduki = require('${runtimeModuleId}');` : '',
-            registerMapString ? `__traduki.register({\n${registerMapString}\n});` : '',
-            `modules.export = ${messagesMapString};\n`,
+            `const __traduki = require('${runtimeModuleId}');`,
+            `__traduki.register({\n${registerMapString}\n});`,
         ].join('\n');
     }
 
     return [
-        runtimeModuleId ? `import __traduki from '${runtimeModuleId}';` : '',
-        registerMapString ? `__traduki.register({\n${registerMapString}\n});` : '',
-        `export default ${messagesMapString};\n`,
+        `import __traduki from '${runtimeModuleId}';`,
+        `__traduki.register({\n${registerMapString}\n});`,
     ].join('\n');
+}
+
+/**
+ * Generate source code that when runs exports the messages map object to be used in the application.
+ */
+export function generateExportMapping(messagesMap: any, format: 'cjs' | 'esm' = 'esm'): string {
+    const messagesMapString = JSON.stringify(messagesMap, null, 4);
+    if (format === 'cjs') {
+        return `modules.export = ${messagesMapString};\n`;
+    }
+
+    return `export default ${messagesMapString};\n`;
 }
 
 /**

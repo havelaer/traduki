@@ -1,5 +1,6 @@
 import {
-    generateMapping,
+    generateImporters,
+    generateExportMapping,
     generatePrecompiledMessages,
     KeyHashFnArgs,
     notEmpty,
@@ -53,7 +54,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
             const messages = dictionaries[locales[0]];
-            const messagesMap = toMessagesMap(messages, id, keyHashFn);
+            const messagesMap = toMessagesMap(messages, keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
             // Return runtime code with references to those assets
@@ -87,7 +88,10 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 {},
             );
 
-            return generateMapping(messagesMap, registerMap, runtimeModuleId);
+            return [
+                generateImporters(registerMap, runtimeModuleId),
+                generateExportMapping(messagesMap),
+            ].join('\n');
         },
         outputOptions(options) {
             format = options.format || 'es';

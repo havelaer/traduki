@@ -5,8 +5,8 @@ import runtimeInstance from '../src';
 
 describe('runtime', () => {
     let runtime: any;
-    let spyWarn;
-    let spyError;
+    let spyWarn: any;
+    let spyError: any;
 
     beforeEach(() => {
         // @ts-ignore
@@ -65,6 +65,34 @@ describe('runtime', () => {
 
             await runtime.setLocale('en').load();
             expect(enImporter).toBeCalledTimes(1);
+        });
+
+        it('should be callable multiple times', async () => {
+            const enImporter = jest.fn().mockResolvedValue({ key1_hash: () => 'Foo' });
+
+            runtime.register({
+                en: () => enImporter(),
+            });
+
+            expect(enImporter).not.toBeCalled();
+
+            runtime.setLocale('en').load();
+            await runtime.setLocale('en').load()
+            expect(runtime.hasKey('key1_hash')).toBe(true);
+        });
+
+        it('should be callable multiple times (2)', async () => {
+            const enImporter = jest.fn().mockResolvedValue({ key1_hash: () => 'Foo' });
+
+            runtime.register({
+                en: () => enImporter(),
+            });
+
+            expect(enImporter).not.toBeCalled();
+
+            await runtime.setLocale('en').load()
+            runtime.setLocale('en').load();
+            expect(runtime.hasKey('key1_hash')).toBe(true);
         });
 
         it('should call locale importer once and merge new registered importer results', async () => {
@@ -183,8 +211,8 @@ describe('runtime', () => {
 
         it('should translate with arguments', async () => {
             runtime.register({
-                en: () => Promise.resolve({ key1_hash: d => `Hey ${d.name}` }),
-                nl: () => Promise.resolve({ key1_hash: d => `Hoi ${d.name}` }),
+                en: () => Promise.resolve({ key1_hash: (d: any) => `Hey ${d.name}` }),
+                nl: () => Promise.resolve({ key1_hash: (d: any) => `Hoi ${d.name}` }),
             });
             await runtime.setLocale('en').load();
             const pending = runtime.setLocale('nl').load();
@@ -197,8 +225,8 @@ describe('runtime', () => {
 
         it('should not crash when forgetting the arguments', async () => {
             runtime.register({
-                en: () => Promise.resolve({ key1_hash: d => `Hey ${d.name}` }),
-                nl: () => Promise.resolve({ key1_hash: d => `Hoi ${d.name}` }),
+                en: () => Promise.resolve({ key1_hash: (d: any) => `Hey ${d.name}` }),
+                nl: () => Promise.resolve({ key1_hash: (d: any) => `Hoi ${d.name}` }),
             });
             await runtime.setLocale('en').load();
             const pending = runtime.setLocale('nl').load();
@@ -214,6 +242,7 @@ describe('runtime', () => {
                 en: () => Promise.resolve({ key1_hash: () => 'Hey' }),
                 nl: () => Promise.resolve({ key1_hash: () => 'Hoi' }),
             });
+
             await runtime.setLocale('en').load();
             expect(runtime.translate('key1_hash')).toBe('Hey');
 

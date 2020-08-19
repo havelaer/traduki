@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils generateExportMapping should generate code for exporting messages key mapping 1`] = `
+"export default {
+    \\"key1\\": \\"key1_df89b086\\",
+    \\"key2\\": \\"key2_7218f15d\\",
+    \\"camelCase\\": \\"camelCase_616a71fa\\",
+    \\"snake_case\\": \\"snake_case_18d98646\\"
+};
+"
+`;
+
+exports[`utils generateExportMapping should generate code for exporting messages key mapping for commonjs 1`] = `
+"modules.export = {
+    \\"key1\\": \\"key1_df89b086\\",
+    \\"key2\\": \\"key2_7218f15d\\",
+    \\"camelCase\\": \\"camelCase_616a71fa\\",
+    \\"snake_case\\": \\"snake_case_18d98646\\"
+};
+"
+`;
+
+exports[`utils generateImporters should generate code for registering importers per locale 1`] = `
+"import __traduki from '@traduki/runtime';
+__traduki.register({
+	en: () => import(\\"/path/to/en.messages.js\\"),
+	nl: () => import(\\"/path/to/nl.messages.js\\")
+});"
+`;
+
+exports[`utils generateImporters should generate code for registering importers per locale for commonjs 1`] = `
+"const __traduki = require('@traduki/runtime');
+__traduki.register({
+	en: () => require(\\"/path/to/en.messages.js\\"),
+	nl: () => require(\\"/path/to/nl.messages.js\\")
+});"
+`;
+
+exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code 1`] = `
+"
+export default {
+  key1: function(d) { return \\"This is key1\\"; },
+  hello: function(d) { return \\"Hello \\" + d.name; }
+}"
+`;
+
+exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code for commonjs 1`] = `
+"
+module.exports = {
+  key1: function(d) { return \\"This is key1\\"; },
+  hello: function(d) { return \\"Hello \\" + d.name; }
+}"
+`;

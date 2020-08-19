@@ -38,7 +38,7 @@ export default {
         runtimeModuleId: '@traduki/runtime', // use `@traduki/react` for React
         /*
          * Description: Hashing function for the global message keys
-         * Default: ({ key, text, path }) => string
+         * Default: ({ key, text }) => string
          */
         keyHashFn: myCustomHashFunction, // Probably won't need this, the default should be just fine
         /*

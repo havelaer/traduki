@@ -102,8 +102,11 @@ class TradukiRuntime {
         return {
             queued: this.queue[this.locale].length,
             loadingOrDone: this.loadingOrDone.length,
-        }
+        };
     }
+
+    // @ts-ignore
+    private previousBatches: Promise<(PrecompiledMessages | null)[]> = Promise.resolve();
 
     async load() {
         const locale = this.locale;
@@ -113,15 +116,20 @@ class TradukiRuntime {
             return;
         }
 
-        const queued: Importer[] = [];
+        const batch: Importer[] = [];
         let importer: Importer | undefined;
 
         while ((importer = this.queue[locale].pop())) {
-            queued.push(importer);
+            batch.push(importer);
             this.loadingOrDone.push(importer);
         }
 
-        const results = await Promise.all(queued.map(resolveImporter));
+        const batchPromise = Promise.all(batch.map(resolveImporter));
+        this.previousBatches = this.previousBatches
+            .then(() => batchPromise)
+            .catch(() => batchPromise);
+        const results = await this.previousBatches;
+
         const newmessages = results
             .filter(notEmpty)
             .reduce((prev, messages) => ({ ...prev, ...messages }), {} as PrecompiledMessages);
