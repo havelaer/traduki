@@ -30,7 +30,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "jest test",
+    "test": "jest",
     "dev": "tsc -w -p tsconfig.cjs.json",
     "build": "yarn run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",

@@ -18,19 +18,19 @@ describe('simple case', () => {
         expect(assets).toHaveProperty(['main.en.js']);
     });
 
-    it('should have references to the messages bundles in main.js', async () => {
+    it('should output main bundle with references to messages', async () => {
         const source = stats.compilation.assets['main.js'].source();
         expect(source).toContain('/dist/main.nl.js');
         expect(source).toContain('/dist/main.en.js');
     });
 
-    it('should output nl messages bundle with "Dit is een test"', async () => {
+    it('should output *nl* messages bundle with "Dit is een test"', async () => {
         const source = stats.compilation.assets['main.nl.js'].source();
         expect(source).toContain('key1_');
         expect(source).toContain('Dit is een test');
     });
 
-    it('should output en messages bundle with "This is a test"', async () => {
+    it('should output *en* messages bundle with "This is a test"', async () => {
         const source = stats.compilation.assets['main.en.js'].source();
         expect(source).toContain('key1_');
         expect(source).toContain('This is a test');
