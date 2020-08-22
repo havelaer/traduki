@@ -14,7 +14,7 @@ export type RegisterMap = Record<Locale, string>;
 
 export type Dictionaries = Record<Locale, Messages>;
 
-export type KeyHashFnArgs = { key: string; text: string };
+export type KeyHashFnArgs = { key: string; texts: string[] };
 
 const messagesFormatExport: Record<string, string | undefined> = {
     amd: 'module.exports',
@@ -26,28 +26,50 @@ const messagesFormatExport: Record<string, string | undefined> = {
     umd: undefined,
 };
 
-export function defaultKeyHashFn({ key, text }: KeyHashFnArgs) {
-    return hash(`${key}_${text}`);
+function uniqueKeys(objects: Record<string, any>[]): Set<string> {
+    return new Set(
+        objects.reduce((keys: string[], object) => keys.concat(Object.keys(object)), []),
+    );
+}
+
+function nestedObjects<T>(objects: Record<string, Record<string, T>>): Record<string, T>[] {
+    return Object.keys(objects).map(id => objects[id]);
+}
+
+export function defaultKeyHashFn(data: KeyHashFnArgs) {
+    return hash(data.key + '_' + data.texts.join('|'));
 }
 
 /**
- * Creates a messages mapping object from a messages object
- * { hello: "Hello world!" } -> { hello: "hello_5nf85" }
+ * Creates a messages mapping object from a dictionary object
+ * { en: { hello: "Hello world!" }, nl: { hello: "Hallo wereld!" } }-> { hello: "hello_5nf85" }
  */
 export function toMessagesMap(
-    messages: Messages,
+    dictionaries: Dictionaries,
     keyHashFn: (data: KeyHashFnArgs) => string = defaultKeyHashFn,
 ): MessagesMap {
-    return Object.keys(messages).reduce(
+    const objects = nestedObjects(dictionaries);
+    const keys = uniqueKeys(objects);
+
+    return [...keys].reduce(
         (prev, key) => ({
             ...prev,
             [key]: `${key}_${keyHashFn({
                 key,
-                text: messages[key],
+                texts: objects.map(o => o[key]).filter(notEmpty),
             })}`,
         }),
         {},
     );
+}
+
+/**
+ * Check if nested object keys are all the same
+ */
+export function isConsistent(nestedObjects: Record<string, Record<string, any>>): boolean {
+    const objects = Object.keys(nestedObjects).map(id => nestedObjects[id]);
+    const keys = uniqueKeys(objects);
+    return objects.every(object => keys.size === Object.keys(object).length);
 }
 
 /**

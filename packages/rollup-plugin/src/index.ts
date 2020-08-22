@@ -40,11 +40,11 @@ function isChunk(item: OutputChunk | OutputAsset): item is OutputChunk {
 
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
     const config = {
-        ...options,
         runtimeModuleId: '@traduki/runtime',
         publicPath: '/',
         include: /\.messages\.yaml$/,
         minify: true,
+        ...options,
     };
 
     const filter = createFilter(config.include, config.exclude);
@@ -63,8 +63,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
-            const messages = dictionaries[locales[0]];
-            const messagesMap = toMessagesMap(messages, config.keyHashFn);
+            const messagesMap = toMessagesMap(dictionaries, config.keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
             // Return runtime code with references to those assets

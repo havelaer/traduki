@@ -2,7 +2,7 @@
 
 exports[`utils generateExportMapping should generate code for exporting messages key mapping 1`] = `
 "export default {
-    \\"plain\\": \\"This is a plain messages\\",
+    \\"plain\\": \\"This is a plain message\\",
     \\"hello\\": \\"Hello {name}\\",
     \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
     \\"camelCase\\": \\"This is camelCase\\",
@@ -14,7 +14,7 @@ exports[`utils generateExportMapping should generate code for exporting messages
 
 exports[`utils generateExportMapping should generate code for exporting messages key mapping for commonjs 1`] = `
 "modules.export = {
-    \\"plain\\": \\"This is a plain messages\\",
+    \\"plain\\": \\"This is a plain message\\",
     \\"hello\\": \\"Hello {name}\\",
     \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
     \\"camelCase\\": \\"This is camelCase\\",
@@ -64,7 +64,7 @@ var plural = function (value, offset, lcfunc, data, isOrdinal) {
 };
 
 export default {
-  plain: function(d) { return \\"This is a plain messages\\"; },
+  plain: function(d) { return \\"This is a plain message\\"; },
   hello: function(d) { return \\"Hello \\" + d.name; },
   found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
   camelCase: function(d) { return \\"This is camelCase\\"; },
@@ -97,7 +97,7 @@ var plural = function (value, offset, lcfunc, data, isOrdinal) {
 };
 
 module.exports = {
-  plain: function(d) { return \\"This is a plain messages\\"; },
+  plain: function(d) { return \\"This is a plain message\\"; },
   hello: function(d) { return \\"Hello \\" + d.name; },
   found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
   camelCase: function(d) { return \\"This is camelCase\\"; },
@@ -106,4 +106,15 @@ module.exports = {
 }"
 `;
 
-exports[`utils minify should minify code 1`] = `"var e=(e,s)=>{var r=String(e).split(\\".\\"),a=!r[1],t=Number(r[0])==e,n=t&&r[0].slice(-1),i=t&&r[0].slice(-2);return s?1==n&&11!=i?\\"one\\":2==n&&12!=i?\\"two\\":3==n&&13!=i?\\"few\\":\\"other\\":1==e&&a?\\"one\\":\\"other\\"},s=(e,s,r)=>{if(!r)return e;if(isNaN(e))throw new Error(\\"Can't apply offset:\\"+r+\\" to argument \`\\"+s+\\"\` with non-numerical value \\"+JSON.stringify(e)+\\".\\");return e-r};export default{plain:e=>\\"This is a plain messages\\",hello:e=>\\"Hello \\"+e.name,found:r=>\\"found \\"+((e,s,r,a,t)=>{if({}.hasOwnProperty.call(a,e))return a[e];s&&(e-=s);var n=r(e,t);return n in a?a[n]:a.other})(r.results,0,e,{0:\\"no results\\",one:\\"1 result\\",other:s(r.results,\\"results\\")+\\" results\\"}),camelCase:e=>\\"This is camelCase\\",snake_case:e=>\\"This is snake_case\\",\\"kebab-case\\":e=>\\"This is kebab-case\\"};"`;
+exports[`utils minify should minify code 1`] = `"var e=(e,s)=>{var r=String(e).split(\\".\\"),a=!r[1],t=Number(r[0])==e,n=t&&r[0].slice(-1),i=t&&r[0].slice(-2);return s?1==n&&11!=i?\\"one\\":2==n&&12!=i?\\"two\\":3==n&&13!=i?\\"few\\":\\"other\\":1==e&&a?\\"one\\":\\"other\\"},s=(e,s,r)=>{if(!r)return e;if(isNaN(e))throw new Error(\\"Can't apply offset:\\"+r+\\" to argument \`\\"+s+\\"\` with non-numerical value \\"+JSON.stringify(e)+\\".\\");return e-r};export default{plain:e=>\\"This is a plain message\\",hello:e=>\\"Hello \\"+e.name,found:r=>\\"found \\"+((e,s,r,a,t)=>{if({}.hasOwnProperty.call(a,e))return a[e];s&&(e-=s);var n=r(e,t);return n in a?a[n]:a.other})(r.results,0,e,{0:\\"no results\\",one:\\"1 result\\",other:s(r.results,\\"results\\")+\\" results\\"}),camelCase:e=>\\"This is camelCase\\",snake_case:e=>\\"This is snake_case\\",\\"kebab-case\\":e=>\\"This is kebab-case\\"};"`;
+
+exports[`utils transformMessageKeys should transform the keys from the messages object to hashed unique keys 1`] = `
+Object {
+  "camelCase_bb4c950c": "This is camelCase",
+  "found_20988641": "found {results, plural, =0 {no results} one {1 result} other {# results}}",
+  "hello_c70ec896": "Hello {name}",
+  "kebab-case_6a71b35a": "This is kebab-case",
+  "plain_21ed7212": "This is a plain message",
+  "snake_case_6d6ab835": "This is snake_case",
+}
+`;

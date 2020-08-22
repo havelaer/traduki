@@ -10,6 +10,7 @@ import {
     minify,
     toMessagesMap,
     transformMessageKeys,
+    isConsistent,
 } from '../src';
 
 const messages = require('./fixtures/messages.json');
@@ -21,48 +22,92 @@ describe('utils', () => {
             expect(toMessagesMap(messages)).toEqual(messagesMap);
         });
 
-        it('should return different hashes for different content', () => {
-            const messagesA = {
-                key1: 'This is key1',
-            };
+        it('should return different hashes when content changes', () => {
             const messagesB = {
-                key1: 'This is also key1, but different',
+                ...messages,
+                nl: {
+                    plain: 'Dit WAS een plat bericht',
+                },
             };
-            expect(toMessagesMap(messagesA).key1).not.toBe(toMessagesMap(messagesB).key1);
+            expect(toMessagesMap(messages).plain).not.toBe(toMessagesMap(messagesB).plain);
         });
 
-        it('should return same hashes for same content', () => {
-            const messagesA = {
-                key1: 'This is key1',
-            };
+        it('should return different hashes new locale is added', () => {
             const messagesB = {
-                key1: 'This is key1',
+                ...messages,
+                de: {
+                    plain: 'Dies ist eine einfache Botschaft',
+                },
             };
-            expect(toMessagesMap(messagesA).key1).toBe(toMessagesMap(messagesB).key1);
+            expect(toMessagesMap(messages).plain).not.toBe(toMessagesMap(messagesB).plain);
+        });
+    });
+
+    describe('isConsistent', () => {
+        it('should be true for consistent keys', () => {
+            expect(
+                isConsistent({
+                    locale1: { a: 'a1', b: 'b1', c: 'c1' },
+                    locale2: { a: 'a2', b: 'b2', c: 'c2' },
+                    locale3: { a: 'a3', b: 'b3', c: 'c3' },
+                }),
+            ).toBe(true);
+        });
+
+        it('should be false inconsistent keys (1)', () => {
+            expect(
+                isConsistent({
+                    locale1: { a: 'a1', b: 'b1' },
+                    locale2: { a: 'a2', b: 'b2', c: 'c2' },
+                    locale3: { a: 'a3', b: 'b3', c: 'c3' },
+                }),
+            ).toBe(false);
+        });
+
+        it('should be false inconsistent keys (2)', () => {
+            expect(
+                isConsistent({
+                    locale1: { a: 'a1', b: 'b1', c: 'c1' },
+                    locale2: { a: 'a2', b: 'b2' },
+                    locale3: { a: 'a3', b: 'b3', c: 'c3' },
+                }),
+            ).toBe(false);
+        });
+
+        it('should be false inconsistent keys (3)', () => {
+            expect(
+                isConsistent({
+                    locale1: { a: 'a1', b: 'b1', c: 'c1' },
+                    locale2: { a: 'a2', b: 'b2', c: 'c2' },
+                    locale3: { a: 'a3', b: 'b3' },
+                }),
+            ).toBe(false);
+        });
+
+        it('should be false inconsistent keys (3)', () => {
+            expect(
+                isConsistent({
+                    locale1: { a: 'a1', b: 'b1', c: 'c1' },
+                    locale2: { a: 'a2', b: 'b2', c: 'c2' },
+                    locale3: { a: 'a3', b: 'b3', z: 'c3' }, // note the 'z'
+                }),
+            ).toBe(false);
         });
     });
 
     describe('transformMessageKeys', () => {
         it('should transform the keys from the messages object to hashed unique keys', () => {
-            expect(transformMessageKeys(messages, messagesMap)).toEqual({
-                plain_065d1ea0: 'This is a plain messages',
-                hello_8e9460b0: 'Hello {name}',
-                found_023c8d84:
-                    'found {results, plural, =0 {no results} one {1 result} other {# results}}',
-                camelCase_616a71fa: 'This is camelCase',
-                'kebab-case_0a0024bd': 'This is kebab-case',
-                snake_case_18d98646: 'This is snake_case',
-            });
+            expect(transformMessageKeys(messages['en'], messagesMap)).toMatchSnapshot();
         });
     });
 
     describe('generateExportMapping', () => {
         it('should generate code for exporting messages key mapping', () => {
-            expect(generateExportMapping(messages)).toMatchSnapshot();
+            expect(generateExportMapping(messages['en'])).toMatchSnapshot();
         });
 
         it('should generate code for exporting messages key mapping for commonjs', () => {
-            expect(generateExportMapping(messages, 'cjs')).toMatchSnapshot();
+            expect(generateExportMapping(messages['en'], 'cjs')).toMatchSnapshot();
         });
     });
 
@@ -88,12 +133,12 @@ describe('utils', () => {
 
     describe('generatePrecompiledMessages', () => {
         it('should generate precompiled messages bundle code', () => {
-            const code = generatePrecompiledMessages('en', messages);
+            const code = generatePrecompiledMessages('en', messages['en']);
             expect(code).toMatchSnapshot();
         });
 
         it('should generate precompiled messages bundle code for commonjs', () => {
-            const code = generatePrecompiledMessages('en', messages, 'cjs');
+            const code = generatePrecompiledMessages('en', messages['en'], 'cjs');
             expect(code).toMatchSnapshot();
             expect(nodeEval(code).found({ results: 3 })).toBe('found 3 results');
         });
@@ -101,14 +146,14 @@ describe('utils', () => {
 
     describe('minify', () => {
         it('should minify code', async () => {
-            const raw = generatePrecompiledMessages('en', messages);
+            const raw = generatePrecompiledMessages('en', messages['en']);
             const minified = await minify(raw);
 
             expect(minified).toMatchSnapshot();
         });
 
         it('should still be executable (commonjs)', async () => {
-            const raw = generatePrecompiledMessages('en', messages, 'cjs');
+            const raw = generatePrecompiledMessages('en', messages['en'], 'cjs');
             const minified = await minify(raw);
 
             expect(nodeEval(raw).found({ results: 3 })).toBe('found 3 results');

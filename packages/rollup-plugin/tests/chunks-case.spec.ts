@@ -28,7 +28,6 @@ describe('chunks case', () => {
 
     it('should output main bundle with references to messages', async () => {
         const source = getChunk(output, 'main.js')?.code;
-        console.log(source)
         expect(source).toContain('/assets/main.nl.js');
         expect(source).toContain('/assets/main.en.js');
     });

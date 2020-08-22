@@ -15,10 +15,9 @@ import { createFilter } from '@rollup/pluginutils';
 
 function createVitePlugin(options: PluginOptions = {}): Plugin {
     const config = {
-        ...options,
         runtimeModuleId: '@traduki/runtime',
-        keyHashFn: defaultKeyHashFn,
         include: /\.messages\.yaml$/,
+        ...options,
     };
 
     const filter = createFilter(config.include, config.exclude);
@@ -35,9 +34,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 const contents = await cachedRead(ctx, path.join(root, ctx.path));
                 const dictionaries = await parseYaml(contents.toString());
                 const locales = Object.keys(dictionaries);
-                const messages = dictionaries[locales[0]];
-                const messagesMap = toMessagesMap(messages, config.keyHashFn);
-
+                const messagesMap = toMessagesMap(dictionaries);
                 const references = locales.map(locale => {
                     const url = `${ctx.path}.${locale}.js`;
                     const messages = transformMessageKeys(dictionaries[locale], messagesMap);

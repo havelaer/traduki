@@ -21,8 +21,7 @@ function loader(this: any, contents: string) {
 
     const dictionaries = parseYaml(contents);
     const locales = Object.keys(dictionaries);
-    const messages = dictionaries[locales[0]];
-    const messagesMap = toMessagesMap(messages);
+    const messagesMap = toMessagesMap(dictionaries);
 
     const compiler = this._compiler;
     const isChildCompiler = compiler.isChild();
