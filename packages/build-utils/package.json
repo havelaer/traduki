@@ -1,6 +1,6 @@
 {
   "name": "@traduki/build-utils",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Build utils for the various traduki plugins",
   "author": "havelaer",
   "files": [
