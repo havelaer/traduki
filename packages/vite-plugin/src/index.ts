@@ -7,32 +7,21 @@ import {
     toMessagesMap,
     transformMessageKeys,
 } from '@traduki/build-utils';
-import tradukiRollupPlugin from '@traduki/rollup-plugin-traduki';
+import tradukiRollupPlugin, { PluginOptions } from '@traduki/rollup-plugin-traduki';
 import path from 'path';
 import { Plugin, ServerPlugin } from 'vite';
 import { cachedRead } from 'vite/dist/node/utils/fsUtils';
-
-type KeyHashArgs = {
-    key: string;
-    text: string;
-};
-
-type PluginOptions = {
-    publicPath?: string;
-    runtimeModuleId?: string;
-    primaryLocale?: string;
-    keyHashFn?: (args: KeyHashArgs) => string;
-    endsWith?: string;
-};
+import { createFilter } from '@rollup/pluginutils';
 
 function createVitePlugin(options: PluginOptions = {}): Plugin {
-    const {
-        runtimeModuleId = '@traduki/runtime',
-        primaryLocale = 'en',
-        keyHashFn = defaultKeyHashFn,
-        endsWith = '.messages.yaml',
-    } = options;
+    const config = {
+        ...options,
+        runtimeModuleId: '@traduki/runtime',
+        keyHashFn: defaultKeyHashFn,
+        include: /\.messages\.yaml$/,
+    };
 
+    const filter = createFilter(config.include, config.exclude);
     const assets = new Map();
 
     const serverPlugin: ServerPlugin = ({
@@ -42,12 +31,12 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
         app.use(async (ctx, next) => {
             // Parse message.yaml and export messages map.
             // As side effect register for each locale the path to the compiled messages module
-            if (ctx.path.endsWith(endsWith)) {
+            if (filter(ctx.path)) {
                 const contents = await cachedRead(ctx, path.join(root, ctx.path));
                 const dictionaries = await parseYaml(contents.toString());
                 const locales = Object.keys(dictionaries);
-                const messages = dictionaries[primaryLocale];
-                const messagesMap = toMessagesMap(messages, keyHashFn);
+                const messages = dictionaries[locales[0]];
+                const messagesMap = toMessagesMap(messages, config.keyHashFn);
 
                 const references = locales.map(locale => {
                     const url = `${ctx.path}.${locale}.js`;
@@ -71,7 +60,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
 
                 ctx.type = 'js';
                 ctx.body = [
-                    generateImporters(registerMap, runtimeModuleId),
+                    generateImporters(registerMap, config.runtimeModuleId),
                     generateExportMapping(messagesMap),
                     'if (__traduki.getLocale()) {',
                     '\t__traduki.load();',
@@ -91,7 +80,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
 
     return {
         rollupInputOptions: {
-            plugins: [tradukiRollupPlugin(options)],
+            plugins: [tradukiRollupPlugin(config)],
         },
         configureServer: serverPlugin,
     };

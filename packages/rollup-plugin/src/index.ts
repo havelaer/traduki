@@ -13,8 +13,6 @@ import {
 import * as path from 'path';
 import { Plugin, OutputAsset, OutputChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
-import { basename } from 'path';
-import { stringify } from 'querystring';
 
 type MessageModule = {
     id: string;
@@ -36,28 +34,21 @@ export type PluginOptions = {
 
 const IDENTIFIER = 'TRADUKI_UNIQUE_IDENTIFIER';
 
-function isAsset(item: OutputChunk | OutputAsset): item is OutputAsset {
-    return item.type === 'asset';
-}
-
 function isChunk(item: OutputChunk | OutputAsset): item is OutputChunk {
     return item.type === 'chunk';
 }
 
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
-    const {
-        runtimeModuleId = '@traduki/runtime',
-        keyHashFn,
-        publicPath = '/',
-        include = /\.messages\.yaml$/,
-        exclude,
-        minify = true,
-    } = options;
+    const config = {
+        ...options,
+        runtimeModuleId: '@traduki/runtime',
+        publicPath: '/',
+        include: /\.messages\.yaml$/,
+        minify: true,
+    };
 
-    const filter = createFilter(include, exclude);
+    const filter = createFilter(config.include, config.exclude);
     const modules: MessageModule[] = [];
-    const assets = new Map<string, string>();
-    const files = new Set<string>();
     let format: string = '';
 
     return {
@@ -73,7 +64,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
             const messages = dictionaries[locales[0]];
-            const messagesMap = toMessagesMap(messages, keyHashFn);
+            const messagesMap = toMessagesMap(messages, config.keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
             // Return runtime code with references to those assets
@@ -108,7 +99,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             );
 
             return [
-                generateImporters(registerMap, runtimeModuleId),
+                generateImporters(registerMap, config.runtimeModuleId),
                 generateExportMapping(messagesMap),
             ].join('\n');
         },
@@ -167,7 +158,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                             const bundleName = `${chunkName}.${locale}.js`;
                             const messages = dictionaries[locale];
                             const rawSource = generatePrecompiledMessages(locale, messages, format);
-                            const source = minify ? await minifyBundle(rawSource) : rawSource;
+                            const source = config.minify ? await minifyBundle(rawSource) : rawSource;
                             const referenceId = this.emitFile({
                                 type: 'asset',
                                 name: bundleName,
@@ -180,6 +171,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                                 .forEach(module => {
                                     if (!module.fileName) return;
 
+                                    const publicPath = config.publicPath;
                                     const optionalSlash =
                                         publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
                                     const filePath = `'${publicPath}${optionalSlash}${fileName}'`;

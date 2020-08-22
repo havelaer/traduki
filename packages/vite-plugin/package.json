@@ -36,6 +36,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
+    "@rollup/pluginutils": "^4.0.0",
     "@traduki/build-utils": "^0.6.0",
     "@traduki/rollup-plugin-traduki": "^0.6.0"
   },
