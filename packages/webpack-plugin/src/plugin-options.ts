@@ -11,5 +11,8 @@ export default {
         minify: {
             type: 'boolean',
         },
+        strict: {
+            enum: [false, 'warn', 'error'],
+        },
     },
 };

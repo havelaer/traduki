@@ -66,7 +66,7 @@ export function toMessagesMap(
 /**
  * Check if nested object keys are all the same
  */
-export function isConsistent(nestedObjects: Record<string, Record<string, any>>): boolean {
+export function assertIsConsistent(nestedObjects: Record<string, Record<string, any>>): boolean {
     const objects = Object.keys(nestedObjects).map(id => nestedObjects[id]);
     const keys = uniqueKeys(objects);
     return objects.every(object => keys.size === Object.keys(object).length);

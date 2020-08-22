@@ -10,7 +10,7 @@ import {
     minify,
     toMessagesMap,
     transformMessageKeys,
-    isConsistent,
+    assertIsConsistent,
 } from '../src';
 
 const messages = require('./fixtures/messages.json');
@@ -43,10 +43,10 @@ describe('utils', () => {
         });
     });
 
-    describe('isConsistent', () => {
+    describe('assertIsConsistent', () => {
         it('should be true for consistent keys', () => {
             expect(
-                isConsistent({
+                assertIsConsistent({
                     locale1: { a: 'a1', b: 'b1', c: 'c1' },
                     locale2: { a: 'a2', b: 'b2', c: 'c2' },
                     locale3: { a: 'a3', b: 'b3', c: 'c3' },
@@ -56,7 +56,7 @@ describe('utils', () => {
 
         it('should be false inconsistent keys (1)', () => {
             expect(
-                isConsistent({
+                assertIsConsistent({
                     locale1: { a: 'a1', b: 'b1' },
                     locale2: { a: 'a2', b: 'b2', c: 'c2' },
                     locale3: { a: 'a3', b: 'b3', c: 'c3' },
@@ -66,7 +66,7 @@ describe('utils', () => {
 
         it('should be false inconsistent keys (2)', () => {
             expect(
-                isConsistent({
+                assertIsConsistent({
                     locale1: { a: 'a1', b: 'b1', c: 'c1' },
                     locale2: { a: 'a2', b: 'b2' },
                     locale3: { a: 'a3', b: 'b3', c: 'c3' },
@@ -76,7 +76,7 @@ describe('utils', () => {
 
         it('should be false inconsistent keys (3)', () => {
             expect(
-                isConsistent({
+                assertIsConsistent({
                     locale1: { a: 'a1', b: 'b1', c: 'c1' },
                     locale2: { a: 'a2', b: 'b2', c: 'c2' },
                     locale3: { a: 'a3', b: 'b3' },
@@ -86,7 +86,7 @@ describe('utils', () => {
 
         it('should be false inconsistent keys (3)', () => {
             expect(
-                isConsistent({
+                assertIsConsistent({
                     locale1: { a: 'a1', b: 'b1', c: 'c1' },
                     locale2: { a: 'a2', b: 'b2', c: 'c2' },
                     locale3: { a: 'a3', b: 'b3', z: 'c3' }, // note the 'z'

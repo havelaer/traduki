@@ -46,7 +46,7 @@ describe('simple case', () => {
 
     describe('development', () => {
         beforeAll(async () => {
-            stats = await compiler('fixtures/simple/main.js', config => ({
+            stats = await compiler('fixtures/simple/main.js', {}, config => ({
                 ...config,
                 mode: 'development',
             }));

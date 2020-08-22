@@ -31,7 +31,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib/*",
-    "test": "jest",
+    "test": "jest tests",
     "dev": "tsc -w -p tsconfig.cjs.json",
     "build": "yarn run clean && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",

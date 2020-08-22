@@ -5,6 +5,7 @@ import { createFsFromVolume, Volume } from 'memfs';
 
 export default (
     fixture: string,
+    pluginOptions?: any,
     configure: (config: webpack.Configuration) => webpack.Configuration = config => config,
 ) => {
     const config = {
@@ -12,6 +13,7 @@ export default (
         plugins: [
             new TradukiWebpackPlugin({
                 filename: '[name].[locale].js',
+                ...pluginOptions,
             }),
         ],
         module: {

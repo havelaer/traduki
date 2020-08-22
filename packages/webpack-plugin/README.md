@@ -29,15 +29,20 @@ module.exports = {
     plugins: [
         new TradukiWebpackPlugin({
             /*
-            * Description: File name of the precompiled messages bundles
-            * Default: '[name].[locale].js'
-            */
+             * Description: File name of the precompiled messages bundles
+             * Default: '[name].[locale].js'
+             */
            filename: '[name].[locale].js',
             /*
-            * Description: Runtime module import path or name
-            * Default: '@traduki/runtime'
-            */
+             * Description: Runtime module import path or name
+             * Default: '@traduki/runtime'
+             */
             runtimeModuleId: '@traduki/runtime', // or @traduki/react if you're using React
+            /*
+             * Description: Check consistency of messages keys for each locale
+             * Default: 'warn'
+             */
+            strict: 'warn', // false | 'error'
         }),
     ],
     module: {

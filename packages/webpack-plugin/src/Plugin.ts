@@ -71,23 +71,24 @@ function isProduction(compilation: Compilation) {
 export default class TradukiWebpackPlugin {
     static loader: string = '';
 
-    private options: any;
+    private config: any;
     private messagesSource: MessagesSource[] = [];
     private chunkMessagesDictionaries: Map<any, Dictionaries> | null = null;
 
     constructor(options = {}) {
         validateOptions(schema, options, { name: pluginName });
 
-        this.options = Object.assign(
+        this.config = Object.assign(
             {
                 minify: false,
                 filename: DEFAULT_FILENAME,
                 runtimeModuleId: DEFAULT_RUNTIME_MODULE_ID,
+                strict: 'warn',
             },
             options,
         );
 
-        if (!/\[locale\]/.test(this.options.filename)) {
+        if (!/\[locale\]/.test(this.config.filename)) {
             throw new Error('[traduki] filename should contain "[locale]"');
         }
     }
@@ -157,7 +158,7 @@ export default class TradukiWebpackPlugin {
                             {
                                 resourcePath: `path/${chunk.name || chunk.id}.js`,
                             } as any,
-                            this.options.filename.replace('[locale]', locale),
+                            this.config.filename.replace('[locale]', locale),
                             { content, context },
                         );
                         const publicFileName = publicPath + optionalSlash + fileName;

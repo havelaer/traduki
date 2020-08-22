@@ -5,6 +5,7 @@ import {
     RegisterMap,
     toMessagesMap,
     transformMessageKeys,
+    assertIsConsistent,
 } from '@traduki/build-utils';
 import loaderUtils from 'loader-utils';
 import validateOptions from 'schema-utils';
@@ -19,20 +20,30 @@ function loader(this: any, contents: string) {
         name: pluginName,
     });
 
-    const dictionaries = parseYaml(contents);
-    const locales = Object.keys(dictionaries);
-    const messagesMap = toMessagesMap(dictionaries);
-
     const compiler = this._compiler;
     const isChildCompiler = compiler.isChild();
     const parentCompiler = isChildCompiler ? compiler.parentCompilation.compiler : null;
-
     const plugin = parentCompiler
         ? parentCompiler.options.plugins.find((p: any) => p[pluginName])
         : this[pluginName];
 
     if (typeof plugin === 'undefined') {
         throw new Error(`${pluginName} requires the corresponding plugin`);
+    }
+
+    const { strict } = plugin.config;
+    const dictionaries = parseYaml(contents);
+    const locales = Object.keys(dictionaries);
+    const messagesMap = toMessagesMap(dictionaries);
+
+    if (strict && !assertIsConsistent(dictionaries)) {
+        const error = new Error(`${strict} Inconsistent messages file: '${this.resourcePath}'`);
+
+        if (strict === 'warn') {
+            this.emitWarning(error);
+        } else if (strict === 'error') {
+            throw error;
+        }
     }
 
     const registerMap = locales.reduce((map: RegisterMap, locale: string) => {
@@ -51,7 +62,7 @@ function loader(this: any, contents: string) {
     }, {} as RegisterMap);
 
     return [
-        generateImporters(registerMap, plugin.options.runtimeModuleId),
+        generateImporters(registerMap, plugin.config.runtimeModuleId),
         generateExportMapping(messagesMap),
     ].join('\n');
 }

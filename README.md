@@ -50,7 +50,7 @@ traduki.setLocale('en').load().then(() => {
 |Lazy loading **| ✅ | ✅ |
 |HMR| ⌛ | ✅ |
 |Minify bundles| ✅ | ✅ |
-|Strict mode ***| ⌛ | ⌛ |
+|Strict mode ***| ✅ | ⌛ |
 |Emit .d.ts| ⌛ | ⌛ |
 
 (*) messages bundles per locale and per chunk
