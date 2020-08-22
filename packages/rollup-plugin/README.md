@@ -42,10 +42,10 @@ export default {
          */
         keyHashFn: myCustomHashFunction, // Probably won't need this, the default should be just fine
         /*
-         * Description: Extension for the messages files
-         * Default: '.messages.yaml'
+         * Description: Match files to be handled by Traduki
+         * Default: /\.messages\.yaml$/
          */
-        endsWith: '.messages.yaml',
+        includes: /\.messages\.yaml$/,
     })],
 };
 ```

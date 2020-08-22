@@ -41,7 +41,7 @@ traduki.setLocale('en').load().then(() => {
 });
 ```
 
-## Status (in alpha)
+## Status (in beta)
 
 |   |Webpack plugin|Vite plugin|
 |---|---|---|
@@ -49,7 +49,7 @@ traduki.setLocale('en').load().then(() => {
 |Code splitting *| ✅ | ✅ |
 |Lazy loading **| ✅ | ✅ |
 |HMR| ⌛ | ✅ |
-|Minify bundles| ⌛ | ⌛ |
+|Minify bundles| ✅ | ✅ |
 |Strict mode ***| ⌛ | ⌛ |
 |Emit .d.ts| ⌛ | ⌛ |
 
