@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/havelaer/traduki/compare/v0.6.1...v0.6.2) (2020-08-22)
+
+
+### Bug Fixes
+
+* **webpack-plugin:** warn when messages files are inconsistent ([7972e2d](https://github.com/havelaer/traduki/commit/7972e2d70d8445353cb2596b71c35658e386e02e))
+
+
+
+
+
 # [0.6.0](https://github.com/havelaer/traduki/compare/v0.5.3...v0.6.0) (2020-08-22)
 
 **Note:** Version bump only for package @traduki/webpack-simple-example

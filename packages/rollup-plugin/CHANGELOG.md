@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/havelaer/traduki/compare/v0.6.1...v0.6.2) (2020-08-22)
+
+
+### Bug Fixes
+
+* dont pick random locale but use all messages for creating messages map ([d1af2ed](https://github.com/havelaer/traduki/commit/d1af2ed2caa99cf531f6efdf27257ed228510e9d))
+
+
+
+
+
 ## [0.6.1](https://github.com/havelaer/traduki/compare/v0.6.0...v0.6.1) (2020-08-22)
 
 
