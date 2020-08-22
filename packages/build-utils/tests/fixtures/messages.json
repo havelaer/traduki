@@ -1,0 +1,8 @@
+{
+    "plain": "This is a plain messages",
+    "hello": "Hello {name}",
+    "found": "found {results, plural, =0 {no results} one {1 result} other {# results}}",
+    "camelCase": "This is camelCase",
+    "snake_case": "This is snake_case",
+    "kebab-case": "This is kebab-case"
+}

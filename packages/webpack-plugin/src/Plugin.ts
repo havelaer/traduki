@@ -1,4 +1,4 @@
-import { Dictionaries, generatePrecompiledMessages, Messages } from '@traduki/build-utils';
+import { Dictionaries, generatePrecompiledMessages, Messages, minify } from '@traduki/build-utils';
 import { interpolateName } from 'loader-utils';
 import validateOptions from 'schema-utils';
 import webpack from 'webpack';
@@ -58,7 +58,15 @@ function getPublicPath(compilation: Compilation) {
         : compilation.outputOptions.publicPath;
 }
 
-// https://github.com/wix-incubator/tpa-style-webpack-plugin/blob/master/src/lib/index.ts
+// Get public path (for webpack 4) TODO: test webpack 5
+// function isDevelopment(compilation: Compilation) {
+//     return compilation.options.optimization.nodeEnv === 'development';
+// }
+
+// Get public path (for webpack 4) TODO: test webpack 5
+function isProduction(compilation: Compilation) {
+    return compilation.options.optimization.nodeEnv === 'production';
+}
 
 export default class TradukiWebpackPlugin {
     static loader: string = '';
@@ -72,6 +80,7 @@ export default class TradukiWebpackPlugin {
 
         this.options = Object.assign(
             {
+                minify: false,
                 filename: DEFAULT_FILENAME,
                 runtimeModuleId: DEFAULT_RUNTIME_MODULE_ID,
             },
@@ -130,13 +139,16 @@ export default class TradukiWebpackPlugin {
              *
              * Having a filename we can find and replace the url placeHolders.
              */
-            compilation.hooks.optimizeChunkAssets.tap(pluginName, () => {
+            compilation.hooks.optimizeChunkAssets.tapPromise(pluginName, async () => {
+                const queue: Promise<any>[] = [];
+
                 this.chunkMessagesDictionaries!.forEach((dictionaries, chunk) => {
                     const locales = Object.keys(dictionaries);
 
-                    locales.forEach(locale => {
+                    queue.concat(locales.map(async locale => {
                         // Compile messages bundles per locale
-                        const content = generatePrecompiledMessages(locale, dictionaries[locale]);
+                        const raw = generatePrecompiledMessages(locale, dictionaries[locale]);
+                        const content = isProduction(compilation) ? await minify(raw) : raw;
 
                         // Generate file name and public file name
                         const optionalSlash =
@@ -167,8 +179,11 @@ export default class TradukiWebpackPlugin {
 
                             compilation.assets[file] = newSource;
                         });
-                    });
+                    }));
+
                 });
+
+                await Promise.all(queue);
             });
         });
     }

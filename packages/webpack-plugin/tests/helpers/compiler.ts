@@ -3,8 +3,11 @@ import webpack from 'webpack';
 import TradukiWebpackPlugin from '../../src';
 import { createFsFromVolume, Volume } from 'memfs';
 
-export default (fixture: string) => {
-    const compiler = webpack({
+export default (
+    fixture: string,
+    configure: (config: webpack.Configuration) => webpack.Configuration = config => config,
+) => {
+    const config = {
         entry: path.resolve(__dirname, '..', fixture),
         plugins: [
             new TradukiWebpackPlugin({
@@ -31,9 +34,10 @@ export default (fixture: string) => {
             path: path.resolve(__dirname, 'dist'),
             publicPath: '/dist/',
             chunkFilename: '[id].js',
-            filename: '[name].js'
+            filename: '[name].js',
         },
-    });
+    };
+    const compiler = webpack(configure(config));
 
     (compiler as any).outputFileSystem = createFsFromVolume(new Volume());
     (compiler as any).outputFileSystem.join = path.join.bind(path);

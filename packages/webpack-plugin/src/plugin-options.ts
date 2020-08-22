@@ -8,5 +8,8 @@ export default {
         filename: {
             type: 'string',
         },
+        minify: {
+            type: 'boolean',
+        },
     },
 };

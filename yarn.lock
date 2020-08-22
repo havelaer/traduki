@@ -1422,6 +1422,15 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rollup/pluginutils@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.0.0.tgz#e18e9f5a3925779fc15209dd316c1bd260d195ef"
+  integrity sha512-b5QiJRye4JlSg29bKNEECoKbLuPXZkPEHSgEjjP1CJV1CPdDBybfYHfm6kyq8yK51h/Zsyl8OvWUrp0FUBukEQ==
+  dependencies:
+    "@types/estree" "0.0.45"
+    estree-walker "^2.0.1"
+    picomatch "^2.2.2"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
@@ -1516,7 +1525,7 @@
     "@types/keygrip" "*"
     "@types/node" "*"
 
-"@types/estree@*":
+"@types/estree@*", "@types/estree@0.0.45":
   version "0.0.45"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.45.tgz#e9387572998e5ecdac221950dab3e8c3b16af884"
   integrity sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==
@@ -6736,6 +6745,13 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
+node-eval@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-eval/-/node-eval-2.0.0.tgz#ae1d1299deb4c0e41352f9528c1af6401661d37f"
+  integrity sha512-Ap+L9HznXAVeJj3TJ1op6M6bg5xtTq8L5CU/PJxtkhea/DrIxdTknGKIECKd/v/Lgql95iuMAYvIzBNd0pmcMg==
+  dependencies:
+    path-is-absolute "1.0.1"
+
 node-fetch-npm@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/node-fetch-npm/-/node-fetch-npm-2.0.4.tgz#6507d0e17a9ec0be3bec516958a497cec54bf5a4"
@@ -8979,6 +8995,15 @@ terser@^4.1.2, terser@^4.6.2:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/terser/-/terser-4.8.0.tgz#63056343d7c70bb29f3af665865a46fe03a0df17"
   integrity sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==
+  dependencies:
+    commander "^2.20.0"
+    source-map "~0.6.1"
+    source-map-support "~0.5.12"
+
+terser@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.2.1.tgz#40b971b8d28b4fe98c9e8c0d073ab48e7bb96cd8"
+  integrity sha512-/AOtjRtAMNGO0fIF6m8HfcvXTw/2AKpsOzDn36tA5RfhRdeXyb4RvHxJ5Pah7iL6dFkLk+gOnCaNHGwJPl6TrQ==
   dependencies:
     commander "^2.20.0"
     source-map "~0.6.1"

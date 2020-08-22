@@ -1,29 +1,24 @@
 /**
  * @jest-environment node
  */
+// @ts-ignore
+import nodeEval from 'node-eval';
 import {
+    generateExportMapping,
+    generateImporters,
+    generatePrecompiledMessages,
+    minify,
     toMessagesMap,
     transformMessageKeys,
-    generateImporters,
-    generateExportMapping,
-    generatePrecompiledMessages,
 } from '../src';
+
+const messages = require('./fixtures/messages.json');
+const messagesMap = require('./fixtures/messages-map.json');
 
 describe('utils', () => {
     describe('toMessagesMap', () => {
         it('should create a messages map of raw messages file', () => {
-            const messages = {
-                key1: 'This is key1',
-                key2: 'This is key2',
-                camelCase: 'This is camelCase',
-                snake_case: 'This is snake_case',
-            };
-            expect(toMessagesMap(messages)).toEqual({
-                camelCase: 'camelCase_616a71fa',
-                key1: 'key1_df89b086',
-                key2: 'key2_7218f15d',
-                snake_case: 'snake_case_18d98646',
-            });
+            expect(toMessagesMap(messages)).toEqual(messagesMap);
         });
 
         it('should return different hashes for different content', () => {
@@ -49,24 +44,13 @@ describe('utils', () => {
 
     describe('transformMessageKeys', () => {
         it('should transform the keys from the messages object to hashed unique keys', () => {
-            const messages = {
-                key1: 'This is key1',
-                key2: 'This is key2',
-                camelCase: 'This is camelCase',
-                snake_case: 'This is snake_case',
-            };
-
-            const messagesMap = {
-                key1: 'key1_df89b086',
-                key2: 'key2_7218f15d',
-                camelCase: 'camelCase_616a71fa',
-                snake_case: 'snake_case_18d98646',
-            };
-
             expect(transformMessageKeys(messages, messagesMap)).toEqual({
-                key1_df89b086: 'This is key1',
-                key2_7218f15d: 'This is key2',
+                plain_065d1ea0: 'This is a plain messages',
+                hello_8e9460b0: 'Hello {name}',
+                found_023c8d84:
+                    'found {results, plural, =0 {no results} one {1 result} other {# results}}',
                 camelCase_616a71fa: 'This is camelCase',
+                'kebab-case_0a0024bd': 'This is kebab-case',
                 snake_case_18d98646: 'This is snake_case',
             });
         });
@@ -74,24 +58,10 @@ describe('utils', () => {
 
     describe('generateExportMapping', () => {
         it('should generate code for exporting messages key mapping', () => {
-            const messages = {
-                key1: 'key1_df89b086',
-                key2: 'key2_7218f15d',
-                camelCase: 'camelCase_616a71fa',
-                snake_case: 'snake_case_18d98646',
-            };
-
             expect(generateExportMapping(messages)).toMatchSnapshot();
         });
 
         it('should generate code for exporting messages key mapping for commonjs', () => {
-            const messages = {
-                key1: 'key1_df89b086',
-                key2: 'key2_7218f15d',
-                camelCase: 'camelCase_616a71fa',
-                snake_case: 'snake_case_18d98646',
-            };
-
             expect(generateExportMapping(messages, 'cjs')).toMatchSnapshot();
         });
     });
@@ -116,24 +86,33 @@ describe('utils', () => {
         });
     });
 
-
     describe('generatePrecompiledMessages', () => {
         it('should generate precompiled messages bundle code', () => {
-            const messages = {
-                key1: 'This is key1',
-                hello: 'Hello {name}',
-            };
-
-            expect(generatePrecompiledMessages('en', messages)).toMatchSnapshot();
+            const code = generatePrecompiledMessages('en', messages);
+            expect(code).toMatchSnapshot();
         });
 
         it('should generate precompiled messages bundle code for commonjs', () => {
-            const messages = {
-                key1: 'This is key1',
-                hello: 'Hello {name}',
-            };
+            const code = generatePrecompiledMessages('en', messages, 'cjs');
+            expect(code).toMatchSnapshot();
+            expect(nodeEval(code).found({ results: 3 })).toBe('found 3 results');
+        });
+    });
 
-            expect(generatePrecompiledMessages('en', messages, 'cjs')).toMatchSnapshot();
+    describe('minify', () => {
+        it('should minify code', async () => {
+            const raw = generatePrecompiledMessages('en', messages);
+            const minified = await minify(raw);
+
+            expect(minified).toMatchSnapshot();
+        });
+
+        it('should still be executable (commonjs)', async () => {
+            const raw = generatePrecompiledMessages('en', messages, 'cjs');
+            const minified = await minify(raw);
+
+            expect(nodeEval(raw).found({ results: 3 })).toBe('found 3 results');
+            expect(nodeEval(minified).found({ results: 3 })).toBe('found 3 results');
         });
     });
 });

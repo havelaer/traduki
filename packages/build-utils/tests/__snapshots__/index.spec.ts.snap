@@ -2,20 +2,24 @@
 
 exports[`utils generateExportMapping should generate code for exporting messages key mapping 1`] = `
 "export default {
-    \\"key1\\": \\"key1_df89b086\\",
-    \\"key2\\": \\"key2_7218f15d\\",
-    \\"camelCase\\": \\"camelCase_616a71fa\\",
-    \\"snake_case\\": \\"snake_case_18d98646\\"
+    \\"plain\\": \\"This is a plain messages\\",
+    \\"hello\\": \\"Hello {name}\\",
+    \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
+    \\"camelCase\\": \\"This is camelCase\\",
+    \\"snake_case\\": \\"This is snake_case\\",
+    \\"kebab-case\\": \\"This is kebab-case\\"
 };
 "
 `;
 
 exports[`utils generateExportMapping should generate code for exporting messages key mapping for commonjs 1`] = `
 "modules.export = {
-    \\"key1\\": \\"key1_df89b086\\",
-    \\"key2\\": \\"key2_7218f15d\\",
-    \\"camelCase\\": \\"camelCase_616a71fa\\",
-    \\"snake_case\\": \\"snake_case_18d98646\\"
+    \\"plain\\": \\"This is a plain messages\\",
+    \\"hello\\": \\"Hello {name}\\",
+    \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
+    \\"camelCase\\": \\"This is camelCase\\",
+    \\"snake_case\\": \\"This is snake_case\\",
+    \\"kebab-case\\": \\"This is kebab-case\\"
 };
 "
 `;
@@ -37,17 +41,69 @@ __traduki.register({
 `;
 
 exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code 1`] = `
-"
+"var en = function(n, ord
+) {
+  var s = String(n).split('.'), v0 = !s[1], t0 = Number(s[0]) == n,
+      n10 = t0 && s[0].slice(-1), n100 = t0 && s[0].slice(-2);
+  if (ord) return (n10 == 1 && n100 != 11) ? 'one'
+      : (n10 == 2 && n100 != 12) ? 'two'
+      : (n10 == 3 && n100 != 13) ? 'few'
+      : 'other';
+  return (n == 1 && v0) ? 'one' : 'other';
+};
+var number = function (value, name, offset) {
+  if (!offset) return value;
+  if (isNaN(value)) throw new Error(\\"Can't apply offset:\\" + offset + ' to argument \`' + name + '\` with non-numerical value ' + JSON.stringify(value) + '.');
+  return value - offset;
+};
+var plural = function (value, offset, lcfunc, data, isOrdinal) {
+  if ({}.hasOwnProperty.call(data, value)) return data[value];
+  if (offset) value -= offset;
+  var key = lcfunc(value, isOrdinal);
+  return key in data ? data[key] : data.other;
+};
+
 export default {
-  key1: function(d) { return \\"This is key1\\"; },
-  hello: function(d) { return \\"Hello \\" + d.name; }
+  plain: function(d) { return \\"This is a plain messages\\"; },
+  hello: function(d) { return \\"Hello \\" + d.name; },
+  found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
+  camelCase: function(d) { return \\"This is camelCase\\"; },
+  snake_case: function(d) { return \\"This is snake_case\\"; },
+  \\"kebab-case\\": function(d) { return \\"This is kebab-case\\"; }
 }"
 `;
 
 exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code for commonjs 1`] = `
-"
+"var en = function(n, ord
+) {
+  var s = String(n).split('.'), v0 = !s[1], t0 = Number(s[0]) == n,
+      n10 = t0 && s[0].slice(-1), n100 = t0 && s[0].slice(-2);
+  if (ord) return (n10 == 1 && n100 != 11) ? 'one'
+      : (n10 == 2 && n100 != 12) ? 'two'
+      : (n10 == 3 && n100 != 13) ? 'few'
+      : 'other';
+  return (n == 1 && v0) ? 'one' : 'other';
+};
+var number = function (value, name, offset) {
+  if (!offset) return value;
+  if (isNaN(value)) throw new Error(\\"Can't apply offset:\\" + offset + ' to argument \`' + name + '\` with non-numerical value ' + JSON.stringify(value) + '.');
+  return value - offset;
+};
+var plural = function (value, offset, lcfunc, data, isOrdinal) {
+  if ({}.hasOwnProperty.call(data, value)) return data[value];
+  if (offset) value -= offset;
+  var key = lcfunc(value, isOrdinal);
+  return key in data ? data[key] : data.other;
+};
+
 module.exports = {
-  key1: function(d) { return \\"This is key1\\"; },
-  hello: function(d) { return \\"Hello \\" + d.name; }
+  plain: function(d) { return \\"This is a plain messages\\"; },
+  hello: function(d) { return \\"Hello \\" + d.name; },
+  found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
+  camelCase: function(d) { return \\"This is camelCase\\"; },
+  snake_case: function(d) { return \\"This is snake_case\\"; },
+  \\"kebab-case\\": function(d) { return \\"This is kebab-case\\"; }
 }"
 `;
+
+exports[`utils minify should minify code 1`] = `"var e=(e,s)=>{var r=String(e).split(\\".\\"),a=!r[1],t=Number(r[0])==e,n=t&&r[0].slice(-1),i=t&&r[0].slice(-2);return s?1==n&&11!=i?\\"one\\":2==n&&12!=i?\\"two\\":3==n&&13!=i?\\"few\\":\\"other\\":1==e&&a?\\"one\\":\\"other\\"},s=(e,s,r)=>{if(!r)return e;if(isNaN(e))throw new Error(\\"Can't apply offset:\\"+r+\\" to argument \`\\"+s+\\"\` with non-numerical value \\"+JSON.stringify(e)+\\".\\");return e-r};export default{plain:e=>\\"This is a plain messages\\",hello:e=>\\"Hello \\"+e.name,found:r=>\\"found \\"+((e,s,r,a,t)=>{if({}.hasOwnProperty.call(a,e))return a[e];s&&(e-=s);var n=r(e,t);return n in a?a[n]:a.other})(r.results,0,e,{0:\\"no results\\",one:\\"1 result\\",other:s(r.results,\\"results\\")+\\" results\\"}),camelCase:e=>\\"This is camelCase\\",snake_case:e=>\\"This is snake_case\\",\\"kebab-case\\":e=>\\"This is kebab-case\\"};"`;

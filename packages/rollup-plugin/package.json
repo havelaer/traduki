@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest tests",
     "build": "yarn run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json"
@@ -37,6 +37,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
+    "@rollup/pluginutils": "^4.0.0",
     "@traduki/build-utils": "^0.5.3"
   },
   "devDependencies": {

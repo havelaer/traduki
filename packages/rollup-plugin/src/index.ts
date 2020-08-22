@@ -7,49 +7,68 @@ import {
     readYaml,
     toMessagesMap,
     transformMessageKeys,
+    Dictionaries,
+    minify as minifyBundle,
 } from '@traduki/build-utils';
 import * as path from 'path';
-import { Plugin } from 'rollup';
+import { Plugin, OutputAsset, OutputChunk } from 'rollup';
+import { createFilter } from '@rollup/pluginutils';
+import { basename } from 'path';
+import { stringify } from 'querystring';
 
 type MessageModule = {
     id: string;
     locale: string;
     referenceId: string;
     messages: Record<string, string>;
+    fileName?: string;
 };
 
-type PluginOptions = {
-    runtimeModuleId?: string; // TODO: support null and false
+export type PluginOptions = {
+    runtimeModuleId?: string;
     publicPath?: string;
     keyHashFn?: (data: KeyHashFnArgs) => string;
-    endsWith?: string;
+    endsWith?: string | RegExp | (string | RegExp)[];
+    include?: string | RegExp | (string | RegExp)[];
+    exclude?: string | RegExp | (string | RegExp)[];
+    minify?: boolean;
 };
 
-const IDENTIFIER = 'TRADUKI_5008cbd5';
+const IDENTIFIER = 'TRADUKI_UNIQUE_IDENTIFIER';
+
+function isAsset(item: OutputChunk | OutputAsset): item is OutputAsset {
+    return item.type === 'asset';
+}
+
+function isChunk(item: OutputChunk | OutputAsset): item is OutputChunk {
+    return item.type === 'chunk';
+}
 
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
     const {
         runtimeModuleId = '@traduki/runtime',
         keyHashFn,
         publicPath = '/',
-        endsWith = '.messages.yaml',
+        include = /\.messages\.yaml$/,
+        exclude,
+        minify = true,
     } = options;
 
+    const filter = createFilter(include, exclude);
     const modules: MessageModule[] = [];
-    const moduleToChunk = new Map<string, string>();
-    const chunkModules = new Map<string, string[]>();
     const assets = new Map<string, string>();
+    const files = new Set<string>();
     let format: string = '';
 
     return {
         name: 'traduki',
         resolveId(source, importer) {
-            if (importer && source.endsWith(endsWith)) {
-                return path.resolve(path.dirname(importer), source);
-            }
+            if (!filter(source) || !importer) return;
+
+            return path.resolve(path.dirname(importer), source);
         },
         async load(id) {
-            if (!id.endsWith(endsWith)) return;
+            if (!filter(id)) return;
 
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
@@ -64,7 +83,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                     const referenceId = this.emitFile({
                         type: 'asset',
                         name: `${path.basename(id)}.${locale}.${IDENTIFIER}.js`,
-                        source: `${id}.${locale}`,
+                        source: `console.log(${id}.${locale})`,
                     });
 
                     modules.push({
@@ -98,13 +117,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             return options;
         },
-        augmentChunkHash(chunk) {
-            // Create mapping from chunk to child modules
-            const moduleIds = Object.keys(chunk.modules);
-            moduleIds.forEach(moduleId => moduleToChunk.set(moduleId, chunk.name));
-            chunkModules.set(chunk.name, moduleIds);
-        },
-        resolveFileUrl({ moduleId, format, fileName, relativePath }) {
+        resolveFileUrl({ fileName, relativePath }) {
             if (!relativePath.includes(IDENTIFIER)) return null;
 
             const module = modules.find(m => this.getFileName(m.referenceId) === fileName);
@@ -113,45 +126,73 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 throw new Error(`No info found for ${fileName}`);
             }
 
-            const { locale } = module;
-            const chunkName = moduleToChunk.get(moduleId) as string;
-            const bundleName = `${chunkName}.${locale}.js`;
+            module.fileName = fileName;
 
-            if (!assets.has(bundleName)) {
-                const includeModules = chunkModules.get(chunkName) || [];
-
-                const messages = modules
-                    .filter(m => m.locale === locale)
-                    .filter(m => includeModules.indexOf(m.id) > -1)
-                    .reduce(
-                        (messages, module) => ({
-                            ...messages,
-                            ...module.messages,
-                        }),
-                        {},
-                    );
-
-                const source = generatePrecompiledMessages(locale, messages, format);
-                const referenceId = this.emitFile({
-                    type: 'asset',
-                    name: bundleName,
-                    source,
-                });
-
-                assets.set(bundleName, referenceId);
-            }
-
-            const referenceId = assets.get(bundleName);
-            const optionalSlash = publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
-            return `'${publicPath}${optionalSlash}${this.getFileName(referenceId as string)}'`;
+            return fileName;
         },
         async generateBundle(_options, bundle) {
-            // Remove dummy asset files
-            Object.keys(bundle).forEach(fileName => {
+            const promises: Promise<void>[] = [];
+
+            Object.keys(bundle).map(fileName => {
+                const item = bundle[fileName];
+
+                // Remove (dummy) local messages files
                 if (fileName.includes(IDENTIFIER)) {
                     delete bundle[fileName];
+                    return null;
                 }
+
+                // Bundle messages to global files
+                if (isChunk(item)) {
+                    const chunkName = item.name;
+                    const referencedModules = item.referencedFiles
+                        .map(referencedFile => {
+                            return modules.find(m => m.fileName === referencedFile);
+                        })
+                        .filter(notEmpty);
+                    const dictionaries = referencedModules.reduce((messages, module) => {
+                        const { locale } = module;
+                        return {
+                            ...messages,
+                            [locale]: {
+                                ...messages[locale],
+                                ...module.messages,
+                            },
+                        };
+                    }, {} as Dictionaries);
+                    const locales = Object.keys(dictionaries);
+
+                    promises.concat(
+                        locales.map(async locale => {
+                            const bundleName = `${chunkName}.${locale}.js`;
+                            const messages = dictionaries[locale];
+                            const rawSource = generatePrecompiledMessages(locale, messages, format);
+                            const source = minify ? await minifyBundle(rawSource) : rawSource;
+                            const referenceId = this.emitFile({
+                                type: 'asset',
+                                name: bundleName,
+                                source,
+                            });
+                            const fileName = this.getFileName(referenceId);
+
+                            referencedModules
+                                .filter(module => module.locale === locale)
+                                .forEach(module => {
+                                    if (!module.fileName) return;
+
+                                    const optionalSlash =
+                                        publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
+                                    const filePath = `'${publicPath}${optionalSlash}${fileName}'`;
+                                    item.code = item.code.replace(module.fileName, filePath);
+                                });
+                        }),
+                    );
+                }
+
+                return null;
             });
+
+            await Promise.all(promises);
         },
     };
 };

@@ -1,4 +1,0 @@
-en:
-  coverage: We have {p, number, percent} code coverage.
-nl:
-  coverage: We hebben {p, number, percent} code dekking.

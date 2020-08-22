@@ -1,7 +1,8 @@
 import fs from 'fs';
-import * as Yaml from 'js-yaml';
 import hash from 'hash-sum';
+import * as Yaml from 'js-yaml';
 import MessageFormat from 'messageformat';
+import { minify as terserMinify } from 'terser';
 
 export type Locale = string;
 
@@ -133,6 +134,21 @@ export function generatePrecompiledMessages(
 ) {
     const messageformat = new MessageFormat(locale);
     return messageformat.compile(messages).toString(messagesFormatExport[format]);
+}
+
+/**
+ * Minify code
+ */
+export async function minify(source: string) {
+    const result = await terserMinify(source, {
+        module: true,
+        ecma: 2016,
+        compress: {
+            unsafe_arrows: true,
+        },
+    });
+
+    return result.code as string;
 }
 
 /**

@@ -2,78 +2,80 @@
  * @jest-environment node
  */
 import compiler from './helpers/compiler';
+import { getFileNames, getChunk, getAsset } from './helpers/misc';
 
 describe('chunks case', () => {
-    let stats: any;
+    let output: any;
 
     beforeAll(async () => {
-        stats = await compiler('fixtures/chunks/main.js');
+        output = await compiler('fixtures/chunks/main.js');
     });
 
     afterAll(() => {
-        stats = null;
+        output = null;
     });
 
     it('should return a main bundle (+2 messages bundles) and a chunk (+2 messages bundles)', async () => {
-        const assets = stats.compilation.assets;
-        expect(Object.keys(assets).length).toBe(6);
-        expect(assets).toHaveProperty(['main.js']);
-        expect(assets).toHaveProperty(['main.nl.js']);
-        expect(assets).toHaveProperty(['main.en.js']);
-        expect(assets).toHaveProperty(['1.js']);
-        expect(assets).toHaveProperty(['1.en.js']);
-        expect(assets).toHaveProperty(['1.en.js']);
+        const assets = getFileNames(output);
+        expect(assets.length).toBe(6);
+        expect(assets).toContain('main.js');
+        expect(assets).toContain('assets/main.nl.js');
+        expect(assets).toContain('assets/main.en.js');
+        expect(assets).toContain('chunks/other.js');
+        expect(assets).toContain('assets/other.en.js');
+        expect(assets).toContain('assets/other.en.js');
     });
 
     it('should output main bundle with references to messages', async () => {
-        const source = stats.compilation.assets['main.js'].source();
-        expect(source).toContain('/dist/main.nl.js');
-        expect(source).toContain('/dist/main.en.js');
+        const source = getChunk(output, 'main.js')?.code;
+        console.log(source)
+        expect(source).toContain('/assets/main.nl.js');
+        expect(source).toContain('/assets/main.en.js');
     });
 
     it('should output main bundle`s *nl* messages with used keys', async () => {
-        const source = stats.compilation.assets['main.nl.js'].source();
+        const source = getAsset(output, 'assets/main.nl.js')?.source;
         ['keyA1_', 'keyA2_', 'keyB1_', 'keyB2_', 'keyCommon1_', 'keyCommon2_'].forEach(key =>
             expect(source).toContain(key),
         );
     });
 
     it('should output main bundle`s *en* messages with used keys', async () => {
-        const source = stats.compilation.assets['main.en.js'].source();
+        const source = getAsset(output, 'assets/main.en.js')?.source;
         ['keyA1_', 'keyA2_', 'keyB1_', 'keyB2_', 'keyCommon1_', 'keyCommon2_'].forEach(key =>
             expect(source).toContain(key),
         );
     });
 
     it('should output chunk with references to messages', async () => {
-        const source = stats.compilation.assets['1.js'].source();
-        expect(source).toContain('/dist/1.nl.js');
-        expect(source).toContain('/dist/1.en.js');
+        const source = getChunk(output, 'chunks/other.js')?.code;
+        expect(source).toContain('/assets/other.nl.js');
+        expect(source).toContain('/assets/other.en.js');
     });
 
     it('should output chunk`s *nl* messages with used keys', async () => {
-        const source = stats.compilation.assets['1.nl.js'].source();
+        const source = getAsset(output, 'assets/other.nl.js')?.source;
         ['keyC1_', 'keyC2_'].forEach(key =>
             expect(source).toContain(key),
         );
     });
 
     it('should output chunk`s *en* messages with used keys', async () => {
-        const source = stats.compilation.assets['1.en.js'].source();
+        const source = getAsset(output, 'assets/other.en.js')?.source;
         ['keyC1_', 'keyC2_'].forEach(key =>
             expect(source).toContain(key),
         );
     });
 
     it('should output chunk`s *nl* messages without common messages', async () => {
-        const source = stats.compilation.assets['1.nl.js'].source();
+        const source = getAsset(output, 'assets/other.nl.js')?.source;
         ['keyCommon1_', 'keyCommon2_'].forEach(key =>
             expect(source).not.toContain(key),
         );
     });
 
     it('should output chunk`s *en* messages without common messages', async () => {
-        const source = stats.compilation.assets['1.en.js'].source();
+        const source = getAsset(output, 'assets/other.en.js')?.source;
         ['keyCommon1_', 'keyCommon2_'].forEach(key =>
             expect(source).not.toContain(key),
         );
