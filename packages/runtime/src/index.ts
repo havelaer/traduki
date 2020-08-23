@@ -119,7 +119,7 @@ class TradukiRuntime {
         const batch: Importer[] = [];
         let importer: Importer | undefined;
 
-        while ((importer = this.queue[locale].pop())) {
+        while (this.queue[locale] && (importer = this.queue[locale].pop())) {
             batch.push(importer);
             this.loadingOrDone.push(importer);
         }

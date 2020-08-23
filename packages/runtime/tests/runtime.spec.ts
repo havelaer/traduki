@@ -54,6 +54,11 @@ describe('runtime', () => {
     });
 
     describe('load', () => {
+        it('should not crash if there is nothing to load', async () => {
+            await runtime.setLocale('en').load();
+            expect(true).toBe(true);
+        });
+
         it('should call locale importer', async () => {
             const enImporter = jest.fn().mockResolvedValue({});
 
