@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/havelaer/traduki/compare/v0.6.2...v0.6.3) (2020-08-23)
+
+
+### Bug Fixes
+
+* load() crashes if no importers where registered for current locale ([56c2f24](https://github.com/havelaer/traduki/commit/56c2f2441f85a46c8d859433129ae0a8feeb6bbe))
+
+
+
+
+
 ## [0.6.2](https://github.com/havelaer/traduki/compare/v0.6.1...v0.6.2) (2020-08-22)
 
 
