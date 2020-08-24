@@ -73,7 +73,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                     const referenceId = this.emitFile({
                         type: 'asset',
                         name: `${path.basename(id)}.${locale}.${IDENTIFIER}.js`,
-                        source: `console.log('${id}.${locale}')`,
+                        source: `/* ${id}.${locale} */`,
                     });
 
                     modules.push({
@@ -118,7 +118,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             module.fileName = fileName;
 
-            return fileName;
+            return `'${fileName}'`;
         },
         async generateBundle(_options, bundle) {
             const promises: Promise<void>[] = [];
@@ -173,7 +173,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                                     const publicPath = config.publicPath;
                                     const optionalSlash =
                                         publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
-                                    const filePath = `'${publicPath}${optionalSlash}${fileName}'`;
+                                    const filePath = `${publicPath}${optionalSlash}${fileName}`;
                                     item.code = item.code.replace(module.fileName, filePath);
                                 });
                         }),
