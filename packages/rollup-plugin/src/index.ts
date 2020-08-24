@@ -73,7 +73,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                     const referenceId = this.emitFile({
                         type: 'asset',
                         name: `${path.basename(id)}.${locale}.${IDENTIFIER}.js`,
-                        source: `console.log(${id}.${locale})`,
+                        source: `console.log('${id}.${locale}')`,
                     });
 
                     modules.push({
