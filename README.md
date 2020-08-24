@@ -1,6 +1,6 @@
 # Traduki
 
-[![npm](https://img.shields.io/npm/v/@traduki/runtime.svg)](https://www.npmjs.com/package/@traduki/runtime) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/%40traduki%2Fruntime.svg)](https://badge.fury.io/js/%40traduki%2Fruntime) [![Build Status](https://travis-ci.com/havelaer/traduki.svg?branch=master)](https://travis-ci.com/havelaer/traduki) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE)
 
 Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 
