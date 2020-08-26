@@ -1,6 +1,6 @@
 {
   "name": "@traduki/rollup-plugin-traduki",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Rollup plugin for Traduki",
   "author": "havelaer",
   "keywords": [
