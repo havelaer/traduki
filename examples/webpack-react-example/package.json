@@ -12,7 +12,8 @@
   "dependencies": {
     "@traduki/react": "^0.6.3",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1"
   },
   "devDependencies": {
     "@traduki/webpack-plugin-traduki": "^0.6.3",

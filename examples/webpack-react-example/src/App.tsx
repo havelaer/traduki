@@ -1,9 +1,10 @@
-import React, { useState, lazy, Suspense } from 'react';
-import { useTranslator, useLocale } from '@traduki/react';
-import messages from './App.messages.yaml';
-import otherMessages from './Other.messages.yaml';
+import { useLocale, useTranslator } from '@traduki/react';
+import React, { lazy, Suspense, useState } from 'react';
+import Markdown from 'react-markdown';
 // import logo from './logo.svg';
 import './App.css';
+import messages from './App.messages.yaml';
+import otherMessages from './Other.messages.yaml';
 
 const AsyncComponent = lazy(() => import('./Component'));
 
@@ -26,7 +27,7 @@ function App() {
                 <Suspense fallback={<div>loading...</div>}>
                     <AsyncComponent />
                 </Suspense>
-                <p dangerouslySetInnerHTML={{ __html: t.markdown(messages.edit) }} />
+                <Markdown source={t(messages.edit)} />
                 <a
                     className="App-link"
                     href="https://reactjs.org"

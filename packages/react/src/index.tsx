@@ -1,19 +1,10 @@
 import * as React from 'react';
 import traduki from '@traduki/runtime';
-import { Remarkable } from 'remarkable';
-
-const register = traduki.register
-
-const md = new Remarkable();
 
 export type Translator = (
     text: string,
     args?: Record<string, string | number>,
 ) => string;
-
-export type TranslateHelper = Translator & {
-    markdown: Translator;
-};
 
 interface TradukiContextProps {
     locale: string | null;
@@ -33,7 +24,7 @@ export function useLocale(): [string | null, (locale: string) => void] {
     return [context.locale, context.setLocale];
 }
 
-export function useTranslator(): TranslateHelper {
+export function useTranslator(): Translator {
     const context = React.useContext(TradukiContext);
 
     if (!context) {
@@ -42,19 +33,9 @@ export function useTranslator(): TranslateHelper {
         );
     }
 
-    const translator: Translator = (key, args = {}) => {
+    return (key, args = {}) => {
         return traduki.translate(key, args);
     };
-
-    const translatorMarkdown: Translator = (key, args = {}) => {
-        return md.render(translator(key, args));
-    };
-
-    return React.useMemo(() => {
-        (translator as any).markdown = translatorMarkdown;
-
-        return translator as TranslateHelper;
-    }, []);
 }
 
 interface TradukiProviderProps {

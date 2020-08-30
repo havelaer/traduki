@@ -1,8 +1,9 @@
+import { useLocale, useTranslator } from '@traduki/react';
 import React, { useState } from 'react';
-import { useTranslator, useLocale } from '@traduki/react';
+import Markdown from 'react-remarkable';
+import './App.css';
 import messages from './App.messages.yaml';
 import logo from './logo.svg';
-import './App.css';
 
 function App() {
     const [count, setCount] = useState(0);
@@ -19,7 +20,7 @@ function App() {
                         {t(messages.count, { count })}
                     </button>
                 </p>
-                <p dangerouslySetInnerHTML={{ __html: t.markdown(messages.edit) }} />
+                <Markdown source={t(messages.edit)} />
                 <a
                     className="App-link"
                     href="https://reactjs.org"
