@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/havelaer/traduki/compare/v0.6.4...v0.6.5) (2020-08-30)
+
+
+### Bug Fixes
+
+* remove markdown from react lib ([b9fd160](https://github.com/havelaer/traduki/commit/b9fd160210a20d0f3f8cc39a84df8f3a3059b685))
+
+
+
+
+
 ## [0.6.4](https://github.com/havelaer/traduki/compare/v0.6.3...v0.6.4) (2020-08-26)
 
 **Note:** Version bump only for package @traduki/vite-react-example
