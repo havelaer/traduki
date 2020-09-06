@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@traduki/webpack-react-app-setup",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "author": "havelaer",
   "license": "MIT",
   "scripts": {
@@ -10,13 +10,13 @@
     "build": "npm run clean && webpack --mode production"
   },
   "dependencies": {
-    "@traduki/react": "^0.6.5",
+    "@traduki/react": "^0.7.0",
     "marked": "^1.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@traduki/webpack-plugin-traduki": "^0.6.3",
+    "@traduki/webpack-plugin-traduki": "^0.7.0",
     "@types/marked": "^1.1.0",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@traduki/vite-react-app-setup",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "author": "havelaer",
   "license": "MIT",
   "scripts": {
@@ -12,11 +12,11 @@
   "dependencies": {
     "@pika/react": "^16.13.1",
     "@pika/react-dom": "^16.13.1",
-    "@traduki/react": "^0.6.5",
+    "@traduki/react": "^0.7.0",
     "marked": "^1.1.1"
   },
   "devDependencies": {
-    "@traduki/vite-plugin-traduki": "^0.6.4",
+    "@traduki/vite-plugin-traduki": "^0.7.0",
     "@types/marked": "^1.1.0",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
