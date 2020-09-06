@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
 
 module.exports = {
-    entry: '../react-app/main.tsx',
+    entry: './src/main.tsx',
     plugins: [
         new MiniCssExtractPlugin({
             filename: '[name].css',
@@ -11,15 +11,9 @@ module.exports = {
         }),
         new TradukiWebpackPlugin({
             filename: '[name].[locale].js',
-            runtimeModuleId: '@traduki/react',
+            runtimeModuleId: '@traduki/preact',
         }),
     ],
-    resolve: {
-        alias: {
-            react: 'preact/compat',
-            'react-dom': 'preact/compat',
-        },
-    },
     module: {
         rules: [
             {
@@ -43,6 +37,11 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            react: 'preact/compat',
+            'react-dom': 'preact/compat',
+            '@traduki/react': '@traduki/preact',
+        },
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

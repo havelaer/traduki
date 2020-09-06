@@ -68,6 +68,21 @@ class TradukiRuntime {
         this.loadingOrDone = [];
     }
 
+    static createInstance() {
+        let global;
+        try {
+            global = Function('return this')();
+        } catch(e) {
+            global = window;
+        }
+
+        if (!global.__tradukiRuntime) global.__tradukiRuntime = new TradukiRuntime();
+
+        if (!(global.__tradukiRuntime instanceof TradukiRuntime)) warn('[traduki] Detected duplicate loaded runtime')
+
+        return global.__tradukiRuntime as TradukiRuntime;
+    }
+
     register(map: Record<string, Importer>) {
         Object.keys(map).forEach(locale => {
             const importer = map[locale];
@@ -159,4 +174,4 @@ class TradukiRuntime {
     }
 }
 
-export default new TradukiRuntime();
+export default TradukiRuntime.createInstance();

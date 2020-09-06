@@ -1,10 +1,10 @@
-import { createElement as h } from 'react';
-import * as ReactDOM from 'react-dom';
 import { TradukiProvider } from '@traduki/react';
-import './index.css';
+import { createElement as h } from 'react';
+import { render } from 'react-dom';
 import App from './App';
+import './index.css';
 
-ReactDOM.render(
+render(
     <TradukiProvider initialLocale="en">
         <App />
     </TradukiProvider>,

@@ -1,6 +1,7 @@
-import * as reactPlugin from 'vite-plugin-react';
 import alias from '@rollup/plugin-alias';
 import tradukiPlugin from '@traduki/vite-plugin-traduki';
+// @ts-ignore
+import prefresh from '@prefresh/vite';
 import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
@@ -14,12 +15,13 @@ const config: UserConfig = {
             entries: [
                 { find: 'react', replacement: 'preact/compat' },
                 { find: 'react-dom', replacement: 'preact/compat' },
+                { find: '@traduki/react', replacement: '@traduki/preact' },
             ],
         }),
-        reactPlugin,
+        prefresh,
         tradukiPlugin({
             publicPath: '/_assets',
-            runtimeModuleId: '@traduki/react',
+            runtimeModuleId: '@traduki/preact',
         }),
     ],
 };

@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@traduki/react": "^0.6.5",
+    "marked": "^1.1.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-remarkable": "^1.1.3"
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@traduki/webpack-plugin-traduki": "^0.6.3",
+    "@types/marked": "^1.1.0",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^4.2.0",
