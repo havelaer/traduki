@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "declaration": true,
     "typeRoots": ["src/@types"],
     "outDir": "./lib/esm"
   },

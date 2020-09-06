@@ -10,7 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "declaration": true,
+    "declaration": false,
     "downlevelIteration": true,
     "jsx": "react",
     "jsxFactory": "h",

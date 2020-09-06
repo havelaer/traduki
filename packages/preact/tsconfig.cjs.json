@@ -1,6 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+      "declaration": true,
       "typeRoots": ["src/@types"],
       "module": "commonjs",
       "outDir": "./lib/cjs"
