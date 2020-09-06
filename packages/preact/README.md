@@ -1,13 +1,13 @@
-# @traduki/react
+# @traduki/preact
 
-[![npm](https://img.shields.io/npm/v/@traduki/react.svg)](https://www.npmjs.com/package/@traduki/react)
+[![npm](https://img.shields.io/npm/v/@traduki/preact.svg)](https://www.npmjs.com/package/@traduki/preact)
 
 See main github repository [readme.md](https://github.com/havelaer/traduki)
 
 ## Examples
 
-- [Webpack example](https://github.com/havelaer/traduki/tree/master/examples/webpack-react-app-setup)
-- [Vite example](https://github.com/havelaer/traduki/tree/master/examples/vite-react-app-setup)
+- [Webpack example](https://github.com/havelaer/traduki/tree/master/examples/webpack-preact-app-setup)
+- [Vite example](https://github.com/havelaer/traduki/tree/master/examples/vite-preact-app-setup)
 
 ## Install
 
@@ -21,7 +21,7 @@ See main github repository [readme.md](https://github.com/havelaer/traduki)
 Make sure to wrap you application in the `TradukiProvider`:
 
 ```js
-import { TradukiProvider } from '@traduki/react';
+import { TradukiProvider } from '@traduki/preact';
 import App from './App';
 
 render(
@@ -34,10 +34,10 @@ render(
 
 ### useTranslator
 
-Use the `useTranslator` React hook to translate messages.
+Use the `useTranslator` hook to translate messages.
 
 ```js
-import { useTranslator } from '@traduki/react';
+import { useTranslator } from '@traduki/preact';
 import messages from './Component.messages.yaml';
 
 function Component() {
@@ -55,10 +55,10 @@ export default Component;
 
 ### useLocale
 
-Read the current locale or switch to another locale with the `useLocale` React hook.
+Read the current locale or switch to another locale with the `useLocale` hook.
 
 ```js
-import { useLocale } from '@traduki/react';
+import { useLocale } from '@traduki/preact';
 import messages from './Component.messages.yaml';
 
 function Component() {
@@ -80,13 +80,13 @@ export default Component;
 
 ### lazy
 
-Traduki is build with code splitting in mind. The react package provides a `lazy` function.
+Traduki is build with code splitting in mind. The preact package provides a `lazy` function.
 
-`lazy` is a wrapper around `React.lazy`: besides handling dynamic imports of components, it also takes care of the loading of the precompiled messages files associated with the chunk.
+`lazy` is a wrapper around `preact/compat`'s `lazy`: besides handling dynamic imports of components, it also takes care of the loading of the precompiled messages files associated with the chunk.
 
 ```js
 // AsyncComponent.js
-import { useTranslator } from '@traduki/react';
+import { useTranslator } from '@traduki/preact';
 import messages from './AsyncComponent.messages.yaml';
 
 function AsyncComponent() {
@@ -99,7 +99,7 @@ export default Component;
 
 
 // Component.js
-import { lazy, useTranslator } from '@traduki/react';
+import { lazy, useTranslator } from '@traduki/preact';
 import messages from './Component.messages.yaml';
 
 const AsyncComponent = lazy(() => import('./AsyncComponent'));

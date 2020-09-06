@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "@traduki/vite-preact-app-setup",
+  "version": "0.6.5",
+  "author": "havelaer",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "@traduki/react": "^0.6.5",
+    "preact": "^10.4.8",
+    "react-remarkable": "^1.1.3"
+  },
+  "devDependencies": {
+    "@prefresh/vite": "^0.10.0",
+    "@rollup/plugin-alias": "^3.1.1",
+    "@traduki/vite-plugin-traduki": "^0.6.4",
+    "typescript": "^3.9.3",
+    "vite": "^1.0.0-rc.1"
+  }
+}

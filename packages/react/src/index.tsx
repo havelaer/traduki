@@ -1,22 +1,26 @@
-import * as React from 'react';
+import {
+    createElement as h,
+    FC,
+    createContext,
+    useContext,
+    useState,
+    useMemo,
+    useEffect,
+    lazy as originalLazy,
+} from './deps';
 import traduki from '@traduki/runtime';
 
-export type Translator = (
-    text: string,
-    args?: Record<string, string | number>,
-) => string;
+export type Translator = (text: string, args?: Record<string, string | number>) => string;
 
 interface TradukiContextProps {
     locale: string | null;
     setLocale(locale: string): void;
 }
 
-export const TradukiContext = React.createContext<TradukiContextProps | null>(
-    null,
-);
+export const TradukiContext = createContext<TradukiContextProps | null>(null);
 
 export function useLocale(): [string | null, (locale: string) => void] {
-    const context = React.useContext(TradukiContext);
+    const context = useContext(TradukiContext);
     if (!context) {
         throw new Error(`useLocale must be used within a TradukiProvider`);
     }
@@ -25,12 +29,10 @@ export function useLocale(): [string | null, (locale: string) => void] {
 }
 
 export function useTranslator(): Translator {
-    const context = React.useContext(TradukiContext);
+    const context = useContext(TradukiContext);
 
     if (!context) {
-        throw new Error(
-            `useTranslator must be used within a TradukiProvider`,
-        );
+        throw new Error(`useTranslator must be used within a TradukiProvider`);
     }
 
     return (key, args = {}) => {
@@ -43,14 +45,11 @@ interface TradukiProviderProps {
 }
 
 /*
- * Application provider needed for the provided react hooks
+ * Application provider needed for the provided hooks
  * During initialization it loads the locale based messages files.
  */
-export const TradukiProvider: React.FC<TradukiProviderProps> = ({
-    initialLocale,
-    children,
-}) => {
-    const [locale, setLocale] = React.useState<string | null>(() => {
+export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, children }) => {
+    const [locale, setLocale] = useState<string | null>(() => {
         return null;
     });
 
@@ -59,12 +58,12 @@ export const TradukiProvider: React.FC<TradukiProviderProps> = ({
         traduki.load().then(() => {
             setLocale(locale);
         });
-    }
-    React.useMemo(() => {
+    };
+    useMemo(() => {
         updateLocale(initialLocale);
     }, []);
 
-    const context: TradukiContextProps = React.useMemo(() => {
+    const context: TradukiContextProps = useMemo(() => {
         return {
             locale,
             setLocale(locale: string) {
@@ -73,29 +72,25 @@ export const TradukiProvider: React.FC<TradukiProviderProps> = ({
         };
     }, [locale]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (context.locale) document.querySelector('html')!.setAttribute('lang', context.locale);
     }, [context]);
 
     if (!context.locale) return null;
 
-    return (
-        <TradukiContext.Provider value={context}>
-            {children}
-        </TradukiContext.Provider>
-    );
+    return <TradukiContext.Provider value={context}>{children}</TradukiContext.Provider>;
 };
 
 /*
- * Wrapper around React.lazy
+ * Wrapper around lazy
  * It loads the locale based messages files before resolving the import factory promise
  */
-export const lazy: typeof React.lazy = factory => {
-    return React.lazy(() => factory().then(result => traduki.load().then(() => result)));
-}
+export const lazy: typeof originalLazy = factory => {
+    return originalLazy(() => factory().then(result => traduki.load().then(() => result)));
+};
 
 /*
  * The default export is the traduki runtime
- * Use this as runtimeModuleId `@traduki/react` in the rollup/vite/webpack plugin
+ * Use this as runtimeModuleId `@traduki/(p)react` in the rollup/vite/webpack plugin
  */
 export default traduki;
