@@ -1,6 +1,6 @@
 {
   "name": "@traduki/vite-plugin-traduki",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Vite plugin for Traduki",
   "author": "havelaer",
   "keywords": [
@@ -38,7 +38,7 @@
   "dependencies": {
     "@rollup/pluginutils": "^4.0.0",
     "@traduki/build-utils": "^0.7.0",
-    "@traduki/rollup-plugin-traduki": "^0.7.0"
+    "@traduki/rollup-plugin-traduki": "^0.7.1"
   },
   "devDependencies": {
     "@traduki/runtime": "^0.7.0",

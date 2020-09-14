@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1](https://github.com/havelaer/traduki/compare/v0.7.0...v0.7.1) (2020-09-14)
+
+
+### Bug Fixes
+
+* move chunk reference find and replace to renderChunk to fix sourcemap issues ([fee93cb](https://github.com/havelaer/traduki/commit/fee93cb866fe57acd999f150f8072c68fbc8415c))
+
+
+
+
+
 # [0.7.0](https://github.com/havelaer/traduki/compare/v0.6.5...v0.7.0) (2020-09-06)
 
 **Note:** Version bump only for package @traduki/rollup-plugin-traduki
