@@ -13,6 +13,7 @@ import {
 import * as path from 'path';
 import { Plugin, OutputAsset, OutputChunk, RenderedChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
+import MagicString from 'magic-string';
 
 type MessageModule = {
     id: string;
@@ -121,7 +122,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             return `'${fileName}'`;
         },
         async renderChunk(code: string, chunk: RenderedChunk) {
-            let codeWithReferences = code;
+            const s = new MagicString(code);
 
             // Bundle messages to global files
             const chunkName = chunk.name;
@@ -164,17 +165,33 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                             publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
                         const filePath = `${publicPath}${optionalSlash}${fileName}`;
 
-                        // @ts-ignore
-                        codeWithReferences = codeWithReferences
-                            .split(module.fileName)
-                            .join(filePath);
+                        // let i = 0;
+                        // while(0 < (i = code.indexOf(module.fileName, i + 1))) {
+                        //     console.log('i', i, module.fileName.length)
+                        //     s.overwrite(i, module.fileName.length, filePath);
+                        // }
+
+                        let i = 0;
+                        while(true) {
+                            const start = code.indexOf(module.fileName, i + 1);
+                            if (start === -1) break;
+                            const end = start + module.fileName.length
+                            s.overwrite(start, end, filePath);
+                            i = start;
+                        }
                     });
             });
 
             await Promise.all(promises);
 
+            const sourceMap = s.generateMap({
+                source: chunk.fileName,
+                hires: true,
+            });
+
             return {
-                code: codeWithReferences,
+                code: s.toString(),
+                map: sourceMap,
             };
         },
         async generateBundle(_options, bundle) {
