@@ -11,7 +11,7 @@ import {
     minify as minifyBundle,
 } from '@traduki/build-utils';
 import * as path from 'path';
-import { Plugin, OutputAsset, OutputChunk } from 'rollup';
+import { Plugin, OutputAsset, OutputChunk, RenderedChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 
 type MessageModule = {
@@ -120,70 +120,73 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             return `'${fileName}'`;
         },
+        async renderChunk(code: string, chunk: RenderedChunk) {
+            let codeWithReferences = code;
+
+            // Bundle messages to global files
+            const chunkName = chunk.name;
+            const referencedModules = chunk.referencedFiles
+                .map(referencedFile => {
+                    return modules.find(m => m.fileName === referencedFile);
+                })
+                .filter(notEmpty);
+            const dictionaries = referencedModules.reduce((messages, module) => {
+                const { locale } = module;
+                return {
+                    ...messages,
+                    [locale]: {
+                        ...messages[locale],
+                        ...module.messages,
+                    },
+                };
+            }, {} as Dictionaries);
+            const locales = Object.keys(dictionaries);
+
+            const promises = locales.map(async locale => {
+                const bundleName = `${chunkName}.${locale}.js`;
+                const messages = dictionaries[locale];
+                const rawSource = generatePrecompiledMessages(locale, messages, format);
+                const source = config.minify ? await minifyBundle(rawSource) : rawSource;
+                const referenceId = this.emitFile({
+                    type: 'asset',
+                    name: bundleName,
+                    source,
+                });
+                const fileName = this.getFileName(referenceId);
+
+                referencedModules
+                    .filter(module => module.locale === locale)
+                    .forEach(module => {
+                        if (!module.fileName) return;
+
+                        const publicPath = config.publicPath;
+                        const optionalSlash =
+                            publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
+                        const filePath = `${publicPath}${optionalSlash}${fileName}`;
+
+                        // @ts-ignore
+                        codeWithReferences = codeWithReferences
+                            .split(module.fileName)
+                            .join(filePath);
+                    });
+            });
+
+            await Promise.all(promises);
+
+            return {
+                code: codeWithReferences,
+            };
+        },
         async generateBundle(_options, bundle) {
-            const promises: Promise<void>[] = [];
-
             Object.keys(bundle).map(fileName => {
-                const item = bundle[fileName];
-
                 // Remove (dummy) local messages files
                 if (fileName.includes(IDENTIFIER)) {
                     delete bundle[fileName];
                     return null;
                 }
 
-                // Bundle messages to global files
-                if (isChunk(item)) {
-                    const chunkName = item.name;
-                    const referencedModules = item.referencedFiles
-                        .map(referencedFile => {
-                            return modules.find(m => m.fileName === referencedFile);
-                        })
-                        .filter(notEmpty);
-                    const dictionaries = referencedModules.reduce((messages, module) => {
-                        const { locale } = module;
-                        return {
-                            ...messages,
-                            [locale]: {
-                                ...messages[locale],
-                                ...module.messages,
-                            },
-                        };
-                    }, {} as Dictionaries);
-                    const locales = Object.keys(dictionaries);
-
-                    promises.concat(
-                        locales.map(async locale => {
-                            const bundleName = `${chunkName}.${locale}.js`;
-                            const messages = dictionaries[locale];
-                            const rawSource = generatePrecompiledMessages(locale, messages, format);
-                            const source = config.minify ? await minifyBundle(rawSource) : rawSource;
-                            const referenceId = this.emitFile({
-                                type: 'asset',
-                                name: bundleName,
-                                source,
-                            });
-                            const fileName = this.getFileName(referenceId);
-
-                            referencedModules
-                                .filter(module => module.locale === locale)
-                                .forEach(module => {
-                                    if (!module.fileName) return;
-
-                                    const publicPath = config.publicPath;
-                                    const optionalSlash =
-                                        publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
-                                    const filePath = `${publicPath}${optionalSlash}${fileName}`;
-                                    item.code = item.code.replace(module.fileName, filePath);
-                                });
-                        }),
-                    );
-                }
-
                 return null;
             });
-
-            await Promise.all(promises);
         },
     };
 };
