@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/havelaer/traduki/compare/v0.7.2...v0.8.0) (2021-01-15)
+
+
+### Features
+
+* vite 1 -> 2 ([162fbe9](https://github.com/havelaer/traduki/commit/162fbe9c54214913029b252d3bb2a111d1f9951f))
+
+
+
+
+
 # [0.7.0](https://github.com/havelaer/traduki/compare/v0.6.5...v0.7.0) (2020-09-06)
 
 **Note:** Version bump only for package @traduki/webpack-plugin-traduki
