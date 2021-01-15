@@ -1,17 +1,16 @@
-import * as reactPlugin from 'vite-plugin-react';
+import reactPlugin from '@vitejs/plugin-react-refresh';
 import tradukiPlugin from '@traduki/vite-plugin-traduki';
 import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
-    jsx: {
-        factory: 'h',
-        fragment: 'Fragment'
+    clearScreen: false,
+    esbuild: {
+        jsxFactory: 'h',
+        jsxFragment: 'Fragment',
     },
-    assetsDir: '_assets',
     plugins: [
-        reactPlugin,
+        reactPlugin(),
         tradukiPlugin({
-            publicPath: '/_assets',
             runtimeModuleId: '@traduki/react',
         }),
     ],

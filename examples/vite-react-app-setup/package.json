@@ -10,18 +10,18 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@pika/react": "^16.13.1",
-    "@pika/react-dom": "^16.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "@traduki/react": "^0.7.0",
     "marked": "^1.1.1"
   },
   "devDependencies": {
     "@traduki/vite-plugin-traduki": "^0.7.2",
     "@types/marked": "^1.1.0",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
-    "typescript": "^3.9.3",
-    "vite": "^1.0.0-rc.1",
-    "vite-plugin-react": "^3.0.0"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@vitejs/plugin-react-refresh": "^1.1.1",
+    "typescript": "^4.1.3",
+    "vite": "^2.0.0-beta.29"
   }
 }

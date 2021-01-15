@@ -1,5 +1,5 @@
-import { useTranslator } from '@traduki/react';
-import { createElement as h } from 'react';
+import { useTranslator } from '@traduki/preact';
+import { createElement as h } from 'preact/compat';
 import './App.css';
 import messages from './Component.messages.yaml';
 

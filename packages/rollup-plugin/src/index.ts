@@ -20,7 +20,7 @@ type MessageModule = {
     locale: string;
     referenceId: string;
     messages: Record<string, string>;
-    fileName?: string;
+    // fileName?: string;
 };
 
 export type PluginOptions = {
@@ -93,7 +93,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             const registerMap = references.reduce(
                 (map, reference) => ({
                     ...map,
-                    [reference.locale]: `() => import(import.meta.ROLLUP_FILE_URL_${reference.referenceId})`,
+                    [reference.locale]: `() => import(TRADUKI_URL_${reference.referenceId})`,
                 }),
                 {},
             );
@@ -108,29 +108,28 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             return options;
         },
-        resolveFileUrl({ fileName, relativePath }) {
-            if (!relativePath.includes(IDENTIFIER)) return null;
+        // resolveFileUrl({ fileName, relativePath }) {
+        //     if (!relativePath.includes(IDENTIFIER)) return null;
 
-            const module = modules.find(m => this.getFileName(m.referenceId) === fileName);
+        //     const module = modules.find(m => this.getFileName(m.referenceId) === fileName);
 
-            if (!module) {
-                throw new Error(`No info found for ${fileName}`);
-            }
+        //     if (!module) {
+        //         throw new Error(`No info found for ${fileName}`);
+        //     }
 
-            module.fileName = fileName;
+        //     module.fileName = fileName;
 
-            return `'${fileName}'`;
-        },
+        //     return `'${fileName}'`;
+        // },
         async renderChunk(code: string, chunk: RenderedChunk) {
             const s = new MagicString(code);
 
             // Bundle messages to global files
             const chunkName = chunk.name;
-            const referencedModules = chunk.referencedFiles
-                .map(referencedFile => {
-                    return modules.find(m => m.fileName === referencedFile);
-                })
+            const referencedModules = modules
+                .filter(m => code.includes(`TRADUKI_URL_${m.referenceId}`))
                 .filter(notEmpty);
+
             const dictionaries = referencedModules.reduce((messages, module) => {
                 const { locale } = module;
                 return {
@@ -158,12 +157,11 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 referencedModules
                     .filter(module => module.locale === locale)
                     .forEach(module => {
-                        if (!module.fileName) return;
-
                         const publicPath = config.publicPath;
                         const optionalSlash =
                             publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
-                        const filePath = `${publicPath}${optionalSlash}${fileName}`;
+                        const filePath = `'${publicPath}${optionalSlash}${fileName}'`;
+                        const ref = `TRADUKI_URL_${module.referenceId}`;
 
                         // let i = 0;
                         // while(0 < (i = code.indexOf(module.fileName, i + 1))) {
@@ -172,10 +170,10 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                         // }
 
                         let i = 0;
-                        while(true) {
-                            const start = code.indexOf(module.fileName, i + 1);
+                        while (true) {
+                            const start = code.indexOf(ref, i + 1);
                             if (start === -1) break;
-                            const end = start + module.fileName.length
+                            const end = start + ref.length;
                             s.overwrite(start, end, filePath);
                             i = start;
                         }

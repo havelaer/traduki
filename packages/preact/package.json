@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "preact": "^10.4.8",
-    "typescript": "^3.9.6"
+    "typescript": "^4.1.3"
   },
   "dependencies": {
     "@traduki/runtime": "^0.7.0"

@@ -1,5 +1,5 @@
-import { lazy, useLocale, useTranslator } from '@traduki/react';
-import { createElement as h, Suspense, useState } from 'react';
+import { lazy, useLocale, useTranslator } from '@traduki/preact';
+import { createElement as h, Suspense, useState } from 'preact/compat';
 import marked from 'marked';
 import './App.css';
 import messages from './App.messages.yaml';

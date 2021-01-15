@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.43",
-    "react": "^16.13.1",
-    "typescript": "^3.9.6"
+    "react": "^17.0.1",
+    "typescript": "^4.1.3"
   },
   "dependencies": {
     "@traduki/runtime": "^0.7.0"
