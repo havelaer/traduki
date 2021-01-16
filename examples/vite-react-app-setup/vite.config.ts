@@ -9,10 +9,8 @@ const config: UserConfig = {
         jsxFragment: 'Fragment',
     },
     plugins: [
+        tradukiPlugin(),
         reactPlugin(),
-        tradukiPlugin({
-            runtimeModuleId: '@traduki/react',
-        }),
     ],
 };
 

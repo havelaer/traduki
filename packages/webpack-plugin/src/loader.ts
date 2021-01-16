@@ -1,11 +1,12 @@
 import {
-    generateImporters,
+    assertIsConsistent,
     generateExportMapping,
+    generateImporters,
+    hash,
     parseYaml,
     RegisterMap,
     toMessagesMap,
     transformMessageKeys,
-    assertIsConsistent,
 } from '@traduki/build-utils';
 import loaderUtils from 'loader-utils';
 import validateOptions from 'schema-utils';
@@ -62,7 +63,7 @@ function loader(this: any, contents: string) {
     }, {} as RegisterMap);
 
     return [
-        generateImporters(registerMap, plugin.config.runtimeModuleId),
+        generateImporters(hash(this.resourcePath), registerMap),
         generateExportMapping(messagesMap),
     ].join('\n');
 }

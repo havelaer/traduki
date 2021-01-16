@@ -26,7 +26,7 @@ exports[`utils generateExportMapping should generate code for exporting messages
 
 exports[`utils generateImporters should generate code for registering importers per locale 1`] = `
 "import __traduki from '@traduki/runtime';
-__traduki.register({
+__traduki.register('abcdef',{
 	en: () => import(\\"/path/to/en.messages.js\\"),
 	nl: () => import(\\"/path/to/nl.messages.js\\")
 });"
@@ -34,7 +34,7 @@ __traduki.register({
 
 exports[`utils generateImporters should generate code for registering importers per locale for commonjs 1`] = `
 "const __traduki = require('@traduki/runtime');
-__traduki.register({
+__traduki.register('abcdef',{
 	en: () => require(\\"/path/to/en.messages.js\\"),
 	nl: () => require(\\"/path/to/nl.messages.js\\")
 });"

@@ -8,10 +8,11 @@ import {
     toMessagesMap,
     transformMessageKeys,
     Dictionaries,
+    hash,
     minify as minifyBundle,
 } from '@traduki/build-utils';
 import * as path from 'path';
-import { Plugin, OutputAsset, OutputChunk, RenderedChunk } from 'rollup';
+import { Plugin, RenderedChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 import MagicString from 'magic-string';
 
@@ -20,11 +21,9 @@ type MessageModule = {
     locale: string;
     referenceId: string;
     messages: Record<string, string>;
-    // fileName?: string;
 };
 
 export type PluginOptions = {
-    runtimeModuleId?: string;
     publicPath?: string;
     keyHashFn?: (data: KeyHashFnArgs) => string;
     endsWith?: string | RegExp | (string | RegExp)[];
@@ -33,15 +32,8 @@ export type PluginOptions = {
     minify?: boolean;
 };
 
-const IDENTIFIER = 'TRADUKI_UNIQUE_IDENTIFIER';
-
-function isChunk(item: OutputChunk | OutputAsset): item is OutputChunk {
-    return item.type === 'chunk';
-}
-
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
     const config = {
-        runtimeModuleId: '@traduki/runtime',
         publicPath: '/',
         include: /\.messages\.yaml$/,
         minify: true,
@@ -62,6 +54,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
         async load(id) {
             if (!filter(id)) return;
 
+            const moduleIdentifier = hash(id);
             const dictionaries = await readYaml(id);
             const locales = Object.keys(dictionaries);
             const messagesMap = toMessagesMap(dictionaries, config.keyHashFn);
@@ -71,11 +64,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             // In the resolveFileUrl the dummy asset will be replaced with the bundled asset file.
             const references = locales
                 .map(locale => {
-                    const referenceId = this.emitFile({
-                        type: 'asset',
-                        name: `${path.basename(id)}.${locale}.${IDENTIFIER}.js`,
-                        source: `/* ${id}.${locale} */`,
-                    });
+                    const referenceId = hash(`${id}_${locale}`);
 
                     modules.push({
                         id,
@@ -88,8 +77,8 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 })
                 .filter(notEmpty);
 
-            // A map of locales pointing to a Rollup placeholder `import.meta.ROLLUP_FILE_URL_`
-            // The placeholder will be replaced later by `resolveFileUrl`
+            // A map of locales pointing to a placeholder `TRADUKI_URL_XXXXXXXX`
+            // The placeholder will be replaced in the `renderChunk` hook
             const registerMap = references.reduce(
                 (map, reference) => ({
                     ...map,
@@ -99,7 +88,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             );
 
             return [
-                generateImporters(registerMap, config.runtimeModuleId),
+                generateImporters(moduleIdentifier, registerMap),
                 generateExportMapping(messagesMap),
             ].join('\n');
         },
@@ -108,19 +97,6 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             return options;
         },
-        // resolveFileUrl({ fileName, relativePath }) {
-        //     if (!relativePath.includes(IDENTIFIER)) return null;
-
-        //     const module = modules.find(m => this.getFileName(m.referenceId) === fileName);
-
-        //     if (!module) {
-        //         throw new Error(`No info found for ${fileName}`);
-        //     }
-
-        //     module.fileName = fileName;
-
-        //     return `'${fileName}'`;
-        // },
         async renderChunk(code: string, chunk: RenderedChunk) {
             const s = new MagicString(code);
 
@@ -163,12 +139,6 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                         const filePath = `'${publicPath}${optionalSlash}${fileName}'`;
                         const ref = `TRADUKI_URL_${module.referenceId}`;
 
-                        // let i = 0;
-                        // while(0 < (i = code.indexOf(module.fileName, i + 1))) {
-                        //     console.log('i', i, module.fileName.length)
-                        //     s.overwrite(i, module.fileName.length, filePath);
-                        // }
-
                         let i = 0;
                         while (true) {
                             const start = code.indexOf(ref, i + 1);
@@ -191,17 +161,6 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 code: s.toString(),
                 map: sourceMap,
             };
-        },
-        async generateBundle(_options, bundle) {
-            Object.keys(bundle).map(fileName => {
-                // Remove (dummy) local messages files
-                if (fileName.includes(IDENTIFIER)) {
-                    delete bundle[fileName];
-                    return null;
-                }
-
-                return null;
-            });
         },
     };
 };

@@ -9,9 +9,7 @@ const config: UserConfig = {
     },
     plugins: [
         prefresh(),
-        tradukiPlugin({
-            runtimeModuleId: '@traduki/preact',
-        }),
+        tradukiPlugin(),
     ],
 };
 

@@ -6,6 +6,10 @@ type ImportedModule = { default: PrecompiledMessages } | PrecompiledMessages;
 
 type Importer = (() => Promise<ImportedModule>) | (() => ImportedModule);
 
+type ImporterResult = Promise<PrecompiledMessages | null>;
+
+type Subscriber = (locale: string) => void;
+
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== null && value !== undefined;
 }
@@ -30,7 +34,7 @@ const EMPTY_OBJECT = {};
  * Resolve messages importer
  * Source is either a url (string), a function returning a `require()` or a function returning an `import()`
  */
-function resolveImporter(importer: Importer): Promise<PrecompiledMessages | null> {
+function resolveImporter(importer: Importer): ImporterResult {
     if (typeof importer !== 'function') {
         warn(`[traduki] Expected a function, instead received ${typeof importer}`);
         return Promise.resolve(null);
@@ -42,7 +46,7 @@ function resolveImporter(importer: Importer): Promise<PrecompiledMessages | null
         if (isPromise<ImportedModule>(result)) {
             return result.then(getDefaultExport).catch((error: Error) => {
                 warn(`[traduki] Error calling locale importer`, error);
-                return null;
+                return Promise.resolve(null);
             });
         }
 
@@ -53,22 +57,18 @@ function resolveImporter(importer: Importer): Promise<PrecompiledMessages | null
     }
 }
 
-class TradukiRuntime {
-    private queue: Record<Locale, Importer[]> = {};
-    private loadingOrDone: Importer[] = [];
-    private currentMessages: PrecompiledMessages | null = null;
-    private locale: string = '';
+export class TradukiRuntime {
+    private importers = new Map<string, Record<Locale, Importer>>();
 
-    private isLoadingOrDone(importer: Importer) {
-        return this.loadingOrDone.indexOf(importer) > -1;
-    }
+    private messages: PrecompiledMessages | null = null;
 
-    private resetLoadingOrDone() {
-        this.queue[this.locale] = [...this.queue[this.locale], ...this.loadingOrDone];
-        this.loadingOrDone = [];
-    }
+    private subscribers: Subscriber[] = [];
 
-    static createInstance() {
+    private locale: string | null = null;
+
+    private latestLoader: Promise<any> | undefined;
+
+    static getSingleton() {
         let global;
         try {
             global = Function('return this')();
@@ -83,84 +83,74 @@ class TradukiRuntime {
         return global.__tradukiRuntime as TradukiRuntime;
     }
 
-    register(map: Record<string, Importer>) {
-        Object.keys(map).forEach(locale => {
+    private load(locale: string) {
+        const batch: ImporterResult[] = [];
+
+        this.importers.forEach(map => {
             const importer = map[locale];
+            if (importer) batch.push(resolveImporter(importer));
+        });
 
-            if (!(typeof importer === 'function')) {
-                warn(`[traduki] Expected a function, instead received '${typeof importer}'`);
-            }
+        const loader = Promise.all(batch);
 
-            if (!this.queue[locale]) this.queue[locale] = [];
+        this.latestLoader = loader;
 
-            if (this.isLoadingOrDone(importer)) return;
+        return loader.then(results => {
+            if (loader !== this.latestLoader) return;
 
-            this.queue[locale].push(map[locale]);
+            const newmessages = results
+                .filter(notEmpty)
+                .reduce((prev, messages) => ({ ...prev, ...messages }), {} as PrecompiledMessages);
+
+            this.messages = newmessages;
+
+            this.locale = locale;
+
+            this.subscribers.forEach(subscriber => subscriber(locale));
         });
     }
 
-    setLocale(locale: string) {
-        if (locale !== this.locale && this.queue[this.locale]) {
-            this.resetLoadingOrDone();
-        }
-
-        this.locale = locale;
-
-        return this;
-    }
-
-    getLocale() {
+    get currentLocale() {
         return this.locale;
     }
 
-    status() {
-        return {
-            queued: this.queue[this.locale].length,
-            loadingOrDone: this.loadingOrDone.length,
-        };
+    register(identifier: string, map: Record<Locale, Importer>) {
+        this.importers.set(identifier, map);
+
+        if (this.locale) this.load(this.locale);
     }
 
-    // @ts-ignore
-    private previousBatches: Promise<(PrecompiledMessages | null)[]> = Promise.resolve();
+    switchTo(locale: string): Promise<void> {
+        if (locale === this.locale) return Promise.resolve();
 
-    async load() {
-        const locale = this.locale;
+        return this.load(locale);
+    }
 
-        if (!locale) {
-            warn(`[traduki] Called load(), but no locale was set.`);
-            return;
-        }
+    async ready(): Promise<void> {
+        if (!this.latestLoader) return;
 
-        const batch: Importer[] = [];
-        let importer: Importer | undefined;
+        const currentLoader = this.latestLoader;
 
-        while (this.queue[locale] && (importer = this.queue[locale].pop())) {
-            batch.push(importer);
-            this.loadingOrDone.push(importer);
-        }
+        return currentLoader.then(() => {
+            if (currentLoader !== this.latestLoader) return this.ready();
+        });
+    }
 
-        const batchPromise = Promise.all(batch.map(resolveImporter));
-        this.previousBatches = this.previousBatches
-            .then(() => batchPromise)
-            .catch(() => batchPromise);
-        const results = await this.previousBatches;
+    subscribe(subscriber: Subscriber) {
+        this.subscribers.push(subscriber);
 
-        const newmessages = results
-            .filter(notEmpty)
-            .reduce((prev, messages) => ({ ...prev, ...messages }), {} as PrecompiledMessages);
-
-        this.currentMessages = {
-            ...this.currentMessages,
-            ...newmessages,
+        return () => {
+            const index = this.subscribers.indexOf(subscriber);
+            if (index > -1) this.subscribers.splice(index, 1);
         };
     }
 
     hasKey(key: string) {
-        return !!(this.currentMessages && this.currentMessages[key]);
+        return !!(this.messages && this.messages[key]);
     }
 
     translate(key: string, args?: Record<string, string | number>) {
-        if (!this.currentMessages) {
+        if (!this.messages) {
             warn(`[traduki] No messages loaded yet`);
             return key;
         }
@@ -170,8 +160,8 @@ class TradukiRuntime {
             return key;
         }
 
-        return this.currentMessages[key](args || EMPTY_OBJECT);
+        return this.messages[key](args || EMPTY_OBJECT);
     }
 }
 
-export default TradukiRuntime.createInstance();
+export default TradukiRuntime.getSingleton();

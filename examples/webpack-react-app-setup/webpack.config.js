@@ -11,7 +11,6 @@ module.exports = {
         }),
         new TradukiWebpackPlugin({
             filename: '[name].[locale].js',
-            runtimeModuleId: '@traduki/react',
         }),
     ],
     module: {

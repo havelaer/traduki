@@ -28,23 +28,15 @@ export default: UserConfig = {
     jsx: 'react', // In case you're using React
     plugins: [tradukiPlugin({
         /*
-         * Description: Absolute path to assets directory
-         * Default: '/'
-         */
-        publicPath: '/_assets', // Use `/_assets`, because that is the current vite default
-        /*
-         * Description: Runtime module import path or name
-         * Default: '@traduki/runtime'
-         */
-        runtimeModuleId: '@traduki/runtime', // use `@traduki/react` for React
-        /*
          * Description: Hashing function for the global message keys
          * Default: ({ key, texts[] }) => string
+         * Optional
          */
         keyHashFn: myCustomHashFunction, // Probably won't need this, the default should be just fine
         /*
          * Description: Match files to be handled by Traduki
          * Default: /\.messages\.yaml$/
+         * Optional
          */
         includes: /\.messages\.yaml$/,
     })],

@@ -36,7 +36,7 @@ import messages from './a.messages.yaml'
 
 console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 
-traduki.setLocale('en').load().then(() => {
+traduki.switchTo('en').then(() => {
     traduki.translate(messages.hello, { name: 'John' }); // "Hello John!"
 });
 ```

@@ -4,16 +4,11 @@ export default {
     register(map) {
         this.maps.push(map);
     },
-    setLocale(language) {
-        this.language = language;
-
-        return this;
-    },
-    async load() {
-        const language = this.language;
+    async switchTo(locale) {
+        const locale = this.locale;
         const results = await Promise.all(
             this.maps
-                .map(map => map[language])
+                .map(map => map[locale])
                 .filter(Boolean)
                 .map(src => src().then(({ default: translations }) => translations),
             ),

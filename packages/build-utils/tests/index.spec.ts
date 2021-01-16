@@ -118,7 +118,7 @@ describe('utils', () => {
                 nl: '() => import("/path/to/nl.messages.js")',
             };
 
-            expect(generateImporters(registerMap, '@traduki/runtime')).toMatchSnapshot();
+            expect(generateImporters('abcdef', registerMap)).toMatchSnapshot();
         });
 
         it('should generate code for registering importers per locale for commonjs', () => {
@@ -127,7 +127,9 @@ describe('utils', () => {
                 nl: '() => require("/path/to/nl.messages.js")',
             };
 
-            expect(generateImporters(registerMap, '@traduki/runtime', 'cjs')).toMatchSnapshot();
+            expect(generateImporters('abcdef', registerMap, {
+                format: 'cjs'
+            })).toMatchSnapshot();
         });
     });
 

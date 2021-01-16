@@ -3,17 +3,16 @@ import {
     generateExportMapping,
     generateImporters,
     generatePrecompiledMessages,
+    hash,
     readYaml,
     toMessagesMap,
     transformMessageKeys,
 } from '@traduki/build-utils';
-import tradukiRollupPlugin, { PluginOptions } from '@traduki/rollup-plugin-traduki';
 import { Plugin } from 'vite';
-import { RenderedChunk } from 'rollup';
+import tradukiRollupPlugin, { PluginOptions } from '@traduki/rollup-plugin-traduki';
 
 function createVitePlugin(options: PluginOptions = {}): Plugin {
     const pluginOptions = {
-        runtimeModuleId: '@traduki/runtime',
         include: /\.messages\.yaml$/,
         ...options,
     };
@@ -57,7 +56,7 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
                 );
 
                 return [
-                    generateImporters(registerMap, pluginOptions.runtimeModuleId),
+                    generateImporters(hash(id), registerMap),
                     generateExportMapping(messagesMap),
                 ].join('\n');
             }

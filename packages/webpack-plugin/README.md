@@ -34,11 +34,6 @@ module.exports = {
              */
            filename: '[name].[locale].js',
             /*
-             * Description: Runtime module import path or name
-             * Default: '@traduki/runtime'
-             */
-            runtimeModuleId: '@traduki/runtime', // or @traduki/react if you're using React
-            /*
              * Description: Check consistency of messages keys for each locale
              * Default: 'warn'
              */

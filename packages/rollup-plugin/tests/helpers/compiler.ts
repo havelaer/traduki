@@ -5,7 +5,6 @@ import { rollup, RollupOptions } from 'rollup';
 export default async (
     fixture: string,
     pluginOptions: PluginOptions = {
-        runtimeModuleId: 'dummy-runtime',
         publicPath: '/',
     },
     configure: (config: RollupOptions) => RollupOptions = config => config,
@@ -20,16 +19,9 @@ export default async (
             chunkFileNames: `chunks/[name].js`,
             assetFileNames: `assets/[name].js`,
         },
+        external: ['@traduki/runtime'],
         plugins: [
             traduki(pluginOptions),
-            {
-                name: 'resolve-dummy-runtime',
-                resolveId(id) {
-                    if (id === 'dummy-runtime') {
-                        return path.resolve(__dirname, './runtime.js');
-                    }
-                },
-            },
         ],
     };
 

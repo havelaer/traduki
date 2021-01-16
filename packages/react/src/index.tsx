@@ -13,8 +13,8 @@ import traduki from '@traduki/runtime';
 export type Translator = (text: string, args?: Record<string, string | number>) => string;
 
 interface TradukiContextProps {
-    locale: string | null;
-    setLocale(locale: string): void;
+    readonly locale: string | null;
+    switchTo(locale: string): void;
 }
 
 export const TradukiContext = createContext<TradukiContextProps | null>(null);
@@ -25,7 +25,7 @@ export function useLocale(): [string | null, (locale: string) => void] {
         throw new Error(`useLocale must be used within a TradukiProvider`);
     }
 
-    return [context.locale, context.setLocale];
+    return [context.locale, context.switchTo];
 }
 
 export function useTranslator(): Translator {
@@ -49,32 +49,27 @@ interface TradukiProviderProps {
  * During initialization it loads the locale based messages files.
  */
 export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, children }) => {
-    const [locale, setLocale] = useState<string | null>(() => {
-        return null;
-    });
-
-    const updateLocale = (locale: string) => {
-        traduki.setLocale(locale);
-        traduki.load().then(() => {
-            setLocale(locale);
-        });
-    };
-    useMemo(() => {
-        updateLocale(initialLocale);
-    }, []);
-
-    const context: TradukiContextProps = useMemo(() => {
-        return {
-            locale,
-            setLocale(locale: string) {
-                updateLocale(locale);
-            },
-        };
-    }, [locale]);
+    const [locale, setLocale] = useState<string | null>(null);
 
     useEffect(() => {
-        if (context.locale) document.querySelector('html')!.setAttribute('lang', context.locale);
-    }, [context]);
+        if (!traduki.currentLocale) traduki.switchTo(initialLocale);
+
+        return traduki.subscribe(() => {
+            setLocale(traduki.currentLocale);
+        });
+    }, []);
+
+    const context: TradukiContextProps = useMemo(
+        () => ({
+            get locale() {
+                return traduki.currentLocale;
+            },
+            switchTo(locale: string) {
+                traduki.switchTo(locale);
+            },
+        }),
+        [locale],
+    );
 
     if (!context.locale) return null;
 
@@ -86,7 +81,7 @@ export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, child
  * It loads the locale based messages files before resolving the import factory promise
  */
 export const lazy: typeof originalLazy = factory => {
-    return originalLazy(() => factory().then(result => traduki.load().then(() => result)));
+    return originalLazy(() => factory().then(result => traduki.ready().then(() => result)));
 };
 
 /*

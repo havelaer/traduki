@@ -32,11 +32,6 @@ export default {
          */
         publicPath: '/path/to/assets',
         /*
-         * Description: Runtime module import path or name
-         * Default: '@traduki/runtime'
-         */
-        runtimeModuleId: '@traduki/runtime', // use `@traduki/react` for React
-        /*
          * Description: Hashing function for the global message keys
          * Default: ({ key, texts[] }) => string
          */

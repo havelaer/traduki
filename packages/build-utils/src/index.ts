@@ -1,5 +1,5 @@
 import fs from 'fs';
-import hash from 'hash-sum';
+import hashSum from 'hash-sum';
 import * as Yaml from 'js-yaml';
 import MessageFormat from 'messageformat';
 import { minify as terserMinify } from 'terser';
@@ -15,6 +15,12 @@ export type RegisterMap = Record<Locale, string>;
 export type Dictionaries = Record<Locale, Messages>;
 
 export type KeyHashFnArgs = { key: string; texts: string[] };
+
+export type RegisterOptions = {
+    format?: 'cjs' | 'esm',
+};
+
+const TRADUKI_RUNTIME_MODULE = '@traduki/runtime';
 
 const messagesFormatExport: Record<string, string | undefined> = {
     amd: 'module.exports',
@@ -37,7 +43,11 @@ function nestedObjects<T>(objects: Record<string, Record<string, T>>): Record<st
 }
 
 export function defaultKeyHashFn(data: KeyHashFnArgs) {
-    return hash(data.key + '_' + data.texts.join('|'));
+    return hashSum(data.key + '_' + data.texts.join('|'));
+}
+
+export function hash(data: string) {
+    return hashSum(data);
 }
 
 /**
@@ -112,24 +122,28 @@ export function transformMessageKeys(messages: Messages, messagesMap: MessagesMa
  * Generate source code that when runs registers the location of the precompiled messages bundles for each locale
  */
 export function generateImporters(
+    moduleIdentifier: string,
     registerMap: Record<Locale, string>,
-    runtimeModuleId: string,
-    format: 'cjs' | 'esm' = 'esm',
+    { format, ...options }: RegisterOptions = {}
 ): string {
     const registerMapString = Object.keys(registerMap)
         .map(locale => `\t${locale}: ${registerMap[locale]}`)
         .join(',\n');
 
+    const args = [`'${moduleIdentifier}'`, `{\n${registerMapString}\n}`];
+
+    if (Object.keys(options).length > 0) args.push(JSON.stringify(options));
+
     if (format === 'cjs') {
         return [
-            `const __traduki = require('${runtimeModuleId}');`,
-            `__traduki.register({\n${registerMapString}\n});`,
+            `const __traduki = require('${TRADUKI_RUNTIME_MODULE}');`,
+            `__traduki.register(${args.join()});`,
         ].join('\n');
     }
 
     return [
-        `import __traduki from '${runtimeModuleId}';`,
-        `__traduki.register({\n${registerMapString}\n});`,
+        `import __traduki from '${TRADUKI_RUNTIME_MODULE}';`,
+        `__traduki.register(${args.join()});`,
     ].join('\n');
 }
 
