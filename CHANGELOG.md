@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/havelaer/traduki/compare/v0.8.0...v0.9.0) (2021-01-16)
+
+
+### Bug Fixes
+
+* travis build ([a3af94d](https://github.com/havelaer/traduki/commit/a3af94d090a8b40fc8a52a46d5dd74152f1ba313))
+
+
+### Features
+
+* warn for messages key inconsistency in rollup plugin ([1f30bed](https://github.com/havelaer/traduki/commit/1f30bed4d43826170c5ecc6ad419703349845327))
+
+
+
+
+
 # [0.8.0](https://github.com/havelaer/traduki/compare/v0.7.2...v0.8.0) (2021-01-15)
 
 
