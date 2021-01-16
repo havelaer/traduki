@@ -4,7 +4,7 @@
 import runtimeInstance from '../src';
 
 
-function onUpdated(runtime): Promise<void> {
+function onUpdated(runtime: any): Promise<void> {
     return new Promise(resolve => {
         runtime.subscribe(() => resolve());
     })
