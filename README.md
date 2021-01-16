@@ -50,6 +50,7 @@ traduki.switchTo('en').then(() => {
 |Lazy loading **| ✅ | ✅ |
 |Minify bundles| ✅ | ✅ |
 |Strict mode ***| ✅ | ✅ |
+|Proxy messages get key| ⌛ | ⌛ |
 |Emit .d.ts| ⌛ | ⌛ |
 
 (*) messages bundles per locale and per chunk

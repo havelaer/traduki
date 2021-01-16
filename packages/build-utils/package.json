@@ -40,5 +40,6 @@
     "js-yaml": "^3.14.0",
     "messageformat": "^2.3.0",
     "terser": "^5.2.1"
-  }
+  },
+  "gitHead": "49bf5e7fed29f7eacb21349555d5a195ff410a5e"
 }

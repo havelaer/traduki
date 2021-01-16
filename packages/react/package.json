@@ -44,5 +44,6 @@
   },
   "dependencies": {
     "@traduki/runtime": "^0.9.0"
-  }
+  },
+  "gitHead": "49bf5e7fed29f7eacb21349555d5a195ff410a5e"
 }

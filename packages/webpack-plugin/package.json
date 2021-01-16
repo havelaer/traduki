@@ -54,5 +54,6 @@
     "ts-jest": "^26.1.1",
     "typescript": "^4.1.3",
     "webpack": "^4.44.1"
-  }
+  },
+  "gitHead": "49bf5e7fed29f7eacb21349555d5a195ff410a5e"
 }
