@@ -9,6 +9,7 @@ import {
     transformMessageKeys,
     Dictionaries,
     hash,
+    assertIsConsistent,
     minify as minifyBundle,
 } from '@traduki/build-utils';
 import * as path from 'path';
@@ -30,6 +31,7 @@ export type PluginOptions = {
     include?: string | RegExp | (string | RegExp)[];
     exclude?: string | RegExp | (string | RegExp)[];
     minify?: boolean;
+    strict?: false | 'warn' | 'error';
 };
 
 const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
@@ -37,6 +39,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
         publicPath: '/',
         include: /\.messages\.yaml$/,
         minify: true,
+        strict: 'warn',
         ...options,
     };
 
@@ -56,6 +59,17 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             const moduleIdentifier = hash(id);
             const dictionaries = await readYaml(id);
+
+            if (config.strict && !assertIsConsistent(dictionaries)) {
+                const error = `Inconsistent messages file: '${id}'`;
+
+                if (config.strict === 'warn') {
+                    this.warn(error);
+                } else if (config.strict === 'error') {
+                    this.error(error);
+                }
+            }
+
             const locales = Object.keys(dictionaries);
             const messagesMap = toMessagesMap(dictionaries, config.keyHashFn);
 

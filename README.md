@@ -48,9 +48,8 @@ traduki.switchTo('en').then(() => {
 |Precompiled translations| ✅ | ✅ |
 |Code splitting *| ✅ | ✅ |
 |Lazy loading **| ✅ | ✅ |
-|HMR| ⌛ | ✅ |
 |Minify bundles| ✅ | ✅ |
-|Strict mode ***| ✅ | ⌛ |
+|Strict mode ***| ✅ | ✅ |
 |Emit .d.ts| ⌛ | ⌛ |
 
 (*) messages bundles per locale and per chunk
