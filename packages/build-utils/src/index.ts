@@ -58,7 +58,7 @@ export function toMessagesMap(
     dictionaries: Dictionaries,
     keyHashFn: (data: KeyHashFnArgs) => string = defaultKeyHashFn,
 ): MessagesMap {
-    const objects = nestedObjects(dictionaries);
+    const objects = nestedObjects<string>(dictionaries);
     const keys = uniqueKeys(objects);
 
     return [...keys].reduce(
