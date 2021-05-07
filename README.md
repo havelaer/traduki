@@ -17,7 +17,7 @@ Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 - [Rollup plugin](https://github.com/havelaer/traduki/blob/master/packages/rollup-plugin/README.md)
 - [React hooks and helpers](https://github.com/havelaer/traduki/blob/master/packages/react/README.md)
 
-## Example
+## Vanilla example
 
 ```yaml
 # a.messages.yaml
@@ -25,9 +25,11 @@ en:
     hello: Hello {name}!
     intro: How are you?
 nl:
-    hello: Hallo {name}!
+    hello: Hoi {name}!
     intro: Hoe is het met jou?
 ```
+
+In vanilla JavaScript
 
 ```js
 // index.js
@@ -39,6 +41,36 @@ console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
 traduki.switchTo('en').then(() => {
     traduki.translate(messages.hello, { name: 'John' }); // "Hello John!"
 });
+```
+
+## React/Preact example
+
+```yaml
+# HelloComponent.messages.yaml
+en:
+    hello: Hello {name}!
+nl:
+    hello: Hoi {name}!
+```
+
+```jsx
+// HelloComponent.jsx
+import { render } from 'react-dom';
+import { TradukiProvider, useTranslator } from '@traduki/react';
+import messages from './HelloComponent.messages.yaml';
+
+function HelloComponent() {
+    const t = useTranslator();
+
+    return <h1>{t(messages.hello, { name: 'John' })}</h1>; // <h1>Hello John!</h1>
+}
+
+render(
+    <TradukiProvider initialLocale="en">
+        <HelloComponent />
+    </TradukiProvider>,
+    document.getElementById('root'),
+);
 ```
 
 ## Status (in beta)
