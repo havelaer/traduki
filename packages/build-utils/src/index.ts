@@ -1,6 +1,6 @@
 import fs from 'fs';
 import hashSum from 'hash-sum';
-import * as Yaml from 'js-yaml';
+import { load as loadYaml }  from 'js-yaml';
 import MessageFormat from 'messageformat';
 import { minify as terserMinify } from 'terser';
 
@@ -86,7 +86,7 @@ export function assertIsConsistent(nestedObjects: Record<string, Record<string, 
  * Parse Yaml
  */
 export function parseYaml(data: string): Dictionaries {
-    return Yaml.load(data);
+    return loadYaml(data) as Dictionaries;
 }
 
 /**

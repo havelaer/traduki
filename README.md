@@ -85,8 +85,8 @@ render(
 |Proxy messages get key| ⌛ | ⌛ |
 |Emit .d.ts| ⌛ | ⌛ |
 
-(*) messages bundles per locale and per chunk
+(*) Messages bundles per locale and per chunk
 
-(**) Lazy loading with EcmaScript Modules using the runtime
+(**) Lazy loading precompiled messages with EcmaScript Modules using the runtime
 
 (***) Check *.messages.yaml consistency

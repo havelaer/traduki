@@ -11,14 +11,14 @@
   },
   "dependencies": {
     "@traduki/preact": "^0.9.1",
-    "marked": "^2.0.0",
-    "preact": "^10.5.9"
+    "marked": "^2.0.3",
+    "preact": "^10.5.13"
   },
   "devDependencies": {
     "@prefresh/vite": "^2.0.0",
     "@traduki/vite-plugin-traduki": "^0.9.1",
-    "@types/marked": "^1.1.0",
-    "typescript": "^4.1.3",
-    "vite": "^2.0.0-beta.29"
+    "@types/marked": "^2.0.2",
+    "typescript": "^4.2.4",
+    "vite": "^2.2.4"
   }
 }
