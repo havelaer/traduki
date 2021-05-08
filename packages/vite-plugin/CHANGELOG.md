@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/havelaer/traduki/compare/v0.9.1...v0.10.0) (2021-05-08)
+
+
+### Features
+
+* debug messages getter ([bb3d516](https://github.com/havelaer/traduki/commit/bb3d516375959499963fb7756405f8b0bedb50c7))
+
+
+
+
+
 ## [0.9.1](https://github.com/havelaer/traduki/compare/v0.9.0...v0.9.1) (2021-01-16)
 
 **Note:** Version bump only for package @traduki/vite-plugin-traduki
