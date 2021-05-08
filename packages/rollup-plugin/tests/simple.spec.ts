@@ -11,10 +11,10 @@ describe('simple case', () => {
         output = null;
     });
 
-    describe('splitAt chunk', () => {
+    describe('splitStrategy chunk', () => {
         beforeAll(async () => {
             output = await compiler('fixtures/simple/main.js', {
-                splitAt: 'chunk'
+                splitStrategy: 'chunk'
             });
         });
 
@@ -52,10 +52,10 @@ describe('simple case', () => {
         });
     });
 
-    describe('splitAt entry', () => {
+    describe('splitStrategy entry', () => {
         beforeAll(async () => {
             output = await compiler('fixtures/simple/main.js', {
-                splitAt: 'entry'
+                splitStrategy: 'entry'
             });
         });
 
@@ -93,10 +93,10 @@ describe('simple case', () => {
         });
     });
 
-    describe('splitAt false', () => {
+    describe('splitStrategy false', () => {
         beforeAll(async () => {
             output = await compiler('fixtures/simple/main.js', {
-                splitAt: false
+                splitStrategy: false
             });
         });
 

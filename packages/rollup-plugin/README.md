@@ -41,6 +41,39 @@ export default {
          * Default: /\.messages\.yaml$/
          */
         includes: /\.messages\.yaml$/,
+        /**
+         * Description: Determine how you want to split the locales.
+         * Default: 'chunk'
+         *
+         * 'chunk': For each entry file and chunk file,
+         *          compiled messages files are generated for each locale.
+         *          Used for huge size applications with lots of supported locales
+         *          example output:
+         *           - main.js,
+         *           - main.en_US.js, (could contain messages shared between main and chunk)
+         *           - main.nl_NL.js, (could contain messages shared between main and chunk)
+         *           - chunk_1.js
+         *           - chunk_1.en_US.js
+         *           - chunk_1.nl_NL.js
+         *
+         * 'entry': For each entry file,
+         *          compiled messages files are generated for each locale
+         *          which also contain messages from chunks.
+         *          Used for small/medium size applications with lots of supported locales
+         *          example output:
+         *           - main.js,
+         *           - main.en_US.js, (also contains messages from chunks)
+         *           - main.nl_NL.js, (also contains messages from chunks)
+         *           - chunk_1.js
+         *
+         * false:   Compiled messages files are not split by locale,
+         *          they are bundled with their dependent entry or chunk file.
+         *          Used for small/medium size applications with 1 or 2 locales.
+         *          example output:
+         *           - main.js, (also bundles compiled messages files)
+         *           - chunk_1.js (also bundles compiled messages files)
+         */
+        splitStrategy: 'chunk',
     })],
 };
 ```
