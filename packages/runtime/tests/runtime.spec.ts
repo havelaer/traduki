@@ -222,6 +222,28 @@ describe('runtime', () => {
             );
         });
 
+        it('should not warn when messages.<key> from *.messages.yaml does not exist', async () => {
+            runtime.register('abcdef', {
+                en: () => Promise.resolve({ key1_hash: () => 'Hey' }),
+                nl: () => Promise.resolve({ key1_hash: () => 'Hoi' }),
+            });
+            await runtime.switchTo('en');
+            expect(runtime.translate('[notFoundkey]')).toBe('[notFoundkey]');
+            expect(console.warn).not.toBeCalled();
+        });
+
+        it('should warn when giving undefined key', async () => {
+            runtime.register('abcdef', {
+                en: () => Promise.resolve({ key1_hash: () => 'Hey' }),
+                nl: () => Promise.resolve({ key1_hash: () => 'Hoi' }),
+            });
+            await runtime.switchTo('en');
+            expect(runtime.translate(undefined)).toBe('undefined');
+            expect(console.warn).toBeCalledWith(
+                `[traduki] Can't pass undefined as message key to translate.`,
+            );
+        });
+
         it('should translate with arguments', async () => {
             runtime.register('abcdef', {
                 en: () => Promise.resolve({ key1_hash: (d: any) => `Hey ${d.name}` }),

@@ -78,15 +78,15 @@ function Component() {
 export default Component;
 ```
 
-### lazy
+### waitForMessages
 
-Traduki is build with code splitting in mind. The react package provides a `lazy` function.
+Traduki is build with code splitting in mind. The preact package provides a `waitForMessages` function.
 
-`lazy` is a wrapper around `React.lazy`: besides handling dynamic imports of components, it also takes care of the loading of the precompiled messages files associated with the chunk.
+Use `waitForMessages` when using `lazy` to make sure the chunk's messages are also loaded before rendering the chunk's component. This is prevent a flash of unlocalized texts.
 
 ```js
 // AsyncComponent.js
-import { useTranslator } from '@traduki/react';
+import { useTranslator } from '@traduki/preact';
 import messages from './AsyncComponent.messages.yaml';
 
 function AsyncComponent() {
@@ -99,10 +99,11 @@ export default Component;
 
 
 // Component.js
-import { lazy, useTranslator } from '@traduki/react';
+import { lazy } from 'react';
+import { waitForMessages, useTranslator } from '@traduki/react';
 import messages from './Component.messages.yaml';
 
-const AsyncComponent = lazy(() => import('./AsyncComponent'));
+const AsyncComponent = lazy(() => import('./AsyncComponent').then(waitForMessages));
 
 function Component() {
     const t = useTranslator();
@@ -117,4 +118,3 @@ function Component() {
 }
 
 export default Component;
-```

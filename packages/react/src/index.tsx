@@ -76,12 +76,22 @@ export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, child
     return <TradukiContext.Provider value={context}>{children}</TradukiContext.Provider>;
 };
 
-/*
+/**
  * Wrapper around lazy
  * It loads the locale based messages files before resolving the import factory promise
+ * @deprecated Use waitForMessages instead.
  */
 export const lazy: typeof originalLazy = factory => {
     return originalLazy(() => factory().then(result => traduki.ready().then(() => result)));
+};
+
+/**
+ * Chain to import promise to make sure the messages in the chunks are also loaded.
+ * e.g.
+ * `React.lazy(() => import('./component.jsx').then(waitForMessages));`
+ */
+export const waitForMessages = <T extends any>(previous: T): Promise<T> => {
+    return traduki.ready().then(() => previous);
 };
 
 /*

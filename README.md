@@ -83,11 +83,18 @@ render(
 |Minify bundles| ✅ | ✅ | ✅ |
 |Split strategy (1)| ⌛ | ✅ | ✅ |
 |Strict mode (2)| ✅ | ✅ | ✅ |
-|Proxy messages get key| ⌛ | ⌛ | ⌛ |
+|Debug warnings (3)| ✅ | ✅ | ✅ |
 
 (1) Determine how you want to split the messages bundles:
     - per locale and per chunk
     - per locale (per entry)
     - no splitting (so no lazy loading)
+    For webpack the default 'chunk' strategy is used.
 
 (2) Check *.messages.yaml consistency
+
+(3) Helpful warnings when
+    - Using non-existing messages.<key>.
+    - Messages *.messages.yaml is inconsistent.
+    - Duplicate bundled runtime.
+    - calling translate before messages are loaded (should not happen)

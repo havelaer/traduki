@@ -1,6 +1,6 @@
 import fs from 'fs';
 import hashSum from 'hash-sum';
-import { load as loadYaml }  from 'js-yaml';
+import { load as loadYaml } from 'js-yaml';
 import MessageFormat from 'messageformat';
 import { minify as terserMinify } from 'terser';
 
@@ -17,7 +17,7 @@ export type Dictionaries = Record<Locale, Messages>;
 export type KeyHashFnArgs = { key: string; texts: string[] };
 
 export type RegisterOptions = {
-    format?: 'cjs' | 'esm',
+    format?: 'cjs' | 'esm';
 };
 
 const TRADUKI_RUNTIME_MODULE = '@traduki/runtime';
@@ -124,7 +124,7 @@ export function transformMessageKeys(messages: Messages, messagesMap: MessagesMa
 export function generateImporters(
     moduleIdentifier: string,
     registerMap: Record<Locale, string>,
-    { format, ...options }: RegisterOptions = {}
+    { format, ...options }: RegisterOptions = {},
 ): string {
     const registerMapString = Object.keys(registerMap)
         .map(locale => `\t${locale}: ${registerMap[locale]}`)
@@ -148,36 +148,41 @@ export function generateImporters(
 }
 
 type GenerateExportMappingOptions = {
-    format?: 'cjs' | 'esm',
+    format?: 'cjs' | 'esm';
     debugSource?: string;
-}
+};
 
 /**
  * Generate source code that when runs exports the messages map object to be used in the application.
  */
-export function generateExportMapping(messagesMap: any, options: GenerateExportMappingOptions = {}): string {
+export function generateExportMapping(
+    messagesMap: any,
+    options: GenerateExportMappingOptions = {},
+): string {
     const { format = 'esm', debugSource } = options;
     const messagesMapString = JSON.stringify(messagesMap, null, 4);
     const exportString = format === 'cjs' ? 'modules.export = ' : 'export default ';
 
     if (debugSource) {
+        // prettier-ignore
         return `
-          const target = ${messagesMapString};
+const target = ${messagesMapString};
 
-          const handler = {
-            get: function(target, prop, receiver) {
-              if (target[prop] === undefined) {
-                console.warn(\`[traduki] Message key '\${prop}' does not exist in ${debugSource}\`);
-              }
-              return target[prop];
-            }
-          };
+const handler = {
+  get: function(target, prop, receiver) {
+    if (target[prop] === undefined) {
+      console.warn(\`[traduki] Message key '\${prop}' does not exist in ${debugSource}\`);
+      return \`[\${prop}]\`;
+    }
+    return target[prop];
+  }
+};
 
-          ${exportString} new Proxy(target, handler);
-        `;
+${exportString} new Proxy(target, handler);
+`;
     }
 
-    return `${exportString}${messagesMapString};\n`
+    return `${exportString}${messagesMapString};\n`;
 }
 
 /**

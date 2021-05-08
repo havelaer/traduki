@@ -1,11 +1,11 @@
-import { lazy, useLocale, useTranslator } from '@traduki/preact';
-import { createElement as h, Suspense, useState } from 'preact/compat';
+import { useLocale, useTranslator, waitForMessages } from '@traduki/preact';
+import { createElement as h, Suspense, useState, lazy } from 'preact/compat';
 import marked from 'marked';
 import './App.css';
 import messages from './App.messages.yaml';
 import logo from './logo.svg';
 
-const AsyncComponent = lazy(() => import('./Component'));
+const AsyncComponent = lazy(() => import('./Component').then(waitForMessages));
 
 function App() {
     const [count, setCount] = useState(0);

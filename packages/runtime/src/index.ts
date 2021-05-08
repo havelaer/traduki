@@ -72,13 +72,14 @@ export class TradukiRuntime {
         let global;
         try {
             global = Function('return this')();
-        } catch(e) {
+        } catch (e) {
             global = window;
         }
 
         if (!global.__tradukiRuntime) global.__tradukiRuntime = new TradukiRuntime();
 
-        if (!(global.__tradukiRuntime instanceof TradukiRuntime)) warn('[traduki] Detected duplicate loaded runtime')
+        if (!(global.__tradukiRuntime instanceof TradukiRuntime))
+            warn('[traduki] Detected duplicate loaded runtime');
 
         return global.__tradukiRuntime as TradukiRuntime;
     }
@@ -150,13 +151,27 @@ export class TradukiRuntime {
     }
 
     translate(key: string, args?: Record<string, string | number>) {
+        if (key === undefined) {
+            warn(`[traduki] Can't pass undefined as message key to translate.`);
+            return 'undefined';
+        }
+
+        // In debug mode the messages getter emits the key string wrapped with square backets when not found.
+        // The messages getter emits a warning and points to the source file.
+        // So here we don't want to warn a second time.
+        // See: build-utils > generateExportMapping()
+        if (key.startsWith('[') && key.endsWith(']')) {
+            return key;
+        }
+
         if (!this.messages) {
             warn(`[traduki] No messages loaded yet`);
             return key;
         }
 
         if (!this.hasKey(key)) {
-            if (key) warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
+            if (key)
+                warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
         }
 

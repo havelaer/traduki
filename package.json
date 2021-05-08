@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "build:packages": "lerna run build --ignore *-setup",
     "test": "lerna run test",
     "publish": "yarn run build && lerna publish"
   },
