@@ -24,6 +24,54 @@ exports[`utils generateExportMapping should generate code for exporting messages
 "
 `;
 
+exports[`utils generateExportMapping should generate code for exporting messages key mapping for commonjs 2`] = `
+"
+          const target = {
+    \\"plain\\": \\"This is a plain message\\",
+    \\"hello\\": \\"Hello {name}\\",
+    \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
+    \\"camelCase\\": \\"This is camelCase\\",
+    \\"snake_case\\": \\"This is snake_case\\",
+    \\"kebab-case\\": \\"This is kebab-case\\"
+};
+
+          const handler = {
+            get: function(target, prop, receiver) {
+              if (target[prop] === undefined) {
+                console.warn(\`Message key '\${prop}' does not exist in ./test.messages.yaml\`);
+              }
+              return target[prop];
+            }
+          };
+
+          modules.export =  new Proxy(target, handler);
+        "
+`;
+
+exports[`utils generateExportMapping should generate debug code when debugSource is provided 1`] = `
+"
+          const target = {
+    \\"plain\\": \\"This is a plain message\\",
+    \\"hello\\": \\"Hello {name}\\",
+    \\"found\\": \\"found {results, plural, =0 {no results} one {1 result} other {# results}}\\",
+    \\"camelCase\\": \\"This is camelCase\\",
+    \\"snake_case\\": \\"This is snake_case\\",
+    \\"kebab-case\\": \\"This is kebab-case\\"
+};
+
+          const handler = {
+            get: function(target, prop, receiver) {
+              if (target[prop] === undefined) {
+                console.warn(\`Message key '\${prop}' does not exist in ./test.messages.yaml\`);
+              }
+              return target[prop];
+            }
+          };
+
+          export default  new Proxy(target, handler);
+        "
+`;
+
 exports[`utils generateImporters should generate code for registering importers per locale 1`] = `
 "import __traduki from '@traduki/runtime';
 __traduki.register('abcdef',{

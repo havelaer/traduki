@@ -1,3 +1,4 @@
+import path from 'path';
 import { createFilter } from '@rollup/pluginutils';
 import {
     generateExportMapping,
@@ -57,7 +58,9 @@ function createVitePlugin(options: PluginOptions = {}): Plugin {
 
                 return [
                     generateImporters(hash(id), registerMap),
-                    generateExportMapping(messagesMap),
+                    generateExportMapping(messagesMap, {
+                        debugSource: id
+                    }),
                 ].join('\n');
             }
 

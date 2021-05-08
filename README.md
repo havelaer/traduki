@@ -75,18 +75,19 @@ render(
 
 ## Status (in beta)
 
-|   |Webpack plugin|Vite plugin|
+|   |Webpack plugin|Rollup plugin|Vite plugin|
 |---|---|---|
-|Precompiled translations| ✅ | ✅ |
-|Code splitting *| ✅ | ✅ |
-|Lazy loading **| ✅ | ✅ |
-|Minify bundles| ✅ | ✅ |
-|Strict mode ***| ✅ | ✅ |
-|Proxy messages get key| ⌛ | ⌛ |
-|Emit .d.ts| ⌛ | ⌛ |
+|Precompiled translations| ✅ | ✅ | ✅ |
+|Code splitting| ✅ | ✅ | ✅ |
+|Lazy loading| ✅ | ✅ | ✅ |
+|Minify bundles| ✅ | ✅ | ✅ |
+|Split strategy (1)| ⌛ | ✅ | ✅ |
+|Strict mode (2)| ✅ | ✅ | ✅ |
+|Proxy messages get key| ⌛ | ⌛ | ⌛ |
 
-(*) Messages bundles per locale and per chunk
+(1) Determine how you want to split the messages bundles:
+    - per locale and per chunk
+    - per locale (per entry)
+    - no splitting (so no lazy loading)
 
-(**) Lazy loading precompiled messages with EcmaScript Modules using the runtime
-
-(***) Check *.messages.yaml consistency
+(2) Check *.messages.yaml consistency

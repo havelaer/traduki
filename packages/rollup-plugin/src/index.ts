@@ -140,7 +140,9 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             }
 
             code.push(generateImporters(moduleIdentifier, registerMap));
-            code.push(generateExportMapping(messagesMap));
+            code.push(generateExportMapping(messagesMap, {
+                debugSource: config.minify ? undefined : id,
+            }));
 
             return code.join('\n');
         },

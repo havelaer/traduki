@@ -156,7 +156,7 @@ export class TradukiRuntime {
         }
 
         if (!this.hasKey(key)) {
-            warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
+            if (key) warn(`[traduki] Global message key '${key}' does not exit, or is not loaded yet.`);
             return key;
         }
 

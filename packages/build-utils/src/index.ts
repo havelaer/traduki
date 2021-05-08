@@ -147,16 +147,37 @@ export function generateImporters(
     ].join('\n');
 }
 
+type GenerateExportMappingOptions = {
+    format?: 'cjs' | 'esm',
+    debugSource?: string;
+}
+
 /**
  * Generate source code that when runs exports the messages map object to be used in the application.
  */
-export function generateExportMapping(messagesMap: any, format: 'cjs' | 'esm' = 'esm'): string {
+export function generateExportMapping(messagesMap: any, options: GenerateExportMappingOptions = {}): string {
+    const { format = 'esm', debugSource } = options;
     const messagesMapString = JSON.stringify(messagesMap, null, 4);
-    if (format === 'cjs') {
-        return `modules.export = ${messagesMapString};\n`;
+    const exportString = format === 'cjs' ? 'modules.export = ' : 'export default ';
+
+    if (debugSource) {
+        return `
+          const target = ${messagesMapString};
+
+          const handler = {
+            get: function(target, prop, receiver) {
+              if (target[prop] === undefined) {
+                console.warn(\`[traduki] Message key '\${prop}' does not exist in ${debugSource}\`);
+              }
+              return target[prop];
+            }
+          };
+
+          ${exportString} new Proxy(target, handler);
+        `;
     }
 
-    return `export default ${messagesMapString};\n`;
+    return `${exportString}${messagesMapString};\n`
 }
 
 /**

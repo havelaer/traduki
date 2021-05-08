@@ -103,11 +103,28 @@ describe('utils', () => {
 
     describe('generateExportMapping', () => {
         it('should generate code for exporting messages key mapping', () => {
-            expect(generateExportMapping(messages['en'])).toMatchSnapshot();
+            const code = generateExportMapping(messages['en']);
+            expect(code).toMatchSnapshot();
         });
 
         it('should generate code for exporting messages key mapping for commonjs', () => {
-            expect(generateExportMapping(messages['en'], 'cjs')).toMatchSnapshot();
+            const code = generateExportMapping(messages['en'], { format: 'cjs' });
+            expect(code).toMatchSnapshot();
+        });
+
+        it('should generate debug code when debugSource is provided', () => {
+            const code = generateExportMapping(messages['en'], {
+                debugSource: './test.messages.yaml',
+            });
+            expect(code).toMatchSnapshot();
+        });
+
+        it('should generate code for exporting messages key mapping for commonjs', () => {
+            const code = generateExportMapping(messages['en'], {
+                format: 'cjs',
+                debugSource: './test.messages.yaml',
+            });
+            expect(code).toMatchSnapshot();
         });
     });
 
@@ -127,9 +144,11 @@ describe('utils', () => {
                 nl: '() => require("/path/to/nl.messages.js")',
             };
 
-            expect(generateImporters('abcdef', registerMap, {
-                format: 'cjs'
-            })).toMatchSnapshot();
+            expect(
+                generateImporters('abcdef', registerMap, {
+                    format: 'cjs',
+                }),
+            ).toMatchSnapshot();
         });
     });
 
