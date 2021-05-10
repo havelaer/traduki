@@ -78,7 +78,6 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 return generatePrecompiledMessages(
                     noSplitModule.locale,
                     noSplitModule.messages,
-                    format,
                 );
             }
 
