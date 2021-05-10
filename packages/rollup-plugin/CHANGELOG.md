@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.1](https://github.com/havelaer/traduki/compare/v0.10.0...v0.10.1) (2021-05-10)
+
+
+### Bug Fixes
+
+* rollup watch issue ([091afc7](https://github.com/havelaer/traduki/commit/091afc766f7899fedbba1078694c9902fa55595d))
+
+
+
+
+
 # [0.10.0](https://github.com/havelaer/traduki/compare/v0.9.1...v0.10.0) (2021-05-08)
 
 

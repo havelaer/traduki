@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@traduki/vite-preact-app-setup",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "author": "havelaer",
   "license": "MIT",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@prefresh/vite": "^2.0.0",
-    "@traduki/vite-plugin-traduki": "^0.10.0",
+    "@traduki/vite-plugin-traduki": "^0.10.1",
     "@types/marked": "^2.0.2",
     "typescript": "^4.2.4",
     "vite": "^2.2.4"
