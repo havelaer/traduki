@@ -51,13 +51,17 @@ interface TradukiProviderProps {
 export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, children }) => {
     const [locale, setLocale] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!traduki.currentLocale) traduki.switchTo(initialLocale);
-
+    const subscriber = useMemo(() => {
         return traduki.subscribe(() => {
             setLocale(traduki.currentLocale);
         });
     }, []);
+
+    useEffect(() => {
+        if (!traduki.currentLocale) traduki.switchTo(initialLocale);
+
+        return subscriber;
+    }, [subscriber]);
 
     const context: TradukiContextProps = useMemo(
         () => ({
