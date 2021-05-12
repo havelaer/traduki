@@ -41,6 +41,37 @@ traduki.switchTo('en').then(() => {
 });
 ```
 
+Pseudo example output:
+
+```js
+// index.js
+/* ... bundle code ... */
+__tradukiRuntine.register({
+    en: () => import('./index.en.js'),
+    nl: () => import('./index.nl.js'),
+});
+
+const messages = {
+    hello: 'hello_30ebe736',
+    intro: 'intro_01b95038'
+};
+
+console.log(messages);
+/* ... more bundle code ... */
+
+// index.en.js
+export default {
+    hello_30ebe736: (e) => "Hello " + e.name + "!",
+    intro_01b95038: (e) => "How are you?",
+};
+
+// index.nl.js
+export default {
+    hello_30ebe736: (e) => "Hoi " + e.name + "!",
+    intro_01b95038: (e) => "Hoe is het met jou?",
+};
+```
+
 ## React/Preact example
 
 ```yaml
