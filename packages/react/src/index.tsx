@@ -13,14 +13,15 @@ import traduki from '@traduki/runtime';
 export type Translator = (text: string, args?: Record<string, string | number>) => string;
 
 interface TradukiContextProps {
-    readonly locale: string | null;
+    readonly locale: string;
     switchTo(locale: string): void;
 }
 
 export const TradukiContext = createContext<TradukiContextProps | null>(null);
 
-export function useLocale(): [string | null, (locale: string) => void] {
+export function useLocale(): [string, (locale: string) => void] {
     const context = useContext(TradukiContext);
+
     if (!context) {
         throw new Error(`useLocale must be used within a TradukiProvider`);
     }
@@ -63,7 +64,7 @@ export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, child
         return subscriber;
     }, [subscriber]);
 
-    const context: TradukiContextProps = useMemo(
+    const context = useMemo(
         () => ({
             get locale() {
                 return traduki.currentLocale;
@@ -77,7 +78,11 @@ export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, child
 
     if (!context.locale) return null;
 
-    return <TradukiContext.Provider value={context}>{children}</TradukiContext.Provider>;
+    return (
+        <TradukiContext.Provider value={context as TradukiContextProps}>
+            {children}
+        </TradukiContext.Provider>
+    );
 };
 
 /**
