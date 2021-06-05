@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@traduki/webpack-preact-app-setup",
-  "version": "0.10.0",
+  "version": "0.10.3",
   "author": "havelaer",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "npm run clean && webpack --mode production"
   },
   "dependencies": {
-    "@traduki/preact": "^0.10.0",
+    "@traduki/preact": "^0.10.3",
     "marked": "^2.0.3",
     "preact": "^10.4.8"
   },
