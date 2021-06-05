@@ -10,6 +10,8 @@ Traduki is a set of build- and runtime tools for lazy loading L10n messages.
 
 * It uses [MessageFormat](https://www.npmjs.com/package/messageformat) for text formatting.
 
+* SSR is not supported (yet).
+
 ## Packages
 
 - [Webpack plugin and loader](https://github.com/havelaer/traduki/blob/master/packages/webpack-plugin/README.md)
@@ -45,25 +47,30 @@ Pseudo example output:
 
 ```js
 // index.js
-/* ... bundle code ... */
-__tradukiRuntine.register({
-    en: () => import('./index.en.js'),
-    nl: () => import('./index.nl.js'),
-});
+/* ...traduki runtime code... */
 
 const messages = {
     hello: 'hello_30ebe736',
     intro: 'intro_01b95038'
 };
+traduki.register({
+    en: () => import('./index.en.js'),
+    nl: () => import('./index.nl.js'),
+});
 
-console.log(messages);
-/* ... more bundle code ... */
+console.log(messages); // { hello: 'hello_30ebe736', intro: 'intro_01b95038' }
+
+traduki.switchTo('en').then(() => {
+    traduki.translate(messages.hello, { name: 'John' }); // "Hello John!"
+});
+
 
 // index.en.js
 export default {
     hello_30ebe736: (e) => "Hello " + e.name + "!",
     intro_01b95038: (e) => "How are you?",
 };
+
 
 // index.nl.js
 export default {
