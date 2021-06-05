@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.2](https://github.com/havelaer/traduki/compare/v0.10.1...v0.10.2) (2021-06-05)
+
+
+### Bug Fixes
+
+* useLocale always return string ([c7b9dc0](https://github.com/havelaer/traduki/commit/c7b9dc021e05342d2a25f706db7d45f9b68ca7e6))
+
+
+
+
+
 ## [0.10.1](https://github.com/havelaer/traduki/compare/v0.10.0...v0.10.1) (2021-05-10)
 
 
