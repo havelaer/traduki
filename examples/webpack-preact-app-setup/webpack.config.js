@@ -4,10 +4,6 @@ const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
 module.exports = {
     entry: './src/main.tsx',
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-        }),
         new TradukiWebpackPlugin({
             filename: '[name].[locale].js',
         }),
