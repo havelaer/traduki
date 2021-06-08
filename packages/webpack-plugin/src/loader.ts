@@ -9,7 +9,7 @@ import {
     transformMessageKeys,
 } from '@traduki/build-utils';
 import loaderUtils from 'loader-utils';
-import validateOptions from 'schema-utils';
+import { validate } from 'schema-utils';
 import { pluginName } from './constants';
 
 const schema = require('./loader-options').default;
@@ -17,7 +17,7 @@ const schema = require('./loader-options').default;
 function loader(this: any, contents: string) {
     const options = loaderUtils.getOptions(this) || {};
 
-    validateOptions(schema, options, {
+    validate(schema, options, {
         name: pluginName,
     });
 

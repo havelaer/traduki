@@ -1,7 +1,7 @@
 import { Dictionaries, generatePrecompiledMessages, Messages, minify } from '@traduki/build-utils';
 import { interpolateName } from 'loader-utils';
-import validateOptions from 'schema-utils';
-import webpack from 'webpack';
+import { validate } from 'schema-utils';
+import webpack, { Compilation } from 'webpack';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { pluginName } from './constants';
 
@@ -9,9 +9,7 @@ const DEFAULT_FILENAME = '[name].[locale].js';
 const DEFAULT_RUNTIME_MODULE_ID = '@traduki/runtime';
 const schema = require('./plugin-options').default;
 
-type Chunk = any; // `any` because of webpack 4 and 5 differences
-
-type Compilation = any; // `any` because of webpack 4 and 5 differences
+type Chunk = any; // TODO: fix
 
 type MessagesSource = {
     locale: string;
@@ -19,51 +17,32 @@ type MessagesSource = {
     messages: Messages;
 };
 
-const isWebpack5 = webpack.version?.charAt(0) === '5';
-
-// Bind plugin to loader context (for webpack 4 and 5)
+// Bind plugin to loader context
 function bindLoaderContext(compilation: Compilation, plugin: TradukiWebpackPlugin) {
-    if (isWebpack5) {
-        (webpack as any).NormalModule.getCompilationHooks(compilation).loader.tap(
-            pluginName,
-            (loaderContext: any) => {
-                loaderContext[pluginName] = plugin;
-            },
-        );
-    } else {
-        compilation.hooks.normalModuleLoader.tap(pluginName, (loaderContext: any) => {
+    (webpack as any).NormalModule.getCompilationHooks(compilation).loader.tap(
+        pluginName,
+        (loaderContext: any) => {
             loaderContext[pluginName] = plugin;
-        });
-    }
+        },
+    );
 }
 
-// Get modules helper (for webpack 4 and 5)
+// Get modules helper
 function getChunkModules(compilation: Compilation, chunk: Chunk) {
-    if (isWebpack5) {
-        return compilation.chunkGraph.getChunkModules(chunk);
-    } else {
-        return chunk.getModules();
-    }
+    return compilation.chunkGraph.getChunkModules(chunk);
 }
 
-// Get context (for webpack 4 and 5)
+// Get context
 function getContext(compilation: Compilation) {
-    return isWebpack5 ? (compilation as any).options.context : compilation.context;
+    return (compilation as any).options.context;
 }
 
-// Get public path (for webpack 4 and 5)
+// Get public path
 function getPublicPath(compilation: Compilation) {
-    return isWebpack5
-        ? (compilation as any).getAssetPath(compilation.outputOptions.publicPath as any, {})
-        : compilation.outputOptions.publicPath;
+    return (compilation as any).getAssetPath(compilation.outputOptions.publicPath as any, {});
 }
 
-// Get public path (for webpack 4) TODO: test webpack 5
-// function isDevelopment(compilation: Compilation) {
-//     return compilation.options.optimization.nodeEnv === 'development';
-// }
-
-// Get public path (for webpack 4) TODO: test webpack 5
+// is production helper
 function isProduction(compilation: Compilation) {
     return compilation.options.optimization.nodeEnv === 'production';
 }
@@ -76,7 +55,7 @@ export default class TradukiWebpackPlugin {
     private chunkMessagesDictionaries: Map<any, Dictionaries> | null = null;
 
     constructor(options = {}) {
-        validateOptions(schema, options, { name: pluginName });
+        validate(schema, options, { name: pluginName });
 
         this.config = Object.assign(
             {
@@ -140,52 +119,65 @@ export default class TradukiWebpackPlugin {
              *
              * Having a filename we can find and replace the url placeHolders.
              */
-            compilation.hooks.optimizeChunkAssets.tapPromise(pluginName, async () => {
-                const queue: Promise<any>[] = [];
+            compilation.hooks.processAssets.tapPromise(
+                {
+                    name: pluginName,
+                    stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
+                },
+                async () => {
+                    const queue: Promise<any>[] = [];
 
-                this.chunkMessagesDictionaries!.forEach((dictionaries, chunk) => {
-                    const locales = Object.keys(dictionaries);
+                    this.chunkMessagesDictionaries!.forEach((dictionaries, chunk) => {
+                        const locales = Object.keys(dictionaries);
 
-                    queue.concat(locales.map(async locale => {
-                        // Compile messages bundles per locale
-                        const raw = generatePrecompiledMessages(locale, dictionaries[locale]);
-                        const content = isProduction(compilation) ? await minify(raw) : raw;
+                        queue.concat(
+                            locales.map(async locale => {
+                                // Compile messages bundles per locale
+                                const raw = generatePrecompiledMessages(
+                                    locale,
+                                    dictionaries[locale],
+                                );
+                                const content = isProduction(compilation) ? await minify(raw) : raw;
 
-                        // Generate file name and public file name
-                        const optionalSlash =
-                            publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
-                        const fileName = interpolateName(
-                            {
-                                resourcePath: `path/${chunk.name || chunk.id}.js`,
-                            } as any,
-                            this.config.filename.replace('[locale]', locale),
-                            { content, context },
+                                // Generate file name and public file name
+                                const optionalSlash =
+                                    publicPath.charAt(publicPath.length - 1) === '/' ? '' : '/';
+                                const fileName = interpolateName(
+                                    {
+                                        resourcePath: `path/${chunk.name || chunk.id}.js`,
+                                    } as any,
+                                    this.config.filename.replace('[locale]', locale),
+                                    { content, context },
+                                );
+                                const publicFileName = publicPath + optionalSlash + fileName;
+
+                                // Add compiled messsages bundle to assets
+                                compilation.assets[fileName] = new RawSource(content) as any;
+
+                                // Find and replace messages bundle urls in chunks
+                                chunk.files.forEach((file: string) => {
+                                    const sourceCode = compilation.assets[file].source() as string;
+                                    const newSource = new ReplaceSource(
+                                        compilation.assets[file] as any,
+                                        file,
+                                    );
+
+                                    this.replaceByPlaceHolder(
+                                        sourceCode,
+                                        newSource,
+                                        this.createPlaceHolder(locale),
+                                        publicFileName,
+                                    );
+
+                                    compilation.assets[file] = newSource as any;
+                                });
+                            }),
                         );
-                        const publicFileName = publicPath + optionalSlash + fileName;
+                    });
 
-                        // Add compiled messsages bundle to assets
-                        compilation.assets[fileName] = new RawSource(content);
-
-                        // Find and replace messages bundle urls in chunks
-                        chunk.files.forEach((file: string) => {
-                            const sourceCode = compilation.assets[file].source();
-                            const newSource = new ReplaceSource(compilation.assets[file], file);
-
-                            this.replaceByPlaceHolder(
-                                sourceCode,
-                                newSource,
-                                this.createPlaceHolder(locale),
-                                publicFileName,
-                            );
-
-                            compilation.assets[file] = newSource;
-                        });
-                    }));
-
-                });
-
-                await Promise.all(queue);
-            });
+                    await Promise.all(queue);
+                },
+            );
         });
     }
 

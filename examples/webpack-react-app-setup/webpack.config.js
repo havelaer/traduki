@@ -1,14 +1,9 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TradukiWebpackPlugin = require('@traduki/webpack-plugin-traduki');
 
 module.exports = {
     entry: './src/main.tsx',
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-        }),
         new TradukiWebpackPlugin({
             filename: '[name].[locale].js',
         }),
@@ -17,7 +12,7 @@ module.exports = {
         rules: [
             {
                 test: /\.svg?$/,
-                use: 'url-loader'
+                use: 'url-loader',
             },
             {
                 test: /\.tsx?$/,
@@ -26,10 +21,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                ],
+                use: ['style-loader', 'css-loader'],
             },
             {
                 test: /\.messages\.yaml$/,
@@ -44,6 +36,6 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/dist/',
         chunkFilename: '[id].js',
-        filename: '[name].js'
+        filename: '[name].js',
     },
 };
