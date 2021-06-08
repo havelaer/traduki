@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.4](https://github.com/havelaer/traduki/compare/v0.10.3...v0.10.4) (2021-06-08)
+
+
+### Bug Fixes
+
+* build ([060993c](https://github.com/havelaer/traduki/commit/060993c18b8c2db1de8a97a93628afb81990a893))
+* webpack 5 fixes ([cd9d6c2](https://github.com/havelaer/traduki/commit/cd9d6c26c54ebe4b16c9005fbf77a10801ad3c63))
+
+
+
+
+
 ## [0.10.3](https://github.com/havelaer/traduki/compare/v0.10.2...v0.10.3) (2021-06-05)
 
 **Note:** Version bump only for package traduki
