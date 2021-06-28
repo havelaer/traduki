@@ -9,6 +9,8 @@ import {
     lazy,
 } from 'preact/compat';
 
+// 1
+
 export {
     createElement,
     FC,

@@ -50,10 +50,14 @@ interface TradukiProviderProps {
  * During initialization it loads the locale based messages files.
  */
 export const TradukiProvider: FC<TradukiProviderProps> = ({ initialLocale, children }) => {
-    const [locale, setLocale] = useState<string | null>(null);
+    const [locale, setLocale] = useState<string | null>(() => {
+        return traduki.currentLocale === initialLocale ? initialLocale : null;
+    });
 
     const subscriber = useMemo(() => {
         return traduki.subscribe(() => {
+            if (traduki.currentLocale === locale) return;
+
             setLocale(traduki.currentLocale);
         });
     }, []);
