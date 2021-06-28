@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.5](https://github.com/havelaer/traduki/compare/v0.10.4...v0.10.5) (2021-06-28)
+
+
+### Bug Fixes
+
+* yarn ([04b56c5](https://github.com/havelaer/traduki/commit/04b56c5975cc2e5cba046512afce6bbdc85c5c42))
+
+
+
+
+
 ## [0.10.3](https://github.com/havelaer/traduki/compare/v0.10.2...v0.10.3) (2021-06-05)
 
 **Note:** Version bump only for package @traduki/preact

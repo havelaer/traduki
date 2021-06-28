@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.5](https://github.com/havelaer/traduki/compare/v0.10.4...v0.10.5) (2021-06-28)
+
+**Note:** Version bump only for package @traduki/vite-react-app-setup
+
+
+
+
+
 ## [0.10.2](https://github.com/havelaer/traduki/compare/v0.10.1...v0.10.2) (2021-06-05)
 
 **Note:** Version bump only for package @traduki/vite-react-app-setup
