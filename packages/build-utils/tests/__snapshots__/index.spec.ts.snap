@@ -77,21 +77,21 @@ export default  new Proxy(target, handler);
 exports[`utils generateImporters should generate code for registering importers per locale 1`] = `
 "import __traduki from '@traduki/runtime';
 __traduki.register('abcdef',{
-	en: () => import(\\"/path/to/en.messages.js\\"),
-	nl: () => import(\\"/path/to/nl.messages.js\\")
+	$en_US: () => import(\\"/path/to/en-us.messages.js\\"),
+	$nl_NL: () => import(\\"/path/to/nl-nl.messages.js\\")
 });"
 `;
 
 exports[`utils generateImporters should generate code for registering importers per locale for commonjs 1`] = `
 "const __traduki = require('@traduki/runtime');
 __traduki.register('abcdef',{
-	en: () => require(\\"/path/to/en.messages.js\\"),
-	nl: () => require(\\"/path/to/nl.messages.js\\")
+	$en_US: () => require(\\"/path/to/en-us.messages.js\\"),
+	$nl_NL: () => require(\\"/path/to/nl-nl.messages.js\\")
 });"
 `;
 
 exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code 1`] = `
-"var en = function(n, ord
+"var en_US = function(n, ord
 ) {
   var s = String(n).split('.'), v0 = !s[1], t0 = Number(s[0]) == n,
       n10 = t0 && s[0].slice(-1), n100 = t0 && s[0].slice(-2);
@@ -116,7 +116,7 @@ var plural = function (value, offset, lcfunc, data, isOrdinal) {
 export default {
   plain: function(d) { return \\"This is a plain message\\"; },
   hello: function(d) { return \\"Hello \\" + d.name; },
-  found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
+  found: function(d) { return \\"found \\" + plural(d.results, 0, en_US, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
   camelCase: function(d) { return \\"This is camelCase\\"; },
   snake_case: function(d) { return \\"This is snake_case\\"; },
   \\"kebab-case\\": function(d) { return \\"This is kebab-case\\"; }
@@ -124,7 +124,7 @@ export default {
 `;
 
 exports[`utils generatePrecompiledMessages should generate precompiled messages bundle code for commonjs 1`] = `
-"var en = function(n, ord
+"var en_US = function(n, ord
 ) {
   var s = String(n).split('.'), v0 = !s[1], t0 = Number(s[0]) == n,
       n10 = t0 && s[0].slice(-1), n100 = t0 && s[0].slice(-2);
@@ -149,7 +149,7 @@ var plural = function (value, offset, lcfunc, data, isOrdinal) {
 module.exports = {
   plain: function(d) { return \\"This is a plain message\\"; },
   hello: function(d) { return \\"Hello \\" + d.name; },
-  found: function(d) { return \\"found \\" + plural(d.results, 0, en, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
+  found: function(d) { return \\"found \\" + plural(d.results, 0, en_US, { \\"0\\": \\"no results\\", one: \\"1 result\\", other: number(d.results, \\"results\\") + \\" results\\" }); },
   camelCase: function(d) { return \\"This is camelCase\\"; },
   snake_case: function(d) { return \\"This is snake_case\\"; },
   \\"kebab-case\\": function(d) { return \\"This is kebab-case\\"; }

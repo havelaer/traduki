@@ -52,7 +52,7 @@ export function hash(data: string) {
 
 /**
  * Creates a messages mapping object from a dictionary object
- * { en: { hello: "Hello world!" }, nl: { hello: "Hallo wereld!" } }-> { hello: "hello_5nf85" }
+ * { en: { hello: "Hello world!" }, 'nl-NL': { hello: "Hallo wereld!" } }-> { hello: "hello_5nf85" }
  */
 export function toMessagesMap(
     dictionaries: Dictionaries,
@@ -87,6 +87,22 @@ export function assertIsConsistent(nestedObjects: Record<string, Record<string, 
  */
 export function parseYaml(data: string): Dictionaries {
     return loadYaml(data) as Dictionaries;
+}
+
+/**
+ * Locale as var eg. 'nl-NL' -> '$nl_NL';
+ * Using '$' to handle numbers at char 0 and handle reservered words.
+ * Escape forbidden characters
+ */
+export function toVarIdentifier(locale: string): string {
+    return `$${locale.replace(/[ &\/\\#,+()$~%.'":*?<>{}-]/g, '_')}`;
+}
+
+/**
+ * Locale as part of file name
+ */
+export function toPathIdentifier(locale: string): string {
+    return locale.replace(/[ &\/\\#,+()$~%.'":*?<>{}]/g, '-').toLowerCase();
 }
 
 /**
@@ -127,7 +143,7 @@ export function generateImporters(
     { format, ...options }: RegisterOptions = {},
 ): string {
     const registerMapString = Object.keys(registerMap)
-        .map(locale => `\t${locale}: ${registerMap[locale]}`)
+        .map(locale => `\t${toVarIdentifier(locale)}: ${registerMap[locale]}`)
         .join(',\n');
 
     const args = [`'${moduleIdentifier}'`, `{\n${registerMapString}\n}`];

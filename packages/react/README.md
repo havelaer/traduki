@@ -68,8 +68,8 @@ function Component() {
         <div>
             <p>Current locale: {locale}</p>
             <p>
-                <button onClick={() => setLocale('en')}>en</button>
-                <button onClick={() => setLocale('nl')}>nl</button>
+                <button onClick={() => setLocale('en-US')}>en</button>
+                <button onClick={() => setLocale('nl-NL')}>nl</button>
             </p>
         </div>
     );

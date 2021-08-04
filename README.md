@@ -1,3 +1,33 @@
+
+const source = {
+    nl: {
+        hello: "hello {name}",
+        login: {
+            sub1: {
+                sub2: "yoyo {name}",
+            }
+        }
+    }
+}
+
+const messagesMap = {
+    hello: "hello_123545",
+    login: {
+        sub1: {
+            sub2: "login_23456.sub1.sub2"
+        }
+    }
+}
+
+const messages = {
+    hello_123545: (e) => "hello " + e.name,
+    login_23456: {
+        sub1: {
+            sub2: (e) => "yoyo " + e.name,
+        }
+    }
+}
+
 # Traduki
 
 [![npm version](https://badge.fury.io/js/%40traduki%2Fruntime.svg)](https://badge.fury.io/js/%40traduki%2Fruntime) [![Build Status](https://travis-ci.com/havelaer/traduki.svg?branch=master)](https://travis-ci.com/havelaer/traduki) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/havelaer/traduki/blob/master/LICENSE)

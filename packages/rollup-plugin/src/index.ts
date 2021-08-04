@@ -11,11 +11,13 @@ import {
     hash,
     assertIsConsistent,
     minify as minifyBundle,
+    toVarIdentifier,
 } from '@traduki/build-utils';
 import * as path from 'path';
 import { Plugin, RenderedChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 import MagicString from 'magic-string';
+import { toPathIdentifier } from '@traduki/build-utils/src';
 
 type MessageModule = {
     id: string;
@@ -71,14 +73,11 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
          */
         async load(id) {
             const noSplitModule = noSplit
-                ? modules.find(m => id === `${m.id}.${m.locale}.js`)
+                ? modules.find(m => id === `${m.id}.${toPathIdentifier(m.locale)}.js`)
                 : null;
 
             if (noSplitModule) {
-                return generatePrecompiledMessages(
-                    noSplitModule.locale,
-                    noSplitModule.messages,
-                );
+                return generatePrecompiledMessages(noSplitModule.locale, noSplitModule.messages);
             }
 
             if (!filter(id)) return;
@@ -97,7 +96,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 }
             }
 
-            const locales = Object.keys(dictionaries).map(locale => locale.replace(/-/g, '_'));
+            const locales = Object.keys(dictionaries);
             const messagesMap = toMessagesMap(dictionaries, config.keyHashFn);
 
             // Create a dummy asset file for each locale in the yaml
@@ -124,7 +123,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
                 (map, reference) => ({
                     ...map,
                     [reference.locale]: noSplit
-                        ? `() => Promise.resolve(${reference.locale})`
+                        ? `() => Promise.resolve(${toVarIdentifier(reference.locale)})`
                         : `() => import(TRADUKI_URL_${reference.referenceId})`,
                 }),
                 {},
@@ -133,15 +132,19 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
             if (noSplit) {
                 code.push(
                     ...references.map(reference => {
-                        return `import ${reference.locale} from './${path.basename(id)}.${reference.locale}.js'`;
+                        return `import ${toVarIdentifier(reference.locale)} from './${path.basename(
+                            id,
+                        )}.${toPathIdentifier(reference.locale)}.js'`;
                     }),
                 );
             }
 
             code.push(generateImporters(moduleIdentifier, registerMap));
-            code.push(generateExportMapping(messagesMap, {
-                debugSource: config.minify ? undefined : id,
-            }));
+            code.push(
+                generateExportMapping(messagesMap, {
+                    debugSource: config.minify ? undefined : id,
+                }),
+            );
 
             return code.join('\n');
         },
@@ -176,7 +179,7 @@ const tradukiPlugin = (options: PluginOptions = {}): Plugin => {
 
             const locales = Object.keys(dictionaries);
             const promises = locales.map(async locale => {
-                const bundleName = `${chunkName}.${locale}.js`;
+                const bundleName = `${chunkName}.${toPathIdentifier(locale)}.js`;
                 const messages = dictionaries[locale];
                 const rawSource = generatePrecompiledMessages(locale, messages, format);
                 const source = config.minify ? await minifyBundle(rawSource) : rawSource;

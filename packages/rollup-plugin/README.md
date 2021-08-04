@@ -50,11 +50,11 @@ export default {
          *          Used for huge size applications with lots of supported locales
          *          example output:
          *           - main.js,
-         *           - main.en_US.js, (could contain messages shared between main and chunk)
-         *           - main.nl_NL.js, (could contain messages shared between main and chunk)
+         *           - main.en-us.js, (could contain messages shared between main and chunk)
+         *           - main.nl-nl.js, (could contain messages shared between main and chunk)
          *           - chunk_1.js
-         *           - chunk_1.en_US.js
-         *           - chunk_1.nl_NL.js
+         *           - chunk_1.en-us.js
+         *           - chunk_1.nl-nl.js
          *
          * 'entry': For each entry file,
          *          compiled messages files are generated for each locale
@@ -62,8 +62,8 @@ export default {
          *          Used for small/medium size applications with lots of supported locales
          *          example output:
          *           - main.js,
-         *           - main.en_US.js, (also contains messages from chunks)
-         *           - main.nl_NL.js, (also contains messages from chunks)
+         *           - main.en-us.js, (also contains messages from chunks)
+         *           - main.nl-nl.js, (also contains messages from chunks)
          *           - chunk_1.js
          *
          * false:   Compiled messages files are not split by locale,

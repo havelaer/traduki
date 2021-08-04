@@ -1,5 +1,5 @@
 {
-    "en": {
+    "en-US": {
         "plain": "This is a plain message",
         "hello": "Hello {name}",
         "found": "found {results, plural, =0 {no results} one {1 result} other {# results}}",
@@ -7,7 +7,7 @@
         "snake_case": "This is snake_case",
         "kebab-case": "This is kebab-case"
     },
-    "nl": {
+    "nl-NL": {
         "plain": "Dit is een plat bericht",
         "hello": "Hallo {name}",
         "found": "{results, plural, =0 {geen resultaten} one {1 resultaat} other {# resultaten}} gevonden",

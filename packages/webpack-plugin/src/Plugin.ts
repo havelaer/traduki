@@ -146,7 +146,7 @@ export default class TradukiWebpackPlugin {
                                     {
                                         resourcePath: `path/${chunk.name || chunk.id}.js`,
                                     } as any,
-                                    this.config.filename.replace('[locale]', locale),
+                                    this.config.filename.replace('[locale]', locale.toLowerCase()),
                                     { content, context },
                                 );
                                 const publicFileName = publicPath + optionalSlash + fileName;

@@ -35,8 +35,8 @@ function App() {
                     {t(messages.learn)}
                 </a>
                 <p>
-                    <button onClick={() => setLocale('en')}>en</button>
-                    <button onClick={() => setLocale('nl')}>nl</button>
+                    <button onClick={() => setLocale('en-US')}>en</button>
+                    <button onClick={() => setLocale('nl-NL')}>nl</button>
                 </p>
             </header>
         </div>

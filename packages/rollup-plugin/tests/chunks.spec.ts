@@ -22,28 +22,28 @@ describe('chunks case', () => {
             const assets = getFileNames(output);
             expect(assets.length).toBe(6);
             expect(assets).toContain('main.js');
-            expect(assets).toContain('assets/main.nl.js');
-            expect(assets).toContain('assets/main.en.js');
+            expect(assets).toContain('assets/main.nl-nl.js');
+            expect(assets).toContain('assets/main.en-us.js');
             expect(assets).toContain('chunks/other.js');
-            expect(assets).toContain('assets/other.en.js');
-            expect(assets).toContain('assets/other.en.js');
+            expect(assets).toContain('assets/other.en-us.js');
+            expect(assets).toContain('assets/other.en-us.js');
         });
 
         it('should output main bundle with references to messages', async () => {
             const source = getChunk(output, 'main.js')?.code;
-            expect(source).toContain('/assets/main.nl.js');
-            expect(source).toContain('/assets/main.en.js');
+            expect(source).toContain('/assets/main.nl-nl.js');
+            expect(source).toContain('/assets/main.en-us.js');
         });
 
         it('should output main bundle`s *nl* messages with used keys', async () => {
-            const source = getAsset(output, 'assets/main.nl.js')?.source;
+            const source = getAsset(output, 'assets/main.nl-nl.js')?.source;
             ['keyA1_', 'keyA2_', 'keyB1_', 'keyB2_', 'keyCommon1_', 'keyCommon2_'].forEach(key =>
                 expect(source).toContain(key),
             );
         });
 
         it('should output main bundle`s *en* messages with used keys', async () => {
-            const source = getAsset(output, 'assets/main.en.js')?.source;
+            const source = getAsset(output, 'assets/main.en-us.js')?.source;
             ['keyA1_', 'keyA2_', 'keyB1_', 'keyB2_', 'keyCommon1_', 'keyCommon2_'].forEach(key =>
                 expect(source).toContain(key),
             );
@@ -51,27 +51,27 @@ describe('chunks case', () => {
 
         it('should output chunk with references to messages', async () => {
             const source = getChunk(output, 'chunks/other.js')?.code;
-            expect(source).toContain('/assets/other.nl.js');
-            expect(source).toContain('/assets/other.en.js');
+            expect(source).toContain('/assets/other.nl-nl.js');
+            expect(source).toContain('/assets/other.en-us.js');
         });
 
         it('should output chunk`s *nl* messages with used keys', async () => {
-            const source = getAsset(output, 'assets/other.nl.js')?.source;
+            const source = getAsset(output, 'assets/other.nl-nl.js')?.source;
             ['keyC1_', 'keyC2_'].forEach(key => expect(source).toContain(key));
         });
 
         it('should output chunk`s *en* messages with used keys', async () => {
-            const source = getAsset(output, 'assets/other.en.js')?.source;
+            const source = getAsset(output, 'assets/other.en-us.js')?.source;
             ['keyC1_', 'keyC2_'].forEach(key => expect(source).toContain(key));
         });
 
         it('should output chunk`s *nl* messages without common messages', async () => {
-            const source = getAsset(output, 'assets/other.nl.js')?.source;
+            const source = getAsset(output, 'assets/other.nl-nl.js')?.source;
             ['keyCommon1_', 'keyCommon2_'].forEach(key => expect(source).not.toContain(key));
         });
 
         it('should output chunk`s *en* messages without common messages', async () => {
-            const source = getAsset(output, 'assets/other.en.js')?.source;
+            const source = getAsset(output, 'assets/other.en-us.js')?.source;
             ['keyCommon1_', 'keyCommon2_'].forEach(key => expect(source).not.toContain(key));
         });
     });
@@ -87,19 +87,19 @@ describe('chunks case', () => {
             const assets = getFileNames(output);
             expect(assets.length).toBe(4);
             expect(assets).toContain('main.js');
-            expect(assets).toContain('assets/main.nl.js');
-            expect(assets).toContain('assets/main.en.js');
+            expect(assets).toContain('assets/main.nl-nl.js');
+            expect(assets).toContain('assets/main.en-us.js');
             expect(assets).toContain('chunks/other.js');
         });
 
         it('should output main bundle with references to messages', async () => {
             const source = getChunk(output, 'main.js')?.code;
-            expect(source).toContain('/assets/main.nl.js');
-            expect(source).toContain('/assets/main.en.js');
+            expect(source).toContain('/assets/main.nl-nl.js');
+            expect(source).toContain('/assets/main.en-us.js');
         });
 
         it('should output main bundle`s *nl* messages with ALL keys', async () => {
-            const source = getAsset(output, 'assets/main.nl.js')?.source;
+            const source = getAsset(output, 'assets/main.nl-nl.js')?.source;
             [
                 'keyA1_',
                 'keyA2_',
@@ -113,7 +113,7 @@ describe('chunks case', () => {
         });
 
         it('should output main bundle`s *en* messages with ALL keys', async () => {
-            const source = getAsset(output, 'assets/main.en.js')?.source;
+            const source = getAsset(output, 'assets/main.en-us.js')?.source;
             [
                 'keyA1_',
                 'keyA2_',
@@ -128,8 +128,8 @@ describe('chunks case', () => {
 
         it('should output chunk without references to messages', async () => {
             const source = getChunk(output, 'chunks/other.js')?.code;
-            expect(source).not.toContain('/assets/other.nl.js');
-            expect(source).not.toContain('/assets/other.en.js');
+            expect(source).not.toContain('/assets/other.nl-nl.js');
+            expect(source).not.toContain('/assets/other.en-us.js');
         });
     });
 
