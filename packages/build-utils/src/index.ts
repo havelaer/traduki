@@ -143,7 +143,7 @@ export function generateImporters(
     { format, ...options }: RegisterOptions = {},
 ): string {
     const registerMapString = Object.keys(registerMap)
-        .map(locale => `\t${toVarIdentifier(locale)}: ${registerMap[locale]}`)
+        .map(locale => `\t'${locale}': ${registerMap[locale]}`)
         .join(',\n');
 
     const args = [`'${moduleIdentifier}'`, `{\n${registerMapString}\n}`];

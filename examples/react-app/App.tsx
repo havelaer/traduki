@@ -5,7 +5,7 @@ import './App.css';
 import messages from './App.messages.yaml';
 import logo from './logo.svg';
 
-const AsyncComponent = lazy(() => import('./Component').then(waitForMessages));
+const AsyncComponent: any = lazy(() => import('./Component').then(waitForMessages));
 
 function App() {
     const [count, setCount] = useState(0);

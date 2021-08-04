@@ -12,12 +12,12 @@ import {
     assertIsConsistent,
     minify as minifyBundle,
     toVarIdentifier,
+    toPathIdentifier,
 } from '@traduki/build-utils';
 import * as path from 'path';
 import { Plugin, RenderedChunk } from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 import MagicString from 'magic-string';
-import { toPathIdentifier } from '@traduki/build-utils/src';
 
 type MessageModule = {
     id: string;

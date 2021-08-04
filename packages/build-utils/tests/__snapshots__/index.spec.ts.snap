@@ -77,16 +77,16 @@ export default  new Proxy(target, handler);
 exports[`utils generateImporters should generate code for registering importers per locale 1`] = `
 "import __traduki from '@traduki/runtime';
 __traduki.register('abcdef',{
-	$en_US: () => import(\\"/path/to/en-us.messages.js\\"),
-	$nl_NL: () => import(\\"/path/to/nl-nl.messages.js\\")
+	'en-US': () => import(\\"/path/to/en-us.messages.js\\"),
+	'nl-NL': () => import(\\"/path/to/nl-nl.messages.js\\")
 });"
 `;
 
 exports[`utils generateImporters should generate code for registering importers per locale for commonjs 1`] = `
 "const __traduki = require('@traduki/runtime');
 __traduki.register('abcdef',{
-	$en_US: () => require(\\"/path/to/en-us.messages.js\\"),
-	$nl_NL: () => require(\\"/path/to/nl-nl.messages.js\\")
+	'en-US': () => require(\\"/path/to/en-us.messages.js\\"),
+	'nl-NL': () => require(\\"/path/to/nl-nl.messages.js\\")
 });"
 `;
 
