@@ -1,6 +1,6 @@
 {
   "name": "@traduki/react",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Traduki React helpers",
   "author": "havelaer",
   "keywords": [
@@ -43,7 +43,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@traduki/runtime": "^0.10.0"
+    "@traduki/runtime": "^0.11.0"
   },
   "gitHead": "49bf5e7fed29f7eacb21349555d5a195ff410a5e"
 }
