@@ -69,12 +69,9 @@ export class TradukiRuntime {
     private latestLoader: Promise<any> | undefined;
 
     static getSingleton() {
-        let global;
-        try {
-            global = Function('return this')();
-        } catch (e) {
-            global = window;
-        }
+        let global = typeof window !== 'undefined' ? window as any : null;
+
+        if (!global) return new TradukiRuntime();
 
         if (!global.__tradukiRuntime) global.__tradukiRuntime = new TradukiRuntime();
 
